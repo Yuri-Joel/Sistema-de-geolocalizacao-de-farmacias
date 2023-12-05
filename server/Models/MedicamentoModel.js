@@ -14,13 +14,15 @@ export const Medicamento = (id) =>{
 }
 
 export const AddMedicamento = (mediId,dados, farmaId)=>{
-    const query = "INSERT INTO medicamentos(id, nome, preco, data_validade, informações, tipo, imagem_path,disponibilidade) values(?)";
+    const query = "INSERT INTO medicamentos(id,nome, preco, data_validade, informações, tipo, imagem_path,disponibilidade) values(?)";
 
     const q = "INSERT INTO farmacia_medicamentos(farmacia_id, medicamento_id) values(?)";
 
     return new Promise((resolve,reject)=>{
     conn.query(query,[mediId,dados],(err)=>{
-        if(err)  reject (err);
+        if(err) {
+             reject (err)
+              }
         else {
             conn.query(q,[farmaId, mediId],(err)=>{
                 if(err) reject(err);
@@ -41,4 +43,28 @@ export const ComparaMedicamentos = (nome) =>{
             else resolve(data)
     })
     })
+}
+
+export const DisponivelMed = (valor)=>{
+    const query = "Update medicamento set disponibilidade = ?"
+
+    return new Promise ((resolve, reject)=>{
+    conn.query(query, [valor], (err)=>{
+        if(err) reject( err);
+        else resolve("Medicamento actualizado")
+    })
+})
+  
+}
+
+export const DeletarMed = (id) =>{
+    const query ="DELETE from medicamento where id = ?"
+return new Promise ((resolve,reject) =>{
+    conn.query(query,[id],(err)=>{
+        if(err) reject( err);
+        else resolve("Medicamento apagado com sucesso")
+
+    })
+})
+    
 }
