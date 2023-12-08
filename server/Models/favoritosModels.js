@@ -23,8 +23,9 @@ export const AddFavoritosMed = (favId)=>{
 
 // esta parte é sobre os favouritos buscar , adicionar e deletar
 export const favoritosMedId = (usuarioId)=>{
-    const query ="SELECT u.nome AS nome_usuario, m.*, f.nome AS nome_farmacia FROM favoritos fav JOIN usuarios u ON fav.usuario_id = u.id LEFT JOIN medicamentos m ON fav.medicamento_id = m.id LEFT JOIN farmacias f ON fav.farmacia_id = f.id ";
+   // const query ="SELECT u.nome AS nome_usuario, m.*, f.nome AS nome_farmacia FROM favoritos fav JOIN usuarios u ON fav.usuario_id = u.id LEFT JOIN medicamentos m ON fav.medicamento_id = m.id LEFT JOIN farmacias f ON fav.farmacia_id = f.id ";
     
+    const query ="SELECT m.*, f.nome AS nome_farmacia FROM favoritos fav JOIN   medicamentos  m ON fav.medicamento_id = m.id LEFT JOIN farmacias f on m.farmacia_id = f.id WHERE fav.usuario_id = ?";
     return new Promise ((resolve,reject)=>{
         conn.query(query,[usuarioId], (err, data)=>{
             if(err)  reject (err);

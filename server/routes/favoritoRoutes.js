@@ -8,6 +8,7 @@ routerF.post("/favoritos", CriarFav)
 routerF.delete("/favoritodel/:id", DeletaFav)
 
 routerF.get("/favoritos/:id", favouritosFarma)
+
 routerF.get("/favmedi/:id",favouritosMed)
 
 export default routerF;

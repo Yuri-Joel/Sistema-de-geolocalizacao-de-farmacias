@@ -4,7 +4,7 @@ import usuariosControllers from "./routes/usuariosRoutes.js"
 import favControllers from "./routes/favoritoRoutes.js"
 import SMSRoutes from './routes/mensagensRoutes.js'
 import Farma from './routes/farmaciasRoute.js'
-
+import Medi from './routes/medicamentoRoutes.js'
 const app = express();
 const port = 8800;
 
@@ -15,6 +15,7 @@ app.use("/api", usuariosControllers)
 app.use("/fav", favControllers)
 app.use("/sms", SMSRoutes)
 app.use("/f", Farma)
+app.use("/me", Medi)
 /*
 app.get("/", (req, res)=> res.send("HELLO"))*/
 

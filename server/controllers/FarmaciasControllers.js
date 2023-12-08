@@ -27,22 +27,26 @@ export const CRiarFarma = async (req,res)=>{
         req.body.telefone,
         req.body.endereco,
         req.body.latitude,
-        req.body.longitude
+        req.body.longitude,
+        req.body.horario_funcionamento
     ]
     const data = await CriarNewFarmacia(values)
     res.json({data})
 }
 
 export const ActualizarFarma = async (req,res)=>{
+    
+    const {id}= req.params
     const values = [
         req.body.nome,
         req.body.nif,
         req.body.telefone,
         req.body.endereco,
         req.body.latitude,
-        req.body.longitude
+        req.body.longitude,
+        req.body.horario_funcionamento
     ]
-    const data = await ActualizarFarmacias(values)
+    const data = await ActualizarFarmacias(values,id)
     res.json({data})
 }
 

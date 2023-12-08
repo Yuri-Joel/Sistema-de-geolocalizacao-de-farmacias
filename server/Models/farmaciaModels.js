@@ -35,7 +35,7 @@ export const  ObterFarmaciaId = (farmaid)=>{
 
 export const CriarNewFarmacia = (dados) => {
 
-    const query = "insert into farmacias (nome,nif,telefone,endereco,latitude,longitude) values (?)"
+    const query = "INSERT INTO farmacias (nome,nif,telefone,endereco,latitude,longitude,horario_funcionamento) values (?)"
       return new Promise((resolve,reject)=>{
 
         conn.query(query,[dados], (err)=>{
@@ -45,11 +45,11 @@ export const CriarNewFarmacia = (dados) => {
     })
 }
 
-export const ActualizarFarmacias = (dados) => {
-    const query = "UPDATE farmacias set nome = ? , nif= ?, telefone= ?, endereco= ?, latitude=?, longitude=?"
+export const ActualizarFarmacias = (dados, id) => {
+    const query = "UPDATE farmacias set nome = ?, nif = ?, telefone = ?, endereco = ?, latitude = ?, longitude = ?, horario_funcionamento = ? WHERE id = ?"
     return new Promise((resolve,reject)=>{
 
-        conn.query(query,[dados], (err)=>{
+        conn.query(query,[dados, id], (err)=>{
             if(err)  reject (err);
             else resolve("Farmacia Actualizada com sucesso")
     })
