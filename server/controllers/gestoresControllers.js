@@ -1,4 +1,4 @@
-import { ActuaGestor, deleteGestor, Gestores, newGestores, TodosGestores, ObtergestorId} from "../Models/gestoresModels"
+import { ActuaGestor, deleteGestor, Gestores, newGestores, TodosGestores, ObtergestorId} from "../Models/gestoresModels.js"
 
 
 export const ContarGestores = async(_,res) =>{
