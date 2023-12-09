@@ -1,8 +1,5 @@
 import { conn } from "../utils/conexao.js";
 
-
-
-
 export const TodosUsuarios = ()=>{
     const query = "SELECT * FROM usuarios";
      return new Promise ((resolve,reject )=>{

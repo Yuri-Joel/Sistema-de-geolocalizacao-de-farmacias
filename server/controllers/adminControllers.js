@@ -1,4 +1,5 @@
 import { Actualiadmin, ObteradminId, newadmin } from "../Models/AdministradoresModels.js"
+import { hashSenha } from "./usuarioControllers.js"
 
 
 
@@ -10,10 +11,11 @@ export const ObterAdmin = async (req,res)=>{
 
 
 export const CriarAdmin = async (req,res)=> {
+    const senha = await hashSenha( req.body.senha);
     const values =[
         req.body.nome,
         req.body.email,
-        req.body.senha  
+        senha 
     ];
 
     const data = await newadmin(values)
@@ -21,11 +23,12 @@ export const CriarAdmin = async (req,res)=> {
 }
 export const Actualizaradmin = async (req,res)=> {
   const {id} = req.params;
+  const senha = await hashSenha(req.body.senha)
   
     const values =[
         req.body.nome,
         req.body.email,
-        req.body.senha,  
+        senha 
     ];
     const data = await Actualiadmin(values,id)
    

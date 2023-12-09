@@ -2,7 +2,7 @@ import { conn } from "../utils/conexao.js";
 
 
 export const Medicamento = (id) =>{
-    const query = "select m.*, f.nome AS nome_farmacia from medicamentos m join farmacia_medicamentos fm on  m.id = fm.medicamento_id left join farmacias f on fm.farmacia_id = f.id  where f.id = ?;";
+    const query = " SELECT m.* FROM medicamentos m JOIN farmacia_medicamentos fm ON m.id = fm.medicamento_id WHERE fm.farmacia_id = ?;";
 
     return new Promise((resolve,reject)=>{
 
@@ -28,18 +28,18 @@ export const ComparaMedicamentos = (nome) =>{
 
 //// do lado do gestor
 
-export const AddMedicamento = (mediId,dados, farmaId)=>{
-    const query = "INSERT INTO medicamentos(id,nome, preco, data_validade, informacoes, tipo, imagem_path,disponibilidade) values(?)";
+export const AddMedicamento = (dados,farmaId)=>{
+    const query = "INSERT INTO medicamentos(id,nome, preco, data_validade, informacoes, tipo, imagem_path,disponibilidade) VALUES(?)";
 
-    const q = "INSERT INTO farmacia_medicamentos(farmacia_id, medicamento_id) values(?)";
+    const q = "INSERT INTO farmacia_medicamentos(farmacia_id,medicamento_id) VALUES(?)";
 
     return new Promise((resolve,reject)=>{
-    conn.query(query,[mediId,dados],(err)=>{
+    conn.query(query,[dados],(err)=>{
         if(err) {
              reject (err)
               }
         else {
-            conn.query(q,[farmaId, mediId],(err)=>{
+            conn.query(q,[farmaId],(err)=>{
                 if(err) reject(err);
                 else resolve("medicamento adicionado")
             })
@@ -49,7 +49,7 @@ export const AddMedicamento = (mediId,dados, farmaId)=>{
 }
 
 export const ActualizarMedi = (dados, id)=>{
-    const query = "UPDATE medicamento set nome=?, preco= ?, data_validade = ?, informações=?,tipo=?,imagem_path=?, disponibilidade=? where id=?";
+    const query = "UPDATE medicamentos set nome=?, preco= ?, data_validade = ?, informações=?,tipo=?,imagem_path=?, disponibilidade=? where id=?";
 
     return new Promise ((resolve, reject)=>{
         conn.query(query, [dados,id], (err)=>{
@@ -60,11 +60,11 @@ export const ActualizarMedi = (dados, id)=>{
 }
 
 
-export const DisponivelMed = (valor,id)=>{
-    const query = "Update medicamento set disponibilidade = ? where id =?"
+export const DisponivelMed = (dispo,id)=>{
+    const query = "UPDATE medicamentos SET disponibilidade = ? WHERE id =?;"
 
     return new Promise ((resolve, reject)=>{
-    conn.query(query, [valor,id], (err)=>{
+    conn.query(query, [dispo,id], (err)=>{
         if(err) reject( err);
         else resolve("Medicamento actualizado")
     })
@@ -73,7 +73,7 @@ export const DisponivelMed = (valor,id)=>{
 }
 
 export const DeletarMed = (id) =>{
-    const query ="DELETE from medicamento where id =?"
+    const query ="DELETE from medicamentos where id =?"
 
 return new Promise ((resolve,reject) =>{
     conn.query(query,[id],(err)=>{

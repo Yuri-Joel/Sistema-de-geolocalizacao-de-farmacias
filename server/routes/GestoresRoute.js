@@ -1,12 +1,12 @@
 import express from 'express'
-import { TodosGestores,ContarGestores, CriarGestor, ActualizarGestor, DeletaGestor } from '../controllers/gestoresControllers.js'
+import { CTodosGestores,ContarGestores, CriarGestor, ActualizarGestor, DeletaGestor, ObterGes } from '../controllers/gestoresControllers.js'
 
 
 const routerG = express.Router()
 
-routerG.get("/todos", TodosGestores)
-
-routerG.get("/todos/:id", ContarGestores)
+routerG.get("/conta",  ContarGestores)
+routerG.get("/todos", CTodosGestores)
+routerG.get("/todos/:id", ObterGes)
 
 routerG.post("/cges", CriarGestor)
 

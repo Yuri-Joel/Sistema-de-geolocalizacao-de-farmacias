@@ -22,9 +22,14 @@ export const ComparaMed = async (req, res )=>{
 //gestor
 
 export const AddMed = async (req, res)=>{
-    const mId = req.body.medid
-    const farmaId = req.body.farmaid
+   
+    
+    const add =[
+        req.body.farma,
+        req.body.mid     
+    ]
     const values = [
+        req.body.mid,
         req.body.nome,
         req.body.preco,
         req.body.data_validade,
@@ -34,7 +39,7 @@ export const AddMed = async (req, res)=>{
         req.body.disponibilidade
     ]
 
-    const data = await AddMedicamento(mId,values,farmaId)
+    const data = await AddMedicamento(values,add)
 
     res.status(200).json({data})
 }
@@ -58,9 +63,9 @@ export const ActuaMedi = async (req,res)=>{
 export const DispoMed= async (req,res) =>{
 
     const {id}= req.params
-    const values =  req.body.nome
+    const {dispo}=  req.body
     
-    const data = await DisponivelMed(values,id)
+    const data = await DisponivelMed(dispo,id)
     
     res.status(200).json({data})
 }

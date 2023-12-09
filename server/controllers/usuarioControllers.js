@@ -1,4 +1,19 @@
 import { ActualizarUsuarioId, CriarUsuario, ObterUsuarioId, TodosUsuarios, TodosUsuariosNumeros, deleteUsuarios} from "../Models/usuarioModels.js";
+import { hash } from "bcrypt";
+
+export const hashSenha = async  (senha)=>{
+    
+        const saltRounds = 10;
+         hash(senha, saltRounds,(err, hash)=>{
+            if(err){ return  err}
+            else {
+                return hash
+            }
+
+        });
+   
+}
+
 
 export const TodosU = async (_,res)=>{
     const data = await  TodosUsuarios()
@@ -23,10 +38,11 @@ export const ObterU = async (req,res)=>{
 
 
 export const CriarU = async (req,res)=> {
+    const senha = await hashSenha(req.body.senha)
     const values =[
         req.body.nome,
         req.body.email,
-        req.body.senha  
+        senha
     ];
 
     const data = await CriarUsuario(values)
@@ -34,11 +50,12 @@ export const CriarU = async (req,res)=> {
 }
 export const ActualizarU = async (req,res)=> {
   const {id} = req.params;
+  const senha = await hashSenha(req.body.senha)
   
     const values =[
         req.body.nome,
         req.body.email,
-        req.body.senha,  
+        senha 
     ];
     const data = await ActualizarUsuarioId(values,id)
    

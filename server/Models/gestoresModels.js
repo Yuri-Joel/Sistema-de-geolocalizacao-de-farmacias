@@ -1,7 +1,7 @@
 import { conn } from "../utils/conexao.js";
 
 
-export const  TodosGestores =()=>{
+export const  CGestores =()=>{
     const query= "SELECT count(*) AS total FROM gestores"
     return new Promise ((resolve, reject)=>{
     conn.query(query,(err, data)=>{
@@ -11,7 +11,7 @@ export const  TodosGestores =()=>{
     })})
 
 }
-export const Gestores =()=>{
+export const TodosGestores =()=>{
     const query= "SELECT *  FROM gestores"
     return new Promise ((resolve, reject)=>{
     conn.query(query,(err, data)=>{
@@ -34,12 +34,12 @@ export const ObtergestorId =(gestorId) =>{
     })})
 }
 export const newGestores = (dados)=>{
-    const query = "insert into gestores (nome, email,senha,telefone) value (?)"
+    const query = "insert into gestores (nome,email,nome_user,senha,telefone, farmacia_id) value (?)"
     return new Promise((resolve, reject)=>{
 
       conn.query(query,[dados], (err)=>{
           if(err)  reject (err);
-          else resolve("Gestor criada com sucesso")
+          else resolve("Gestor criado com sucesso")
   })
   })
 }
@@ -56,7 +56,7 @@ export const deleteGestor = (usuarioId)=>{
 }
 
 export const ActuaGestor = (dados,usuarioId)=>{
-    const query = "UPDATE gestores SET `nome` =?, `email`=?, `senha`=? WHERE `id` = ?"
+    const query = "UPDATE gestores SET `nome` =?, `email`=?, `senha`=? , `telefone`=? ,`farmacia_id`=? WHERE `id` = ?"
     return new Promise ((resolve,reject)=>{
         conn.query(query,[...dados, usuarioId],(err)=>{
             if(err) reject(err)

@@ -1,13 +1,14 @@
-import { ActuaGestor, deleteGestor, Gestores, newGestores, TodosGestores, ObtergestorId} from "../Models/gestoresModels.js"
+import { ActuaGestor, deleteGestor, CGestores, newGestores, TodosGestores, ObtergestorId} from "../Models/gestoresModels.js"
+import { hashSenha } from "./usuarioControllers.js"
 
 
 export const ContarGestores = async(_,res) =>{
-    const data = await TodosGestores()
+    const data = await CGestores()
     res.status(200).json({data})
 }
 
-export const TodosGestores = async (_,res)=>{
-    const data = await  Gestores()
+export const CTodosGestores = async (_,res)=>{
+    const data = await  TodosGestores()
     
         res.status(200).json({data})
    
@@ -21,10 +22,14 @@ export const ObterGes = async (req,res)=>{
 
 
 export const CriarGestor = async (req,res)=> {
+    const senha = await hashSenha(req.body.senha)
     const values =[
         req.body.nome,
         req.body.email,
-        req.body.senha  
+        req.body.nomeusuario,
+        senha,
+        req.body.telefone,
+        req.body.farmacia
     ];
 
     const data = await newGestores(values)
@@ -32,11 +37,13 @@ export const CriarGestor = async (req,res)=> {
 }
 export const ActualizarGestor = async (req,res)=> {
   const {id} = req.params;
-  
+  const senha = await hashSenha(req.body.senha)
     const values =[
         req.body.nome,
         req.body.email,
-        req.body.senha,  
+        senha,
+        req.body.telefone,
+        req.body.farmacia 
     ];
     const data = await ActuaGestor(values,id)
    
