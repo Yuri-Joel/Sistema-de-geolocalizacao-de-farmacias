@@ -1,47 +1,22 @@
-import {FormC} from './componts/form'
-import React,{useEffect, useState} from 'react';
-import axios from 'axios';
-import {Grid} from './componts/Grid'
-import {toast , ToastContainer} from 'react-toastify';
-import "react-toastify/dist/ReactToastify.css"
-import {Global} from './Global'
-import styled from 'styled-components';
+import { BrowserRouter, Routes, Route} from "react-router-dom"
+import { Cadastro } from "./pages/cadastro/Cadastro"
+import { login } from "./pages/login/login"
+import {Home} from './pages/Home/Home'
+import { Maps } from "./pages/FarmaciaMaps/Maps"
 
-const Container = styled.div`
-
-width:100%;
-max-width:800px;
-margin-top: 20px;
-display:flex;
-flex-direction: column;
-align-items: center;
-gap:10px;`
-const Title = styled.h2``
-
-export default function App() {
-     const [users, Setusers] =useState([])
-     const [onEdit, SetOnEdit] = useState(null)
-
-      const getUsers = async ()=> {
-        try {
-            const res = await  axios.get("http://localhost:8080");
-            Setusers(res.data.sort((a,b) => (a.nome > b.nome ? 1 : -1 )))
-        } catch(error){
-           toast.error(error);
-        }
-     };
-     useEffect(()=> {
-        getUsers();
-     }, [Setusers])
+export const App = ()=> {
+   
    return( 
    <>
-   <Container>
-    <Title>Usuarios</Title>
-    <FormC onEdit={onEdit} SetOnEdit={SetOnEdit} getUsers={getUsers}/>
-    <Grid users={users} Setusers={Setusers} SetOnEdit={SetOnEdit}/>
-    </Container>
-    <ToastContainer autoClose={3000} position={toast.POSITION.BOTTOM_LEFT} />
-    <Global />
+   <BrowserRouter>
+  <Routes>
+    <Route path="/Home" exath Component={Home}></Route>
+   <Route path="/Cadastro" component={Cadastro}></Route>
+   <Route path="/login" component={login}></Route>
+   <Route path="/maps" component={Maps}></Route>
+   </Routes> 
+   </BrowserRouter>
+  
     </>
     )
 }

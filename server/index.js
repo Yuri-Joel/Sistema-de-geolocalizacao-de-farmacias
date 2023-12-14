@@ -1,5 +1,7 @@
 import express from 'express';
-
+import cors from 'cors'
+import cookieParser from 'cookie-parser';
+//dependecias
 import usuarios from "./routes/usuariosRoutes.js"
 import fav from "./routes/favoritoRoutes.js"
 import SMSRoutes from './routes/mensagensRoutes.js'
@@ -8,15 +10,19 @@ import Medi from './routes/medicamentoRoutes.js'
 import gestor from './routes/GestoresRoute.js'
 import Admin from './routes/adminRoute.js'
 import logactividades from './routes/logactividadesRoute.js'
+//services
 import login from './services/login/loginroutes.js'
 import recuperar from './services/recuperacao de senha/recuperacaoroute.js'
 
 const app = express();
 const port = 8800;
 
-
 app.use(express.json())
-
+app.use(cors({
+    origin:['http://localhost:8800'],
+    methods: ["POST", "GET", "PUT", "DELETE"]
+}))
+app.use(cookieParser())
 
 app.use("/api", usuarios)
 app.use("/fav", fav)
@@ -28,8 +34,8 @@ app.use("/ad", Admin)
 app.use("/log",logactividades)
 
 ///services
-app.use("/redes", recuperar)
-app.use("/login", login)
+app.use("/rede", recuperar)
+app.use("/l", login)
 
 // app.get("/", (_, res)=> res.send("HELLO"))
 

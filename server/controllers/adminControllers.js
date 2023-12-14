@@ -15,7 +15,8 @@ export const CriarAdmin = async (req,res)=> {
     const values =[
         req.body.nome,
         req.body.email,
-        senha 
+        senha,
+        
     ];
 
     const data = await newadmin(values)

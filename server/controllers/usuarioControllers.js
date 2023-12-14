@@ -4,13 +4,9 @@ import { hash } from "bcrypt";
 export const hashSenha = async  (senha)=>{
     
         const saltRounds = 10;
-         hash(senha, saltRounds,(err, hash)=>{
-            if(err){ return  err}
-            else {
-                return hash
-            }
+      const v  = hash(senha, saltRounds)
 
-        });
+       return v;
    
 }
 
@@ -46,7 +42,7 @@ export const CriarU = async (req,res)=> {
     ];
 
     const data = await CriarUsuario(values)
-    res.status(200).json({data})
+    res.status(200).json({status: data})
 }
 export const ActualizarU = async (req,res)=> {
   const {id} = req.params;

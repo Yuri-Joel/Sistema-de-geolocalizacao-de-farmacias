@@ -5,6 +5,6 @@ const routeLog = express.Router()
 
 routeLog.post("/lognew", criaLog)
 
-routeLog.get("log/:id", ObterLogactividades)
+routeLog.get("log/:id/:tipo", ObterLogactividades)
 
 export  default routeLog;

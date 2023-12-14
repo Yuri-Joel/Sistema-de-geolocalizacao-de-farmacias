@@ -1,16 +1,24 @@
 import { ActualizarSenha, Verify, addrecuperacao, deleteSenhas, ver } from "./recuperacaoModel.js";
 import { createTransport } from 'nodemailer';
-import { sign, verify } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 
-
-export const  RecuperaSenha  = async ()=>{
+export const  RecuperaSenha  = async (req, res)=>{
 
     const tokenAleatorioCrypto = ()=>  {
       
-        return crypto.randomBytes(32).toString('hex') 
+       return new Promise((resolve, reject) => {
+        crypto.randomBytes(10,(erro, buffer)=>{
+          if(erro)reject(erro)
+          else{
+        const token = buffer.toString('hex');
+        resolve(token)
+      }
+        })  })   
     }
 
+    const secret = await tokenAleatorioCrypto();
+   
     const {email} = req.body
     const user = await Verify(email)
 
@@ -18,7 +26,7 @@ export const  RecuperaSenha  = async ()=>{
         return res.status(404).json({ message: 'E-mail não encontrado' });
       }
     
-      const token = sign({ email }, tokenAleatorioCrypto, { expiresIn: '1h' });
+      const token = jwt.sign({ email }, secret, { expiresIn: '1h' });
       const expiraEm = new Date();
      expiraEm.setHours(expiraEm.getHours() + 1)
 
@@ -31,12 +39,11 @@ export const  RecuperaSenha  = async ()=>{
         service: 'gmail',
         auth: {
           user: 'ceoyuri23@gmail.com',
-          pass: 'eterno44',
+          pass: 'cume iuee ojjg qjls',
         },
       });
     
       const mailOptions = {
-        from: 'ceoyuri23@gmail.com',
         to: email,
         subject: 'Recuperação de Senha',
         text: `Clique no link para redefinir sua senha: http://localhost:8800/rede/redefinir-senha/${token}`,
@@ -69,14 +76,12 @@ export const  RedefinirSenha = async (req, res)=>{
       }
   
     // Verifique se o token é válido
-    verify(token,result, async (err, decoded) => {
+    jwt.verify(token,result, async (err, decoded) => {
       if (err) {
         return res.status(401).json({ message: 'Token inválido' });
       }
     
       const { email } = decoded;
-  
-      
   
       // Atualize a senha no banco de dados
       const values= [novaSenha,email ]
@@ -86,8 +91,7 @@ export const  RedefinirSenha = async (req, res)=>{
 
       const del = await deleteSenhas(email)
      
-  
-      res.status(200).json({ message: data, del });
+      res.status(200).json({ message: data + del });
     });
   
 }

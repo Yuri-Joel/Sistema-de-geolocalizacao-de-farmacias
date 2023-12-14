@@ -1,7 +1,9 @@
 
+import { conn } from "../../utils/conexao.js";
 /// recuperar senha 
 export const Verify = (email)=>{
-    const query = "SELECT *FROM usuarios where email = ?"
+    const query = "SELECT * FROM usuarios WHERE email = ?";
+
     return new Promise ((resolve, reject)=>{
         conn.query(query,[email],(err, data)=>{
             if(err)  reject (err);

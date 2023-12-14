@@ -15,7 +15,7 @@ export const AddFavoritosMed = (favId)=>{
     return new Promise ((resolve,reject)=>{
         conn.query(query,[favId],(err)=>{
             if(err) reject(err)
-            else resolve("Adicionado como favorito")
+            else resolve("Sucess")
         })})
 
 

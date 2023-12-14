@@ -4,7 +4,7 @@ import { conn } from "../utils/conexao.js";
 
 export const ObteradminId =(gestorId) =>{
     
-    const query = "SELECT * FROM admin where id = ? "
+    const query = "SELECT * FROM administradores where id = ? "
     return new Promise ((resolve,reject )=>{
     conn.query(query,[gestorId], (err, data)=>{
         if(err)  reject (err);
@@ -13,7 +13,7 @@ export const ObteradminId =(gestorId) =>{
     })})
 }
 export const newadmin = (dados)=>{
-    const query = "insert into admin (nome, email,senha,telefone) value (?)"
+    const query = "insert into administradores (nome, email,senha) value (?)"
     return new Promise((resolve, reject)=>{
 
       conn.query(query,[dados], (err)=>{
@@ -25,7 +25,7 @@ export const newadmin = (dados)=>{
 
 
 export const Actualiadmin = (dados,usuarioId)=>{
-    const query = "UPDATE Admin SET `nome` =?, `email`=?, `senha`=? WHERE `id` = ?"
+    const query = "UPDATE Administradores SET `nome` =?, `email`=?, `senha`=? WHERE `id` = ?"
     return new Promise ((resolve,reject)=>{
         conn.query(query,[...dados, usuarioId],(err)=>{
             if(err) reject(err)

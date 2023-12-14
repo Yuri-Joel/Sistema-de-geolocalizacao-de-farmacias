@@ -26,7 +26,7 @@ export const CriarUsuario = (dados)=>{
 return new Promise ((resolve,reject)=>{
     conn.query(query,[dados],(err)=>{
         if(err) reject(err)
-        else resolve("usuario Criado com sucesso")
+        else resolve("Sucess")
     })
 }) 
 }

@@ -10,7 +10,7 @@ export const CriarFav= async (req,res)=> {
     ];
 
     const data = await AddFavoritosMed(values)
-    res.status(200).json({data})
+    res.status(200).json({status: data})
 }
 
 export const DeletaFav = async (req,res)=> {
