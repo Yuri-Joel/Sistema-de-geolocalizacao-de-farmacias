@@ -4,7 +4,7 @@ import { hash } from "bcrypt";
 export const hashSenha = async  (senha)=>{
     
         const saltRounds = 10;
-      const v  = hash(senha, saltRounds)
+      const v  =  hash(senha, saltRounds)
 
        return v;
    
@@ -20,8 +20,8 @@ export const TodosU = async (_,res)=>{
 
 export const ContarUsuarios = async (_,res)=>{
     const data = await TodosUsuariosNumeros()
-    const d = data[0].total
-    res.status(200).json({total: d})
+    const total = data[0].total
+    res.status(200).json({total})
       
 
 }

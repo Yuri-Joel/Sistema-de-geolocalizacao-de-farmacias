@@ -1,8 +1,10 @@
 import { BrowserRouter, Routes, Route} from "react-router-dom"
 import { Cadastro } from "./pages/cadastro/Cadastro"
-import { login } from "./pages/login/login"
+import { Login } from "./pages/login/login"
 import {Home} from './pages/Home/Home'
 import { Maps } from "./pages/FarmaciaMaps/Maps"
+import { FarmaciaDetalhes } from "./pages/FarmaciaDetalhes/FarmaciaDetalhes"
+import { NotFoundPage } from "./pages/NotFound/NotFound"
 
 export const App = ()=> {
    
@@ -10,13 +12,16 @@ export const App = ()=> {
    <>
    <BrowserRouter>
   <Routes>
-    <Route path="/Home" exath Component={Home}></Route>
-   <Route path="/Cadastro" component={Cadastro}></Route>
-   <Route path="/login" component={login}></Route>
-   <Route path="/maps" component={Maps}></Route>
+   <Route path="/"  exath  Component={Home}></Route>
+   <Route path="/cadastro" Component={Cadastro}></Route>
+   <Route path="/login" Component={Login}></Route>
+   <Route path="/maps" Component={Maps}></Route>
+   <Route path="/farmacia/:id" Component={FarmaciaDetalhes}></Route>
+   
+   {/* Pagina 404 para caminhos não encontrados */}
+   <Route Component={NotFoundPage}></Route>
    </Routes> 
    </BrowserRouter>
-  
     </>
     )
 }

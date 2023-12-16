@@ -29,11 +29,8 @@ if (!resultadoAdministrador.erro) {
     res.cookie('token', resultadoAdministrador)
   return res.status(200).json({status: "Sucess"});
 }
-
 // Se não encontrado em nenhuma das tabelas, retorne uma mensagem de erro
 res.status(401).json({ erro: 'Credenciais inválidas' });
-
-
 }
 
 export const verifyUser = (req, res, next)=>{

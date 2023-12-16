@@ -22,7 +22,7 @@ export const autenticar = async (email, senha, tabela) => {
 
       if (senhaCorreta) {
         // Senha correta, retorne uma resposta adequada
-        const nome = usuario[0].nome;
+        const nome = usuario[0].id;
         const token = jwt.sign({nome}, "yuri", {expiresIn: '1d'})
         return token;
       }

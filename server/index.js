@@ -19,7 +19,7 @@ const port = 8800;
 
 app.use(express.json())
 app.use(cors({
-    origin:['http://localhost:8800'],
+    origin:['http://localhost:3000'],
     methods: ["POST", "GET", "PUT", "DELETE"]
 }))
 app.use(cookieParser())

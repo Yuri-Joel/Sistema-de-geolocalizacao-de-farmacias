@@ -5,7 +5,6 @@ export const CriarFav= async (req,res)=> {
    
     const values =[
         req.body.usuario,
-        req.body.med,
         req.body.farma 
     ];
 

@@ -1,24 +1,28 @@
 import axios from 'axios'
 import {useState} from 'react'
-import {useNavigate} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 
 
-export const login = ()=>{
+export const Login = ()=>{
 
-    const users = {
-        email: email,
-        senha: senha
-    }
-    const Navigate = useNavigate()
-    const [email, setemail] = useState("")
-    const [senha, setsenha] = useState("")
-    const handleSubmit = (e)=>{
+    const Navigate = useNavigate();
+
+    const [Email, setemail] = useState("")
+    const [Senha, setsenha] = useState("")
+
+    const handleSubmit = async (e)=>{
         e.preventDefault()
 
-        axios.post(`http://localhost:8800/l/login`, users)
+        const users = {
+            email: Email,
+            senha: Senha
+        }
+
+      await  axios.post(`http://localhost:8800/l/login`, users)
         .then(res => {
-            if(res.data.status == "Sucess"){
-                Navigate("/Home")
+            console.log(res.data)
+            if(res.data.status === "Sucess"){
+                Navigate("/maps")
             } else{
                 alert("erro ao logar neste servidor")
             }
@@ -28,20 +32,23 @@ export const login = ()=>{
     }
 
     return(
+        <>
         <form onSubmit={handleSubmit}>
             <div>
-                <input  type='email'placeholder='Email*' value={email} onChange={(e)=> setemail(e.target
+                <input  type='email'placeholder='Email*' value={Email} onChange={(e)=> setemail(e.target
                     .value)}/>
             </div>
             <div>
-                <input type='password'placeholder='Palavra-passe*' value={senha} onChange={(e)=> setsenha(e.target
+                <input type='password'placeholder='Palavra-passe*' value={Senha} onChange={(e)=> setsenha(e.target
                     .value)} />
             </div>
             <div>
                 <button type='submit'>login</button>  
             </div>
-            
         </form>
-    
+        <div>
+        <Link to="/cadastro">Cadastre-se</Link>
+        </div>
+        </>
     )
 }

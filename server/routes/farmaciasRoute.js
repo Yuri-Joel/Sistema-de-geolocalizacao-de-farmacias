@@ -12,7 +12,6 @@ routerFa.get("/obterfarma/:id", ObterFarmaID )
 
 routerFa.post("/criarfarma", CRiarFarma )
 
-
 routerFa.put("/actuafarma/:id", ActualizarFarma )
 
 routerFa.delete("/delfarma/:id", DeleteFarma )
