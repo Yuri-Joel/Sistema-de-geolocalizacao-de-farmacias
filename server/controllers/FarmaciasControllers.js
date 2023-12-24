@@ -5,7 +5,8 @@ import { ActualizarFarmacias, ContarFarmacias, CriarNewFarmacia, DeleteFarmacia,
 export const ContaFarma = async (_,res)=>{
     
     const data = await ContarFarmacias()
-    res.json({data})
+    const total = data[0].total; 
+    res.status(200).json({total})
 }
 
 export const TodasFarma = async (_,res)=>{

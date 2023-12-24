@@ -33,8 +33,7 @@ export const  RecuperaSenha  = async (req, res)=>{
      const values = [email, token, expiraEm]
 
      const bool = await addrecuperacao(values)
-      if(bool)
-{
+      if(bool){
      const transporter = createTransport({
         service: 'gmail',
         auth: {
@@ -46,7 +45,7 @@ export const  RecuperaSenha  = async (req, res)=>{
       const mailOptions = {
         to: email,
         subject: 'Recuperação de Senha',
-        text: `Clique no link para redefinir sua senha: http://localhost:8800/rede/redefinir-senha/${token}`,
+        text: `Clique no link para redefinir sua senha: http://localhost:3000/redefinir-senha/${token}`,
       };
     
       transporter.sendMail(mailOptions, (error, info) => {
@@ -90,8 +89,8 @@ export const  RedefinirSenha = async (req, res)=>{
       // Remova o registro da tabela recuperacao_senha, pois o token foi usado
 
       const del = await deleteSenhas(email)
-     
-      res.status(200).json({ message: data + del });
+      console.log(del)
+      res.status(200).json({ message: data });
     });
   
 }

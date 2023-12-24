@@ -5,6 +5,7 @@ const routerM = Express.Router()
 
 
 routerM.get("/mostra", MostraSMS)
+
 routerM.post("/novasms", AddNovasSMS)
 
 routerM.delete("/apagarsms/:id", DeleteSMS)

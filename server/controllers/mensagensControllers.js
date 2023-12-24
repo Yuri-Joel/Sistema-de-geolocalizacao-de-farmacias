@@ -7,7 +7,7 @@ export const MostraSMS = async (_, res)=>{
     const data = await MostrarMensagens();
     
    
-    res.status(200).json(data)
+    res.status(200).json({data})
 }
 
 export const AddNovasSMS = async (req,res)=>{
@@ -19,7 +19,7 @@ const values = [
 ]
 const data = await AddNewsms(values);
 
-    res.status(200).json(data)
+    res.status(200).json({data})
 }
 
  export const DeleteSMS = async (req, res) => {

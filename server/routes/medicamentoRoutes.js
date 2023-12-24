@@ -5,7 +5,7 @@ const routermed = express.Router()
 
 routermed.get('/med/:id',SelMedicamento)
 
-routermed.get("/compara/:id", ComparaMed)
+routermed.get("/compara", ComparaMed)
 
 
 // gestor

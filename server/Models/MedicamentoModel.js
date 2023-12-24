@@ -15,7 +15,7 @@ export const Medicamento = (id) =>{
 
 
 export const ComparaMedicamentos = (nome) =>{
-    const query = "SELECT m.nome AS nome_medicamento,f.nome AS nome_farmacia, m.preco FROM  medicamentos m JOIN  farmacia_medicamentos fm ON m.id = fm.medicamento_id JOIN farmacias f ON fm.farmacia_id = f.id WHERE  m.id = ? ORDER BY m.preco ASC";
+    const query = "SELECT m.nome AS nome_medicamento,f.nome AS nome_farmacia, m.preco FROM  medicamentos m JOIN  farmacia_medicamentos fm ON m.id = fm.medicamento_id JOIN farmacias f ON fm.farmacia_id = f.id WHERE  m.nome = ? ORDER BY m.preco ASC";
 
     // ? 'Ibuprofeno'
     return new Promise((resolve, reject)=>{

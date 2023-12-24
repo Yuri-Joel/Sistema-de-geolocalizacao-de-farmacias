@@ -1,6 +1,7 @@
 import axios from 'axios'
 import {useState} from 'react'
 import {Link, useNavigate} from 'react-router-dom'
+import {toast} from 'react-toastify'
 
 
 export const Login = ()=>{
@@ -17,21 +18,25 @@ export const Login = ()=>{
             email: Email,
             senha: Senha
         }
-
+if( Email || Senha ){
       await  axios.post(`http://localhost:8800/l/login`, users)
         .then(res => {
-            console.log(res.data)
             if(res.data.status === "Sucess"){
                 Navigate("/maps")
             } else{
-                alert("erro ao logar neste servidor")
+               toast.error(res.data.erro)
             }
 
         } )
-        .then(err => alert(err))
+        .catch(err =>toast.error(err));
     }
+     else {
+        toast.error("Preenche Todos os Campos")
+}
+  
+} 
 
-    return(
+return(
         <>
         <form onSubmit={handleSubmit}>
             <div>
@@ -46,6 +51,9 @@ export const Login = ()=>{
                 <button type='submit'>login</button>  
             </div>
         </form>
+                    <div>
+                        <Link to="/recuperar">Esqueceu a senha? Recupere</Link>
+                    </div>
         <div>
         <Link to="/cadastro">Cadastre-se</Link>
         </div>

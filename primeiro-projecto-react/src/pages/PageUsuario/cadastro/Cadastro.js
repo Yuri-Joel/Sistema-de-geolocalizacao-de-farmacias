@@ -1,6 +1,8 @@
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link} from "react-router-dom";
+import {toast} from 'react-toastify'
+
 
 
 
@@ -20,19 +22,22 @@ export const Cadastro =()=>{
    const handleSubmit = async(e)=>{
         e.preventDefault()
 
-        if( confirmSenha  ===  Cadastro.senha){
-     await  axios.post(`http://localhost:8800:/api/cadastro`, Cadastro)
+        if(( confirmSenha  ===  Cadastro.senha) && Cadastro.nome && Cadastro.email){
+     await  axios.post(`http://localhost:8800/api/cadastro`, Cadastro)
         .then(res => {
             console.log(res.data);
             if(res.data.status === "Sucess"){
+                setTimeout(()=>{
+                    toast.success("Cadastrado com Sucesso")
+                },1500)
                 Navigate("/login")
             } else{
-                alert("erro ao logar neste servidor");
+                toast.warn("erro ao logar neste servidor");
             }
         } )
-        .then(err => alert(err))
+        .catch(err => toast.warn(err))
     } else{
-        alert("Digite as mesmas passowords")
+       toast.error("ERRO!")
     }
     
     }
@@ -43,7 +48,7 @@ export const Cadastro =()=>{
             <input placeholder="Nome"  onChange={e => setCadastro({...Cadastro, nome: e.target.value})} />
         </div>
         <div>
-            <input placeholder="Email"  onChange={e => setCadastro({...Cadastro, email: e.target.value})} />
+            <input placeholder="Email" type="email" onChange={e => setCadastro({...Cadastro, email: e.target.value})} />
         </div>
         <div>
             <input placeholder="sua senha"  onChange={e => setCadastro({...Cadastro, senha: e.target.value})} />
@@ -54,7 +59,9 @@ export const Cadastro =()=>{
         <div>
            <button type="submit">Cadastrar</button>
         </div>
-
+        <div>
+            <Link to="/login">Login</Link>
+        </div>
         </form>
        
         </>

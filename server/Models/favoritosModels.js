@@ -35,7 +35,7 @@ export const favoritosMedId = (usuarioId)=>{
 }
 
 export const favoritosFarmaid = (usuarioId)=> {
-   const query ="SELECT f.* FROM favoritos fav  JOIN   farmacias f ON fav.farmacia_id = f.id WHERE fav.usuario_id = ?"
+   const query ="SELECT f.* FROM favoritos fav  JOIN farmacias f ON fav.farmacia_id = f.id WHERE fav.usuario_id = ?"
    return new Promise ((resolve,reject)=>{
     conn.query(query,[usuarioId],(err,result)=>{
         if(err) reject(err)

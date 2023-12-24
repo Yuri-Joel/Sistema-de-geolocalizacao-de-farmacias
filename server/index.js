@@ -13,6 +13,7 @@ import logactividades from './routes/logactividadesRoute.js'
 //services
 import login from './services/login/loginroutes.js'
 import recuperar from './services/recuperacao de senha/recuperacaoroute.js'
+import BuscarMed  from './services/Busca por um Medicamento/BuscaRoutes.js'
 
 const app = express();
 const port = 8800;
@@ -36,6 +37,7 @@ app.use("/log",logactividades)
 ///services
 app.use("/rede", recuperar)
 app.use("/l", login)
+app.use("/b", BuscarMed)
 
 // app.get("/", (_, res)=> res.send("HELLO"))
 

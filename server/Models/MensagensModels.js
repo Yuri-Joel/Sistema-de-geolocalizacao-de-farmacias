@@ -18,7 +18,7 @@ export const AddNewsms = (dados)=>{
   return  new Promise ((resolve, reject)=>{
         conn.query(query,[dados], (err)=>{
             if(err) reject(err);
-            else resolve("mensagem Enviada")
+            else resolve("Sucess")
         })
     })
 }
