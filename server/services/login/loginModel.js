@@ -1,6 +1,6 @@
 import { compare } from 'bcrypt';
 import {conn} from '../../utils/conexao.js'
-import jwt from 'jsonwebtoken';
+//import jwt from 'jsonwebtoken';
 import {promisify} from 'util'
 
 
@@ -22,9 +22,9 @@ export const autenticar = async (email, senha, tabela) => {
 
       if (senhaCorreta) {
         // Senha correta, retorne uma resposta adequada
-        const nome = usuario[0].id;
-        const token = jwt.sign({nome}, "yuri", {expiresIn: '1d'})
-        return token;
+        const Id = usuario[0].id;
+      //  const token = jwt.sign({nome}, "yuri", {expiresIn: '1d'})
+        return Id;
       }
     }
     // Se não encontrado na tabela, ou senha incorreta, retorne uma mensagem de erro

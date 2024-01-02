@@ -8,21 +8,33 @@ export const Login = ()=>{
 
     const Navigate = useNavigate();
 
-    const [Email, setemail] = useState("")
-    const [Senha, setsenha] = useState("")
+    const [email, setemail] = useState("")
+    const [senha, setsenha] = useState("")
 
     const handleSubmit = async (e)=>{
         e.preventDefault()
 
-        const users = {
-            email: Email,
-            senha: Senha
-        }
-if( Email || Senha ){
-      await  axios.post(`http://localhost:8800/l/login`, users)
+     
+if( email || senha ){
+      await  axios.post(`http://localhost:8800/l/login`, {email, senha})
         .then(res => {
             if(res.data.status === "Sucess"){
-                Navigate("/maps")
+                const id = res.data.id
+               if(res.data.tipo === "usuario"){
+                
+                localStorage.setItem("usuario", id);
+              
+                Navigate("/maps");
+               }
+               else if(res.data.tipo === "gestor"){
+                localStorage.setItem("gestor", id);
+               
+               }
+               else if(res.data.tipo === "admin"){
+                localStorage.setItem("admin", id);
+             
+               }
+              
             } else{
                toast.error(res.data.erro)
             }
@@ -40,11 +52,11 @@ return(
         <>
         <form onSubmit={handleSubmit}>
             <div>
-                <input  type='email'placeholder='Email*' value={Email} onChange={(e)=> setemail(e.target
+                <input  type='email'placeholder='email*' value={email} onChange={(e)=> setemail(e.target
                     .value)}/>
             </div>
             <div>
-                <input type='password'placeholder='Palavra-passe*' value={Senha} onChange={(e)=> setsenha(e.target
+                <input type='password'placeholder='Palavra-passe*' value={senha} onChange={(e)=> setsenha(e.target
                     .value)} />
             </div>
             <div>

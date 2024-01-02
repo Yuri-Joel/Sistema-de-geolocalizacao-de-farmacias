@@ -1,5 +1,5 @@
 
-import { conn } from "../../utils/conexao.js";
+import {conn}  from "../../utils/conexao.js";
 /// recuperar senha 
 export const Verify = (email)=>{
     const query = "SELECT * FROM usuarios WHERE email = ?";
@@ -28,27 +28,38 @@ export const  ActualizarSenha = (dados)=>{
     return new Promise ((resolve,reject)=>{
         conn.query(query,[...dados],(err)=>{
             if(err) reject(err)
-            else resolve("Actualizada senha")
+            else resolve("Actualizada")
         })})
 
 }
 
-export const deleteSenhas = (email) =>{
-    const query = 'DELETE FROM recuperacao_senha WHERE email = ?';
+export const deleteSenhas = (id) =>{
+    const query = 'DELETE FROM recuperacao_senha WHERE id = ?';
 
     return new Promise ((resolve,reject)=>{
-        conn.query(query,[email],(err)=>{
+        conn.query(query,[id],(err)=>{
             if(err) reject(err)
-            else resolve("recuperacao eliminada")
+            else resolve("recuperacao Feita com Sucesso")
         })})
 }
 
 export const ver = (e)=>{
 
-    const query = " SELECT * FROM recuperacao_senha WHERE token = ? AND expira_em > NOW()'";
+    const query = " SELECT * FROM recuperacao_senha WHERE token = ? AND expira_em > NOW()";
     return new Promise ((resolve,reject)=>{
         conn.query(query,[e],(err,data)=>{
             if(err) reject(err)
             else resolve(data)
         })})
 }
+
+export const verEmail = (e)=>{
+
+    const query = " SELECT * FROM recuperacao_senha WHERE id = ? ";
+    return new Promise ((resolve,reject)=>{
+        conn.query(query,[e],(err,data)=>{
+            if(err) reject(err)
+            else resolve(data)
+        })})
+}
+

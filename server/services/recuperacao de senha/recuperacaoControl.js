@@ -1,32 +1,37 @@
-import { ActualizarSenha, Verify, addrecuperacao, deleteSenhas, ver } from "./recuperacaoModel.js";
+import { hashSenha } from "../../controllers/usuarioControllers.js";
+import { ActualizarSenha, Verify, addrecuperacao, deleteSenhas, ver, verEmail } from "./recuperacaoModel.js";
 import { createTransport } from 'nodemailer';
-import jwt from 'jsonwebtoken';
-import crypto from 'crypto';
+
 
 export const  RecuperaSenha  = async (req, res)=>{
 
+
+  const {email} = req.body
+  const user = await Verify(email)
+  
     const tokenAleatorioCrypto = ()=>  {
       
        return new Promise((resolve, reject) => {
-        crypto.randomBytes(10,(erro, buffer)=>{
-          if(erro)reject(erro)
-          else{
-        const token = buffer.toString('hex');
-        resolve(token)
+      const seisDigitos = Math.floor(100000 + Math.random()* 900000);
+
+      if(seisDigitos){
+        resolve(seisDigitos.toString());
+      }else{
+        reject('erro ao gerar Token')
       }
-        })  })   
+    })   
     }
 
+    
     const secret = await tokenAleatorioCrypto();
-   
-    const {email} = req.body
-    const user = await Verify(email)
+    console.log(secret)
+    
 
     if (!user || user.length === 0) {
         return res.status(404).json({ message: 'E-mail não encontrado' });
       }
     
-      const token = jwt.sign({ email }, secret, { expiresIn: '1h' });
+      const token = secret;
       const expiraEm = new Date();
      expiraEm.setHours(expiraEm.getHours() + 1)
 
@@ -45,7 +50,7 @@ export const  RecuperaSenha  = async (req, res)=>{
       const mailOptions = {
         to: email,
         subject: 'Recuperação de Senha',
-        text: `Clique no link para redefinir sua senha: http://localhost:3000/redefinir-senha/${token}`,
+        text: `${token}`,
       };
     
       transporter.sendMail(mailOptions, (error, info) => {
@@ -60,37 +65,52 @@ export const  RecuperaSenha  = async (req, res)=>{
 
 export const  RedefinirSenha = async (req, res)=>{
 
-// Rota para redefinir a senha
 
-    const { token } = req.params;
-    const { novaSenha } = req.body;
-  
+// Rota para redefinir a senha
+  const {token} = req.body
     const valor = await ver(token)
 
     const result = valor[0].token
     // Verifique no banco de dados se o token está associado ao e-mail do usuário
-    
-    if (result.length === 0) {
+  
+    if (valor.length === 0) {
         return res.status(401).json({ message: 'Token inválido ou expirado' });
       }
   
     // Verifique se o token é válido
-    jwt.verify(token,result, async (err, decoded) => {
-      if (err) {
-        return res.status(401).json({ message: 'Token inválido' });
-      }
-    
-      const { email } = decoded;
-  
-      // Atualize a senha no banco de dados
-      const values= [novaSenha,email ]
-      const data = await ActualizarSenha(values)
-  
-      // Remova o registro da tabela recuperacao_senha, pois o token foi usado
+    if (result === token){
+      const { id } = valor[0];
+      
+      res.setHeader('Content-Type','application/json');
+      res.status(200).json({id}) 
+    }
+   else{
+   return res.status(401).json({ message: 'Token inválido' });
 
-      const del = await deleteSenhas(email)
-      console.log(del)
-      res.status(200).json({ message: data });
-    });
+   }
+   
+    
+      
+      
   
+}
+
+export const AdicionadoNovaSenha = async(req, res)=>{
+  
+
+  const {id} = req.body
+  const {novaSenha}  = req.body;
+  const result = await verEmail(id);
+
+  const email = result[0].email;
+  const senha = await hashSenha(novaSenha);
+  // Atualize a senha no banco de dados
+  const values= [senha, email]
+  const data = await ActualizarSenha(values)
+
+  // Remova o registro da tabela recuperacao_senha, pois o token foi usado
+
+  const del = await deleteSenhas(id)
+  console.log(del)
+  res.status(200).json({ message: data });
 }

@@ -22,7 +22,7 @@ export const ObterUsuarioId =(usuarioId) =>{
 }
 
 export const CriarUsuario = (dados)=>{
-    const query = "INSERT INTO usuarios(`nome`, `email`, `senha`) VALUES(?)";
+    const query = "INSERT INTO usuarios(`nome`,`telefone`, `email`, `senha`) VALUES(?)";
 return new Promise ((resolve,reject)=>{
     conn.query(query,[dados],(err)=>{
         if(err) reject(err)
@@ -42,7 +42,7 @@ export const deleteUsuarios = (usuarioId)=>{
 }
 
 export const ActualizarUsuarioId = (dados,usuarioId)=>{
-    const query = "UPDATE usuarios SET `nome` =?, `email`=?, `senha`=? WHERE `id` = ?"
+    const query = "UPDATE usuarios SET `nome` =?, `telefone`=?, `email`=? WHERE `id` = ?"
     return new Promise ((resolve,reject)=>{
         conn.query(query,[...dados, usuarioId],(err)=>{
             if(err) reject(err)
@@ -50,7 +50,24 @@ export const ActualizarUsuarioId = (dados,usuarioId)=>{
         })})
 
 }
+export const ActualizarSenhaUser = (dados,usuarioId)=>{
+    const query = "UPDATE usuarios SET senha= ? WHERE `id` = ?"
+    return new Promise ((resolve,reject)=>{
+        conn.query(query,[dados, usuarioId],(err)=>{
+            if(err) reject(err)
+            else resolve("Actualizada")
+        })})
 
+}
+
+export const VerificarSenha = (usuarioId) => {
+    const query = "SELECT * from usuarios WHERE id = ?";
+    return new Promise ((resolve,reject)=>{
+        conn.query(query,[ usuarioId],(err,data)=>{
+            if(err) reject(err)
+            else resolve(data)
+        })})
+}
 export const TodosUsuariosNumeros = ()=>{
     const query = "SELECT count(id) AS total FROM usuarios"
     return new Promise ((resolve, reject)=>{

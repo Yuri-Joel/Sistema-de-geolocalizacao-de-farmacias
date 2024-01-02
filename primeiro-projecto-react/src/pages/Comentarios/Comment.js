@@ -2,9 +2,12 @@ import React,{ useState } from "react"
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { Logout } from "../../components/Logout/Logout";
+import { Nome } from "../../components/NomeUser/Nome";
 
 
 export const Comentarios = ()=>{
+    
 const {usuario} = useParams()
 const [texto, setTexto] = useState('');
 
@@ -15,6 +18,7 @@ const HandleSubmit = async(e)=>{
         const res = await axios.post("http://localhost:8800/sms/novasms", {usuario, texto})
             if(res.data.data === "Sucess"){
                 toast.success("Enviada com Sucesso");
+                console.log(res.data)
             } else{
                 toast.error("ERRO!")
             }
@@ -27,6 +31,8 @@ const HandleSubmit = async(e)=>{
 }
     return(
         <>
+        <Logout />
+        <Nome />
         <div>
             <form onSubmit={HandleSubmit}>
                 <div>

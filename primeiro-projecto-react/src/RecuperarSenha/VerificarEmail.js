@@ -1,27 +1,35 @@
 import React,{ useState } from "react"
 import axios from "axios"
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom"
+
 
 
 
 export const Recuperar = ()=>{
 
+    const Navigate = useNavigate()
     const [email, setInput] = useState('');
    
 
     const handleSubmit = async (e)=>{
-        e.preventDefault()
-    await  axios.post("http://localhost:8800/rede/recuperar", email)
-        .then( res => {
-          
+        e.preventDefault();
+
+        try {
+            const res =  await  axios.post(`http://localhost:8800/rede/recuperar`,{email})
             if(res.status === 200){
                 toast.success("E-mail enviado com Sucesso");
+                Navigate(`/redefinir-senha`)
             }
             if(res.status !== 200){
                 toast.error("Erro no Servidor")
             }
             console.log(res.status)
-        }).catch(error => console.error(error))
+        } catch (error) {
+            console.log(error)
+        }
+            
+       
     }
     return (
         <>

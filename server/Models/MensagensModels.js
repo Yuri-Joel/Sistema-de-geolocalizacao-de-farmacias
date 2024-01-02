@@ -1,4 +1,4 @@
-import { conn } from "../utils/conexao.js";
+import  {conn}  from "../utils/conexao.js";
 
 // aqui eu adiciono novas mengens e mostro as mensagens enviadas
 

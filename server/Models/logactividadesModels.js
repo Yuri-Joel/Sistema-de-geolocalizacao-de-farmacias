@@ -1,4 +1,4 @@
-import { conn } from "../utils/conexao.js";
+import {conn}  from "../utils/conexao.js";
 
 export const addLog = (dados, tipo_usuario)=>{
 

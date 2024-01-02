@@ -11,7 +11,7 @@ const resultadoUsuario = await autenticar(email, senha,'usuarios');
 
 if (!resultadoUsuario.erro) {
     res.cookie('token', resultadoUsuario)
-  return res.status(200).json({status: "Sucess"});
+  return res.status(200).json({status: "Sucess", tipo: "usuario", id: resultadoUsuario});
 }
 
 // Autenticar gestor
@@ -19,7 +19,7 @@ const resultadoGestor = await autenticar(email, senha, 'gestores');
 
 if (!resultadoGestor.erro) {
       res.cookie('token', resultadoGestor)
-  return res.status(200).json({status: "Sucess"});
+  return res.status(200).json({status: "Sucess", tipo: "gestor", id: resultadoUsuario});
 }
 
 // Autenticar administrador
@@ -27,7 +27,7 @@ const resultadoAdministrador = await autenticar(email, senha, 'administradores')
 
 if (!resultadoAdministrador.erro) {
     res.cookie('token', resultadoAdministrador)
-  return res.status(200).json({status: "Sucess"});
+  return res.status(200).json({status: "Sucess", tipo: "admin", id: resultadoUsuario});
 }
 // Se não encontrado em nenhuma das tabelas, retorne uma mensagem de erro
 res.status(401).json({ erro: 'Credenciais inválidas' });

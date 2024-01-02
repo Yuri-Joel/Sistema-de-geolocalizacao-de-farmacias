@@ -7,7 +7,7 @@ const routerL = express.Router();
 routerL.post("/login", Verificação)
 
 routerL.get("/verificar", verifyUser, (req,res)=>{
-    return res.json({status: "Sucess", nome: req.nome})
+    return res.status(200).json({status: "Sucess", nome: req.nome})
 })
 
 

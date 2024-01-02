@@ -4,6 +4,6 @@ import { BuscaMedicamento } from "./BuscaControllers.js";
 const routeBuscas =  Express.Router();
 
 
-routeBuscas.get("/buscar", BuscaMedicamento);
+routeBuscas.get("/buscar/:search", BuscaMedicamento);
 
 export default routeBuscas;

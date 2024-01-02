@@ -1,10 +1,12 @@
 import  Express  from "express";
-import { RecuperaSenha, RedefinirSenha } from "./recuperacaoControl.js";
+import { RecuperaSenha, RedefinirSenha,AdicionadoNovaSenha } from "./recuperacaoControl.js";
 
 const routerU = Express.Router()
 
 routerU.post("/recuperar", RecuperaSenha)
 
-routerU.post("/redefinir-senha/:token", RedefinirSenha)
+routerU.post("/redefinir-senha", RedefinirSenha)
+
+routerU.post("/novasenha", AdicionadoNovaSenha)
 
 export default routerU;

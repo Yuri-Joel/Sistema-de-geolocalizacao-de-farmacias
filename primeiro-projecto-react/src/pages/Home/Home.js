@@ -17,7 +17,7 @@ export const Home = ()=>{
       // console.log(res.data.total)
         setusers(res.data.total); 
      })
-     .catch(err =>toast.error("erro"+err))
+     .catch(err => toast.error("erro"+err))
  }
  
  const CountFarmacias =async()=>{
@@ -40,7 +40,6 @@ export const Home = ()=>{
  
     return(
         <>
-         <div>Yuri</div>
          <Link to="/login">iniciar Sessao</Link>
          <div>{users} : Usuarios</div>
         <div>{Farmacias}: Farmacias</div>

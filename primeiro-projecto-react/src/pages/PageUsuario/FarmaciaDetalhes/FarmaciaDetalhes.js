@@ -2,9 +2,12 @@ import React,{  useEffect, useState } from 'react'
 import {Link, useParams} from 'react-router-dom'
 import { toast } from 'react-toastify';
 import axios from 'axios';
+import { Logout } from '../../../components/Logout/Logout';
+import { Nome } from '../../../components/NomeUser/Nome';
 
 
 export const FarmaciaDetalhes = ()=>{
+
 const {id} = useParams()
 const {ad} = useParams()
 const [Medi, setMedi] = useState([])
@@ -30,7 +33,7 @@ useEffect(()=>{
 
 const favoritarMedi =async( med)=>{
   const usuario = ad;
-  const farma = null;
+  const farma = id;
   await axios.post("http://localhost:8800/fav/favoritos/", {usuario, med, farma})
   .then(res => {
       if(res.data.status === "Sucess"){
@@ -43,38 +46,34 @@ const favoritarMedi =async( med)=>{
 }
 
 const Comparar = async(med)=>{
- 
-  await axios.post("http://localhost:8800/m/compara", {med})
-  .then(res => {
-      if(res.data.data){
-        setMedi(res.data.data)
-        setbool(true);
 
-        toast.success("Medicamento Adicionado como favorito")
-          
-      }
-  })
-  .catch(error => console.error( error))
+  try{
+    const res = await axios.get(`http://localhost:8800/m/compara/${med}`)
+    setMedi(res.data.data)
+    setbool(true);    
+  }
+  catch(error ){
+    console.error( error)
+  } 
 }
 
 const Pesquisar = async(e)=>{
   e.preventDefault()
   const search = Input;
- await  axios.post("http://localhost:8800/b/buscar", search)
-   .then(res =>{
-         console.log(res.data)
-         if(res.data.data){
-         setMedi(res.data.data)   
-         setbool(true)
-        }
-   })
-   .catch(erro => console.error(erro))
+  try{
+    const res = await  axios.get(`http://localhost:8800/b/buscar/${search}`)
+    console.log(res.data)
+    if(res.data.data){
+    setMedi(res.data.data)   
+    setbool(true)
+  }
+   }catch(erro){ console.error(erro)}
 
 }
 
 const Handledown =(event)=>{
   if(event.key === 'Enter'){
-      Pesquisar()
+      Pesquisar();
   }
 }
 
@@ -82,8 +81,13 @@ const Handledown =(event)=>{
     return(
         <>
         <div>
+           <div>
+           <Link to="/perfil">Meu perfil</Link>  
+          </div>
+          <Nome />
+          <Logout />
           <form onSubmit={Pesquisar}>
-          <input placeholder='Pesquise o nome de um medicamneto' onKeyDown={Handledown} value={Input} id='pesquisar' onChange={e => setInput(e.target.value)}  />
+          <input placeholder='Pesquise o nome de um medicamneto' onKeyDown={(e)=> Handledown(e)} value={Input}  onChange={e => setInput(e.target.value)}  />
           <button type='submit'> Pesquisar</button>
           </form>
         </div>
@@ -92,6 +96,9 @@ const Handledown =(event)=>{
         </div>
         <div>
          <Link to={`/favfarma/${ad}`}>Ver Farmacias favoritos</Link>
+        </div>
+        <div>
+            <Link to={`/comentar/${ad}`}> Comentarios</Link>
         </div>
         {
          bool ?
@@ -103,7 +110,7 @@ const Handledown =(event)=>{
                   <h2> {med.nome}</h2> 
                   <p> { med.tipo} </p>
                   <p> { med.informacoes} </p>
-                  <h2>{med.preco}</h2>
+                  <h2>{med.preco +" kz"}</h2>
                   <div>
                     <img src={med.imagem_path} alt='descricao de um medicamento' />
                   </div>

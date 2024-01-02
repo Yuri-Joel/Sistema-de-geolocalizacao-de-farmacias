@@ -1,5 +1,5 @@
 import express from 'express'
-import { ObterU,TodosU, DeletaU, ActualizarU, ContarUsuarios, CriarU} from '../controllers/usuarioControllers.js'
+import { ObterU,TodosU, DeletaU, ActualizarU, ContarUsuarios, CriarU, ActualizarSenha} from '../controllers/usuarioControllers.js'
 
 const router = express.Router()
 
@@ -12,9 +12,7 @@ router.post('/cadastro',CriarU)
 
 router.delete('/deletar/:id', DeletaU)
 router.put('/actualizar/:id', ActualizarU)
-/*
-router.put("/:id", UpdateUser)
-router.post("/", addUser)
-router.delete("/:id", DeleteUser)*/
+router.put('/actualizarsenha/:id', ActualizarSenha)
+
 
 export default router;

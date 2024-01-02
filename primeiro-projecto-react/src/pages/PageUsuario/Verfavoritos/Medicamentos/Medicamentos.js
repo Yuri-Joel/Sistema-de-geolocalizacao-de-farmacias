@@ -2,6 +2,8 @@ import axios from "axios"
 import React,{ useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import {Logout} from '../../../../components/Logout/Logout'
+import { Nome } from "../../../../components/NomeUser/Nome";
 
 
 export const FavoritosMedicamentos = ()=>{
@@ -14,13 +16,15 @@ export const FavoritosMedicamentos = ()=>{
         try{
             const res = await axios.get(`http://localhost:8800/fav/favmedi/${id}`)     
             setMedi(res.data.data)
-        } catch(error){
+        }
+         catch (error){
             toast.error(error)
         };
     }
+    
     useEffect(()=>{
         FavMedi()
-    })
+    },[])
 
 
     const Delete = async(id)=>{
@@ -31,6 +35,7 @@ export const FavoritosMedicamentos = ()=>{
             if(res.data.data){
                
                 toast.success(res.data.data)
+                FavMedi();
             }
             
         }).catch((err) => {
@@ -39,12 +44,12 @@ export const FavoritosMedicamentos = ()=>{
     }
     return(
         <>
-        
-        
+        <Nome />
+        <Logout />
             <table>
                 <thead>
                     <tr>
-                    <th>Nome</th>
+                    <th>Nome </th>
                     <th>Preço</th>
                     <th>tipo</th>
                     <th>data_validade</th>
@@ -54,14 +59,14 @@ export const FavoritosMedicamentos = ()=>{
                 <tbody>
                     {
             med.map((medi)=>(
-                <tr key={medi.id}>
+                <tr key={medi.ide}>
                     <td>{medi.nome}</td>
                     <td>{medi.preco}</td>
                     <td>{medi.tipo}</td>
                     <td>{medi.data_validade}</td>
                     <td>{medi.nome_farmacia}</td>
                     <td>
-                        <button onClick={()=> Delete(medi.id)}>Eliminar</button>
+                        <button onClick={()=> Delete(medi.ide)}>Eliminar</button>
                     </td>
                 </tr>
             ))}

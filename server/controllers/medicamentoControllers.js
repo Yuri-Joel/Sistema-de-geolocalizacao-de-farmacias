@@ -12,7 +12,7 @@ export const SelMedicamento = async( req,res) =>{
 
 export const ComparaMed = async (req, res )=>{
 
-    const {med} = req.body
+    const {med} = req.params
 
     const data = await ComparaMedicamentos(med)
 

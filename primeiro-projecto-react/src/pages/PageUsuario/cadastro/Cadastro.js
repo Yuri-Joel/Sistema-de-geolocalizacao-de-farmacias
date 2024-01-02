@@ -13,6 +13,7 @@ export const Cadastro =()=>{
    
     const [Cadastro, setCadastro]= useState({
         nome: '',
+        telefone: '',
         email:'',
         senha:''
     })
@@ -22,7 +23,7 @@ export const Cadastro =()=>{
    const handleSubmit = async(e)=>{
         e.preventDefault()
 
-        if(( confirmSenha  ===  Cadastro.senha) && Cadastro.nome && Cadastro.email){
+        if(( confirmSenha  ===  Cadastro.senha) && Cadastro.nome && Cadastro.email && Cadastro.senha && Cadastro.telefone){
      await  axios.post(`http://localhost:8800/api/cadastro`, Cadastro)
         .then(res => {
             console.log(res.data);
@@ -31,8 +32,8 @@ export const Cadastro =()=>{
                     toast.success("Cadastrado com Sucesso")
                 },1500)
                 Navigate("/login")
-            } else{
-                toast.warn("erro ao logar neste servidor");
+            } else {
+                toast.warn(res.data.status);
             }
         } )
         .catch(err => toast.warn(err))
@@ -46,6 +47,9 @@ export const Cadastro =()=>{
         <form onSubmit={handleSubmit}>
         <div>
             <input placeholder="Nome"  onChange={e => setCadastro({...Cadastro, nome: e.target.value})} />
+        </div>
+        <div>
+            <input placeholder="Numero"  onChange={e => setCadastro({...Cadastro, telefone: e.target.value})} />
         </div>
         <div>
             <input placeholder="Email" type="email" onChange={e => setCadastro({...Cadastro, email: e.target.value})} />
