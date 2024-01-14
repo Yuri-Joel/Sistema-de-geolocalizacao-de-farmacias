@@ -3,7 +3,7 @@ import { ActuaMedi, AddMed, ComparaMed, DeleMedi, DispoMed, SelMedicamento } fro
 
 const routermed = express.Router()
 
-routermed.get('/med/:id',SelMedicamento)
+routermed.get('/med/:id/:usuario',SelMedicamento)
 
 routermed.get("/compara/:med", ComparaMed)
 

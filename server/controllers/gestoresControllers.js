@@ -4,7 +4,8 @@ import { hashSenha } from "./usuarioControllers.js"
 
 export const ContarGestores = async(_,res) =>{
     const data = await CGestores()
-    res.status(200).json({data})
+    const total = data[0].total
+    res.status(200).json({total})
 }
 
 export const CTodosGestores = async (_,res)=>{

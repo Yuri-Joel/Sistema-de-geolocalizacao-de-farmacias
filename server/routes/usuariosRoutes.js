@@ -8,7 +8,7 @@ router.get('/usuarioId/:id', ObterU)
 router.get('/dados', TodosU)
 router.get('/oneuser', ContarUsuarios)
 
-router.post('/cadastro',CriarU)
+router.post('/cadastro', CriarU)
 
 router.delete('/deletar/:id', DeletaU)
 router.put('/actualizar/:id', ActualizarU)

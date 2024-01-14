@@ -4,7 +4,8 @@ import { ActualizarMedi, AddMedicamento, ComparaMedicamentos, DeletarMed, Dispon
 export const SelMedicamento = async( req,res) =>{
 
     const {id} = req.params
-    const data = await Medicamento(id)
+    const {usuario} = req.params;
+    const data = await Medicamento(usuario,id)
 
     res.status(200).json({data})
 

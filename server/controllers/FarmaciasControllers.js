@@ -22,14 +22,16 @@ export const ObterFarmaID = async (req,res)=>{
 }
 
 export const CRiarFarma = async (req,res)=>{
+  const hora = "24h"
     const values = [
         req.body.nome,
         req.body.nif,
         req.body.telefone,
+        req.body.email,
         req.body.endereco,
         req.body.latitude,
         req.body.longitude,
-        req.body.horario_funcionamento
+        hora
     ]
     const data = await CriarNewFarmacia(values)
     res.json({data})

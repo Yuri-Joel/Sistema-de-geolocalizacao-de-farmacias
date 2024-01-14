@@ -1,10 +1,10 @@
 import { hashSenha } from "../../controllers/usuarioControllers.js";
 import { ActualizarSenha, Verify, addrecuperacao, deleteSenhas, ver, verEmail } from "./recuperacaoModel.js";
 import { createTransport } from 'nodemailer';
+import {Validatepass} from '../../controllers/usuarioControllers.js'
 
 
 export const  RecuperaSenha  = async (req, res)=>{
-
 
   const {email} = req.body
   const user = await Verify(email)
@@ -22,16 +22,12 @@ export const  RecuperaSenha  = async (req, res)=>{
     })   
     }
 
+    const token = await tokenAleatorioCrypto();
     
-    const secret = await tokenAleatorioCrypto();
-    console.log(secret)
-    
-
     if (!user || user.length === 0) {
-        return res.status(404).json({ message: 'E-mail não encontrado' });
+        return res.status(200).json({ message: 'E-mail não encontrado' });
       }
     
-      const token = secret;
       const expiraEm = new Date();
      expiraEm.setHours(expiraEm.getHours() + 1)
 
@@ -55,9 +51,9 @@ export const  RecuperaSenha  = async (req, res)=>{
     
       transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
-          return res.status(500).send(error.message);
+          return res.status(200).json({message: 'Erro ao enviar o Pacote', status: error.message});
         }
-        res.status(200).json('E-mail enviado com sucesso: ' + info.response);
+        res.status(200).json({message:"Sucess" , status:`E-mail enviado com sucesso: ${info.response}`});
       });
 }    
     
@@ -65,52 +61,53 @@ export const  RecuperaSenha  = async (req, res)=>{
 
 export const  RedefinirSenha = async (req, res)=>{
 
-
 // Rota para redefinir a senha
   const {token} = req.body
-    const valor = await ver(token)
+  const valor = await ver(token)
 
-    const result = valor[0].token
     // Verifique no banco de dados se o token está associado ao e-mail do usuário
-  
     if (valor.length === 0) {
-        return res.status(401).json({ message: 'Token inválido ou expirado' });
+        return res.status(200).json({ message: 'Token inválido ou expirado' });
       }
-  
+
+     
+      const result = valor[0].token;
     // Verifique se o token é válido
     if (result === token){
       const { id } = valor[0];
       
       res.setHeader('Content-Type','application/json');
-      res.status(200).json({id}) 
+      res.status(200).json({message: "Sucess", id}) 
     }
    else{
-   return res.status(401).json({ message: 'Token inválido' });
+   return res.status(200).json({ message: 'Token inválido' });
 
    }
-   
     
-      
-      
-  
 }
 
 export const AdicionadoNovaSenha = async(req, res)=>{
   
-
   const {id} = req.body
-  const {novaSenha}  = req.body;
+  const {novaSenha} = req.body;
   const result = await verEmail(id);
 
-  const email = result[0].email;
+  const { email } = result[0];
+
+  const validar = await Validatepass(novaSenha)
+  if(validar){
   const senha = await hashSenha(novaSenha);
   // Atualize a senha no banco de dados
-  const values= [senha, email]
+  const values= [senha, email];
+
   const data = await ActualizarSenha(values)
 
   // Remova o registro da tabela recuperacao_senha, pois o token foi usado
 
   const del = await deleteSenhas(id)
   console.log(del)
-  res.status(200).json({ message: data });
+  res.status(200).json({ message: data })
+}else{
+  res.status(200).json({message: "A senha deve conter mais de 6 caracteres"})
+}
 }

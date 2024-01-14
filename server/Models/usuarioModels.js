@@ -60,10 +60,10 @@ export const ActualizarSenhaUser = (dados,usuarioId)=>{
 
 }
 
-export const VerificarSenha = (usuarioId) => {
-    const query = "SELECT * from usuarios WHERE id = ?";
+export const VerificarSenha = ( tabela,usuarioId) => {
+    const query = "SELECT * from ?? WHERE id = ?";
     return new Promise ((resolve,reject)=>{
-        conn.query(query,[ usuarioId],(err,data)=>{
+        conn.query(query,[tabela, usuarioId],(err,data)=>{
             if(err) reject(err)
             else resolve(data)
         })})

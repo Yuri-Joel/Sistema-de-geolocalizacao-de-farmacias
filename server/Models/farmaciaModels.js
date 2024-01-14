@@ -34,13 +34,13 @@ export const  ObterFarmaciaId = (farmaid)=>{
 }
 
 export const CriarNewFarmacia = (dados) => {
-
-    const query = "INSERT INTO farmacias (nome,nif,telefone,endereco,latitude,longitude,horario_funcionamento) VALUES (?)"
+ 
+    const query = "INSERT INTO farmacias (nome,nif,telefone,email,endereco,latitude,longitude,horario_funcionamento) VALUES (?)"
       return new Promise((resolve,reject)=>{
 
         conn.query(query,[dados], (err)=>{
             if(err)  reject (err);
-            else resolve("Farmacia criada com sucesso")
+            else resolve("Sucess")
     })
     })
 }

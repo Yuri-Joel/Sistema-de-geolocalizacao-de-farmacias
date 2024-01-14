@@ -24,9 +24,18 @@ export const newadmin = (dados)=>{
 
 
 export const Actualiadmin = (dados,usuarioId)=>{
-    const query = "UPDATE Administradores SET `nome` =?, `email`=?, `senha`=? WHERE `id` = ?"
+    const query = "UPDATE Administradores SET `nome` =?, `email`=? WHERE `id` = ?"
     return new Promise ((resolve,reject)=>{
         conn.query(query,[...dados, usuarioId],(err)=>{
+            if(err) reject(err)
+            else resolve("Actualizado")
+        })})
+
+}
+export const Actualiadminsenha = (dados,usuarioId)=>{
+    const query = "UPDATE Administradores SET ? `senha`= ? WHERE `id` = ?"
+    return new Promise ((resolve,reject)=>{
+        conn.query(query,[dados, usuarioId],(err)=>{
             if(err) reject(err)
             else resolve("Actualizado")
         })})

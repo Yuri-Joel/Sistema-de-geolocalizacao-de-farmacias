@@ -1,14 +1,17 @@
 import  Express  from "express";
-import { CriarFav, DeletaFav, favouritosFarma, favouritosMed } from "../controllers/favoritosControllers.js";
+import { CriarFavFarma, CriarFavMed, DeletaFav, favoritosFarma, favoritosMed } from "../controllers/favoritosControllers.js";
 
 const routerF = Express.Router()
 
-routerF.post("/favoritos", CriarFav)
+routerF.post("/favoritos-m", CriarFavMed)
 
-routerF.delete("/favoritodel/:id", DeletaFav)
+routerF.post("/favoritos-f", CriarFavFarma)
 
-routerF.get("/favoritos/:id", favouritosFarma)
 
-routerF.get("/favmedi/:id",favouritosMed)
+routerF.delete("/favoritodel/:id/:tabela", DeletaFav)
+
+routerF.get("/favoritos/:id", favoritosFarma)
+
+routerF.get("/favmedi/:id",favoritosMed)
 
 export default routerF;

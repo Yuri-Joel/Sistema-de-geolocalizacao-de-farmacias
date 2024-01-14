@@ -1,0 +1,13 @@
+*{
+  padding: 0px;
+  margin: 0px;
+  box-sizing: border-box;
+  text-decoration: none;
+   
+}
+:root{
+     --padrao:#00968c;
+     --tipodeletra:sans-serif;
+     --branca:white;
+     
+}

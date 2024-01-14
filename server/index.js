@@ -14,6 +14,8 @@ import logactividades from './routes/logactividadesRoute.js'
 import login from './services/login/loginroutes.js'
 import recuperar from './services/recuperacao de senha/recuperacaoroute.js'
 import BuscarMed  from './services/Busca por um Medicamento/BuscaRoutes.js'
+import {Tabela} from './utils/Tabelas.js'
+import Foto from './upload/foto.js'
 
 const app = express();
 const port = 8800;
@@ -33,12 +35,15 @@ app.use("/m", Medi)
 app.use("/ges", gestor)
 app.use("/ad", Admin)
 app.use("/log",logactividades)
+app.use(Foto)
 
 ///services
 app.use("/rede", recuperar)
 app.use("/l", login)
 app.use("/b", BuscarMed)
-
+    
+app.use("/upload", express.static('upload'))
+Tabela();
 // app.get("/", (_, res)=> res.send("HELLO"))
 
 app.use((_,res)=>{

@@ -1,14 +1,16 @@
 import {conn}  from "../utils/conexao.js";
 
 
-export const Medicamento = (id) =>{
-    const query = " SELECT m.* FROM medicamentos m JOIN farmacia_medicamentos fm ON m.id = fm.medicamento_id WHERE fm.farmacia_id = ?;";
+export const Medicamento = (usuario, farma) =>{
+   // const query = " SELECT m.* FROM medicamentos m JOIN farmacia_medicamentos fm ON m.id = fm.medicamento_id WHERE fm.farmacia_id = 3;";
+   
 
+   const query = "SELECT medicamentos.*, favoritos_medicamentos.id AS favorito_id from farmacia_medicamentos  join medicamentos on farmacia_medicamentos.medicamento_id = medicamentos.id LEFT join favoritos_medicamentos on favoritos_medicamentos.medicamento_id = medicamentos.id AND favoritos_medicamentos.usuario_id = ? where farmacia_medicamentos.farmacia_id = ?";
     return new Promise((resolve,reject)=>{
 
-        conn.query(query,[id],(err, result)=>{
+        conn.query(query,[usuario,farma],(err, result)=>{
             if(err)  reject (err);
-            else resolve(result)
+            else resolve(result);
     })
     })
 }

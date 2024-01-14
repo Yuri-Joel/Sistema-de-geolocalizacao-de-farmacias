@@ -34,12 +34,12 @@ export const ObtergestorId =(gestorId) =>{
     })})
 }
 export const newGestores = (dados)=>{
-    const query = "insert into gestores (nome,email,nome_user,senha,telefone, farmacia_id) value (?)"
+    const query = "insert into gestores (nome,email,nome_user,senha,telefone,farmacia_id) value (?)"
     return new Promise((resolve, reject)=>{
 
       conn.query(query,[dados], (err)=>{
           if(err)  reject (err);
-          else resolve("Gestor criado com sucesso")
+          else resolve("Sucess")
   })
   })
 }
