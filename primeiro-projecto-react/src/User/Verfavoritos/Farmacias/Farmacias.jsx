@@ -13,6 +13,7 @@ import 'bootstrap/js/dist/button';
 import 'bootstrap/js/dist/offcanvas';
 import 'bootstrap/js/dist/scrollspy';
 import FooterDashboard from "../../../Dashboard/components/footer/footer";
+import { LogActividades } from "../../../Log_Actividades/Log_actividades";
 
 export const FavoritosFarmacia = ()=>{
 
@@ -51,8 +52,9 @@ export const FavoritosFarmacia = ()=>{
     }
     return(
         <> 
-            <HeaderUser nome={<Nome />} />
+            <HeaderUser nome={<Nome />} placeholder={'pesquisar....'} />
             <UserSide />
+            <LogActividades />
             <main id="main" className="main" style={{backgroundColor:'#00968c53'}} >
             <div className="pagetitle">
       <h1 style={{color:'white'}}>Dashboard</h1>
@@ -63,10 +65,10 @@ export const FavoritosFarmacia = ()=>{
         </ol>
       </nav>
     </div>
-    <section className="section dashboard">
+  <div className="container">
       <div className="row">       
    <div className="card info-card sales-card   min-vh-40" style={{height:'30rem'}}>
-   <table className="table">
+   <table className="table table-borderless datatable">
             <thead>
                     <tr>
                     <th>Nome </th>
@@ -97,7 +99,10 @@ export const FavoritosFarmacia = ()=>{
                     </td>
                     
                     <td>
-                        <button className="btn btn-danger" onClick={()=> Delete(farmacia.ide)}>Eliminar</button>
+                    <Link  className="btn btn-danger btn-sm" title="Remove my profile image">
+                        <i className="bi bi-trash" onClick={()=> Delete(farmacia.ide)}></i>
+                                                                 
+                    </Link>
                     </td>
                 </tr>
             ))}
@@ -110,7 +115,7 @@ export const FavoritosFarmacia = ()=>{
     
     </div>
     
-    </section>
+    </div>
             
             </main>
            <FooterDashboard />        

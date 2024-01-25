@@ -8,6 +8,10 @@ import { AdminMostrarFarmacias } from './Admintrador/AdminMostrarFarmacias/Admin
 import { AdminListarUsuario } from './Admintrador/AdminUsuario/adminUsuarioListar';
 import { AdminListarGestor } from './Admintrador/AdminMostrarGestor/AdminListarGestor';
 import { AdminMensagens } from './Admintrador/AdminMensagens/AdminMensagens';
+import { AdminCadastrarAdmin } from './Admintrador/AdminCadastrarAdmin/AdminCadastrarAdmin';
+import { ListarAdmin } from './Admintrador/AdminCadastrarAdmin/ListarAdmin.jsx/ListarAdmin';
+import { ObterLog } from './Admintrador/AdminLogActividades/AdminLog';
+import { AdminDados } from './Admintrador/adminDadosEstatiscos/Admindados';
 
 
 export const RoutesAdmin = ()=>{
@@ -23,6 +27,10 @@ export const RoutesAdmin = ()=>{
         <Route path='/adminfarmacias' Component={AdminMostrarFarmacias}></Route>
         <Route path='/adminlistarGestor' Component={AdminListarGestor}></Route>
         <Route path='/adminmensagem' Component={AdminMensagens}></Route>
+        <Route path='/adminCadastrarAdmin' Component={AdminCadastrarAdmin}></Route>
+        <Route path='/ListarAdmin' Component={ListarAdmin}></Route>
+        <Route path='/adminlog' Component={ObterLog}></Route>
+        <Route path='/admindados' Component={AdminDados}></Route>
 
             </Routes>         
         </>

@@ -14,6 +14,8 @@ import { Nome } from "../../components/NomeUser/Nome";
 import HeaderUser from '../../Dashboard/components/heder/user/headerUser';
 import FooterDashboard from '../../Dashboard/components/footer/footer';
 import UserSide from '../../Dashboard/components/aside/user/userSide';
+import "./map.css"
+import { LogActividades } from '../../Log_Actividades/Log_actividades';
 
 export default function Map() {
   //  
@@ -49,6 +51,11 @@ ObterUserLocation();
   const center = {
       lat: -8.8383,
       lng: 13.2344
+  }
+
+  const labelStyle = {
+    color: 'white',
+    fontWeight: 'bold',
   }
   const handleCloseinfoWindow = () =>{
       setselectfarma(null)
@@ -132,9 +139,10 @@ ObterUserLocation();
 <>
 { IsAutenticado ?
  <>
-<HeaderUser nome={<Nome />}/>
+<HeaderUser nome={<Nome />} placeholder={'Pesquisar Farmacia....'}/>
 
 <UserSide />
+<LogActividades />
 
 
 <main id="main" className="main" style={{backgroundColor:'#00968c53'}}>
@@ -149,18 +157,36 @@ ObterUserLocation();
       </nav>
     </div>
 
-    <section className="section dashboard">
+    <section className="section">
       <div className="row">
 
            
  <div className="card info-card sales-card   min-vh-40" style={{height:'30rem'}}>
-       
-	  { dataload && (
+      
+	 { dataload && (
             <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={12}>
                 {
                     Farmacias.map((farma)=>(
                         <Marker key={farma.id}
                         position={{lat: farma.latitude, lng: farma.longitude}}
+                        
+                        options={{
+                           label: {
+                            text: `${farma.nome}`,
+                            className: "map-marker",      
+                          },
+                           // icon: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png'
+                        }}
+                          icon={{
+                   url: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png', // Ícone verde padrão do Google Maps
+                      }}
+                        
+                        label={{
+                          text: 'F',
+                          color: labelStyle.color,
+                          fontWeight: labelStyle.fontWeight,
+                        }}
+                       
                         title={farma.nome}
                         onClick={()=> handleMarkerClick(farma)}
                         />  
@@ -207,7 +233,8 @@ ObterUserLocation();
           {directions && <DirectionsRenderer directions={directions} /> }
             </GoogleMap>
 
-)}  
+)}   
+ 
         
             <button className='btn btn-success'style={{marginTop:'1rem',backgroundColor:'#00968c'}}  onClick={()=> handleCriarRota()} >Criar Rota</button>
       

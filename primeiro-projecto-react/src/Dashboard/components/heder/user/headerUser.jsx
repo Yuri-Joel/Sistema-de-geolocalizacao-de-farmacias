@@ -12,7 +12,7 @@ import {Terminar} from '../../../../components/Logout/Logout'
 import k from '../../../../assets/Geo Farma/Geo Farma.png'
 import axios from 'axios'
 import imagem from '../../../../assets/Screenshot_20240110-233026.png'
-export default function HeaderUser({nome}) {
+export default function HeaderUser({nome,onKeyDown,value,placeholder,onChange,onSubmit}) {
      
   const Idusuario  = localStorage.getItem("usuario");
  const [Foto, SetFoto] = useState('');
@@ -43,6 +43,8 @@ const ObterUserFoto = async ()=>{
 useEffect(()=>{
 ObterUserFoto();
 },[])
+
+
   return (
     <>
 
@@ -57,8 +59,8 @@ ObterUserFoto();
 </div>
 
 <div className="search-bar">
-<form className="search-form d-flex align-items-center" method="POST" action="#">
- <input type="text" name="query" placeholder="Pesquisar" title="Enter search keyword" style={{width:'20rem'}}/>
+<form className="search-form d-flex align-items-center" onSubmit={onSubmit}>
+ <input type="text" onKeyDown={onKeyDown} value={value} name="query" placeholder={placeholder} onChange={onChange} title="Enter search keyword" style={{width:'20rem'}}/>
  <button type="submit" title="Search"><i className="bi bi-search"></i></button>
 </form>
 </div>

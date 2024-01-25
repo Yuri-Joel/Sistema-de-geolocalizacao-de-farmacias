@@ -36,12 +36,26 @@ export default function Login() {
              }
              else if(res.data.tipo === "gestor"){
               localStorage.setItem("usuario", id);
-             
+              localStorage.setItem("gestor", id)
+              localStorage.setItem("farma", res.data.farmacia)
+              Navigate("/gestor")
+             }
+             else if(res.data.tipo === "subgestor"){
+               
+               localStorage.setItem("usuario", res.data.idGestor);
+               localStorage.setItem("subgestor", id)
+               localStorage.setItem("farma", res.data.farmacia)
+              Navigate("/gestor")
              }
              else if(res.data.tipo === "admin"){
               localStorage.setItem("usuario", id);
-
               Navigate("/admin")
+             } 
+             else if (res.data.tipo === "adminPrincipal"){
+
+               localStorage.setItem("usuario", id)
+               localStorage.setItem("admin", id)
+               Navigate("/admin")
              }
             
           } else{

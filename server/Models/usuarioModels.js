@@ -68,7 +68,7 @@ export const VerificarSenha = ( tabela,usuarioId) => {
             else resolve(data)
         })})
 }
-export const TodosUsuariosNumeros = ()=>{
+export const TodosUsuariosNumeros = () =>{
     const query = "SELECT count(id) AS total FROM usuarios"
     return new Promise ((resolve, reject)=>{
     conn.query(query,(err, data)=>{
@@ -76,5 +76,18 @@ export const TodosUsuariosNumeros = ()=>{
         else resolve(data)
 
     })})
+
+}
+
+
+export const EliminarFoto = (tabela,id)=>{
+
+    const query = "UPDATE ?? SET `foto` = null  where id = ?";
+    return new Promise ((resolve, reject)=>{
+        conn.query(query,[tabela,id],(err)=>{
+            if(err)  reject (err);
+            else resolve("Sucess")
+    
+        })})
 
 }

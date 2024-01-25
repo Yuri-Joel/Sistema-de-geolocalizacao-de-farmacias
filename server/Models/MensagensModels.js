@@ -3,7 +3,7 @@ import  {conn}  from "../utils/conexao.js";
 // aqui eu adiciono novas mengens e mostro as mensagens enviadas
 
 export const MostrarMensagens = () => {
-const query = "select u.nome, m.id, m.mensagem,m.data_envio,(Select Count(*) from mensagens)  As total from mensagens m join usuarios u on m.usuario_id = u.id";
+const query = "select u.nome,u.foto, m.id, m.mensagem,m.data_envio,m.id,(Select Count(*) from mensagens)  As total from mensagens m join usuarios u on m.usuario_id = u.id";
 
 return new Promise((resolve, reject)=>{
     conn.query(query, (err, data)=>{

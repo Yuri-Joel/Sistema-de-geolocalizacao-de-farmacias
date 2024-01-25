@@ -22,9 +22,13 @@ const {tipo} = req.body;
     const data = await FotoModel("Administradores",imagePath, userId);
   res.status(200).json({data})
   }
-  else{
-    const data = await FotoModel("usuarios",imagePath, userId);
+  if(tipo == "gestor"){
+    const data = await FotoModel("gestores",imagePath, userId);
   res.status(200).json({data})
+
+  } else{
+    const data = await FotoModel("usuarios", imagePath, userId);
+    res.status(200).json({ data })
 
   }
   

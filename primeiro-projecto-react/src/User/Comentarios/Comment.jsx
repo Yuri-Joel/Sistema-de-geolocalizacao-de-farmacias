@@ -12,6 +12,7 @@ import 'bootstrap/js/dist/collapse';
 import 'bootstrap/js/dist/button';
 import 'bootstrap/js/dist/offcanvas';
 import 'bootstrap/js/dist/scrollspy';
+import { LogActividades } from "../../Log_Actividades/Log_actividades";
 
 
 export const Comentarios = ()=>{
@@ -44,7 +45,7 @@ const HandleSubmit = async(e)=>{
      
          <UserSide />
 
-
+  <LogActividades />
          <main id="main" className="main" style={{backgroundColor:'#00968c53'}}>
             <div className="pagetitle">
       <h1 style={{color:'white'}}>Dashboard</h1>

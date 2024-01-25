@@ -18,11 +18,7 @@ import UserSide from '../../Dashboard/components/aside/user/userSide';
 import imagem from '../../assets/Screenshot_20240110-233026.png'
 
 export default function User() {
-    const [toggle,settoggle]= useState(true)
-
-   const Toggle=()=>{
-    settoggle(!toggle)
-   } 
+   
    
 const Idusuario = localStorage.getItem("usuario");
 const [userPhoto, setUserPhoto] = useState('');
@@ -144,12 +140,26 @@ const handleUploadNewImage = async () => {
     console.error('Error uploading image:', error);
   }
 };
+
+
+const DeletarFoto = (id)=>{
+  try {
+    const tabela = "usuario"
+    const res = axios.delete(`http://localhost:8800/api/delfoto/${id}/${tabela}`)
+      if(res.data.data === "Sucess"){
+        toast.success(res.data.data)
+      }
+  } catch (error) {
+    console.log(`${error}`)
+  }
+
+}
   return (
     <>
- <HeaderUser nome={<Nome />} on={Toggle} />
-{toggle &&
+ <HeaderUser nome={<Nome />}/>
+
     <UserSide   />
-}
+
 
 <main id="main" className="main">
 
@@ -230,6 +240,7 @@ const handleUploadNewImage = async () => {
                 ))}
 
                 <div className="tab-pane fade profile-edit pt-3" id="profile-edit">
+                <button onClick={()=> DeletarFoto(Idusuario)}>Eliminar Foto</button>
                 {
                  ( dataload &&
                   <form  onSubmit={ActualizarUser}>
@@ -255,8 +266,6 @@ const handleUploadNewImage = async () => {
                           <button className="btn btn-primary btn-sm"   onClick={()=> handleUploadNewImage} >
                                           <i className="bi bi-upload">  </i>
                             </button>
-                             
-                          
                           <Link  className="btn btn-danger btn-sm" title="Remove my profile image">
                             
                             <i className="bi bi-trash"></i></Link>

@@ -55,12 +55,34 @@ export const deleteGestor = (usuarioId)=>{
 
 }
 
-export const ActuaGestor = (dados,usuarioId)=>{
-    const query = "UPDATE gestores SET `nome` =?, `email`=?, `senha`=? , `telefone`=? ,`farmacia_id`=? WHERE `id` = ?"
-    return new Promise ((resolve,reject)=>{
-        conn.query(query,[...dados, usuarioId],(err)=>{
-            if(err) reject(err)
+export const ActuaGestor = (dados, usuarioId) => {
+    const query = "UPDATE gestores SET `nome` =?, `email`=?  WHERE `id` = ?"
+    return new Promise((resolve, reject) => {
+        conn.query(query, [...dados, usuarioId], (err) => {
+            if (err) reject(err)
             else resolve("Actualizado")
+        })
+    })
+
+}
+export const ActuaGestorsenha = (dados, usuarioId) => {
+    const query = "UPDATE gestores SET `senha`=? WHERE `id` = ?"
+    return new Promise((resolve, reject) => {
+        conn.query(query, [dados, usuarioId], (err) => {
+            if (err) reject(err)
+            else resolve("Actualizado")
+        })
+    })
+
+}
+
+export const Nomefarmacias = (id)=>{
+
+    const query =" SELECT farmacias.id, farmacias.nome, gestores.nome as gestor FROM farmacias join gestores  on gestores.farmacia_id = farmacias.id where gestores.id = ?"
+    return new Promise ((resolve,reject)=>{
+        conn.query(query,[id],(err,data)=>{
+            if(err) reject(err)
+            else resolve(data)
         })})
 
 }

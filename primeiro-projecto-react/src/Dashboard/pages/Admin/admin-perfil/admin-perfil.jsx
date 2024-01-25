@@ -144,6 +144,18 @@ const handleUploadNewImage = async () => {
   }
 };
 
+
+const DeletarFoto = (id)=>{
+  try {
+    const res = axios.delete(`http://localhost:8800/ad/delfoto/${id}`)
+      if(res.data.data === "Sucess"){
+        toast.success(res.data.data)
+      }
+  } catch (error) {
+    console.log(`${error}`)
+  }
+
+}
   return (
     <>
          <HeaderAdmin on={Toggle} />
@@ -159,7 +171,7 @@ const handleUploadNewImage = async () => {
   <h1>Perfil</h1>
   <nav>
     <ol className="breadcrumb">
-      <li className="breadcrumb-item"><Link to={'/'}>Home</Link></li>
+      <li className="breadcrumb-item"><Link to={'/admin'}>Home</Link></li>
       <li className="breadcrumb-item">Usuario</li>
       <li className="breadcrumb-item active">Perfil</li>
     </ol>
@@ -178,7 +190,7 @@ const handleUploadNewImage = async () => {
           <img src={imagem} alt='profile' className='rounded-circle' />
           }
           <h2><NomeAdmin /></h2>
-          <h3>User 00{Idusuario}</h3>
+          <h3>Admin 00{Idusuario}</h3>
          
         </div>
       </div>
@@ -232,6 +244,7 @@ const handleUploadNewImage = async () => {
             ))}
 
             <div className="tab-pane fade profile-edit pt-3" id="profile-edit">
+              <button onClick={()=> DeletarFoto(Idusuario)}>Eliminar Foto</button>
             {
              ( dataload &&
               <form  onSubmit={ActualizarUser}>
@@ -252,16 +265,8 @@ const handleUploadNewImage = async () => {
           }
                     <div className="pt-2">
                     <input type="file" className="btn btn-primary btn-sm" title="Upload new profile image" onChange={(e)=> setNewImage(e.target.files[0])} />
-
-                      <br></br><br></br>
-                      <button className="btn btn-primary btn-sm"   onClick={()=> handleUploadNewImage} >
-                                      <i className="bi bi-upload">  </i>
-                        </button>
-                         
-                      
-                      <Link  className="btn btn-danger btn-sm" title="Remove my profile image">
-                        
-                        <i className="bi bi-trash"></i></Link>
+                      <br></br>
+                      <button className="btn btn-primary btn-sm"   onClick={()=> handleUploadNewImage} ></button>  
                     </div>
                   </div>
                 </div>

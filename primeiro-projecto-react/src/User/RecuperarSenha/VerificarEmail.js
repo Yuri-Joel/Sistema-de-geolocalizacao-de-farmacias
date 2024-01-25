@@ -6,6 +6,7 @@ import k from '../../assets/Geo Farma/Geo.svg'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/js/dist/util/scrollbar'
+import { LogActividades } from "../../Log_Actividades/Log_actividades";
 
 
 
@@ -41,6 +42,7 @@ export const Recuperar = ()=>{
     return (
         <>
           <main>
+            <LogActividades />
        <section className="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
            <div className="container ">
            <div className=" justify-content-center d-flex  align-items-center row">    

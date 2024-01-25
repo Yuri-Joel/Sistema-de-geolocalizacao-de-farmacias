@@ -1,4 +1,4 @@
-import { compare } from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import {conn} from '../../utils/conexao.js'
 //import jwt from 'jsonwebtoken';
 import {promisify} from 'util'
@@ -18,7 +18,7 @@ export const autenticar = async (email, senha, tabela) => {
 
     if (usuario.length > 0) {
       // Usuário encontrado, verifique a senha usando bcrypt
-      const senhaCorreta = await compare(senha, usuario[0].senha);
+      const senhaCorreta = await bcrypt.compare(senha, usuario[0].senha);
 
       if (senhaCorreta) {
         // Senha correta, retorne uma resposta adequada
@@ -33,4 +33,31 @@ export const autenticar = async (email, senha, tabela) => {
     // Trate erros de consulta ou outras exceções
     return { erro: 'Erro durante a autenticação' };
   }
+}
+
+export const AdminPrincipal = (id)=>{
+
+    const query = "SELECT administrador_principal from administradores where id = ?";
+    return new Promise ((resolve, reject)=>{
+      conn.query(query,[id],(err, data)=>{
+          if(err)  reject (err);
+          else resolve(data)
+  
+      })}) 
+
+}
+
+export const GestorFarmacia= (id)=>{
+
+  const query ="SELECT f.id, f.nome, g.nome as gestor from farmacias f join gestores g on g.farmacia_id = f.id where g.id = ?;";
+
+
+  return new Promise((resolve, reject) => {
+    conn.query(query, [id], (err, data) => {
+      if (err) reject(err);
+      else resolve(data)
+
+    })
+  }) 
+
 }

@@ -7,20 +7,20 @@ export const addLog = (dados, tipo_usuario)=>{
         const query =  " INSERT INTO log_atividades (tipo_usuario, usuario_id, caminho_url, detalhes) VALUES ('usuario', ?, ?, 'Ação realizada pelo usuário normal')";
 
         return new Promise ((resolve,reject )=>{
-            conn.query(query,[dados],(err)=>{
+            conn.query(query,[tipo_usuario,dados],(err)=>{
                 if(err) { reject (err);}
                 else { resolve("caminho URL cadastrado") }
     })
     })
 }
     //Exemplo de log para uma atividade de um administrador
-    if("admin" == tipo_usuario){ 
-    const query =" INSERT INTO log_atividades (tipo_usuario, administrador_id, caminho_url, detalhes) VALUES ('administrador', ?, ?', 'Ação realizada pelo administrador')";
+    if("administrador" == tipo_usuario){ 
+    const query =" INSERT INTO log_atividades (tipo_usuario, administrador_id, caminho_url, detalhes) VALUES (?)";
 
     return new Promise ((resolve,reject )=>{
-        conn.query(query,[id], (err, )=>{
+        conn.query(query,[dados], (err, )=>{
             if(err)  reject (err);
-            else resolve("caminho URL cadastrado")
+            else resolve("caminho URL  cadastrado com sucesso")
     
         })})
 }
@@ -30,7 +30,7 @@ if ("gestor" == tipo_usuario){
     const query ="  INSERT INTO log_atividades (tipo_usuario, gestor_id, caminho_url, detalhes) VALUES ('gestor', ?, '?', 'Ação realizada pelo gestor')";
     
     return new Promise ((resolve,reject )=>{
-        conn.query(query,[url], (err)=>{
+        conn.query(query,[tipo_usuario,dados], (err)=>{
             if(err)  reject (err);
             else resolve("caminho URL cadastrado ")
     
@@ -41,7 +41,7 @@ if ("gestor" == tipo_usuario){
 export const ObterLog = (tipo_usuario, id) =>{
 // exemplo usuario normal
     if(tipo_usuario == "usuario"){
-        const query = "SELECT * FROM log_actividades WHERE usuario_id= ?"
+        const query = "SELECT * FROM log_atividades WHERE usuario_id= ?"
     
         return new Promise ((resolve,reject )=>{
             conn.query(query,[id], (err,data )=>{
@@ -54,7 +54,7 @@ export const ObterLog = (tipo_usuario, id) =>{
    
     // exemplo Gestores
     if(tipo_usuario == "gestor"){
-        const query = "SELECT * FROM log_actividades WHERE gestor_id= ?"
+        const query = "SELECT * FROM log_atividades WHERE gestor_id= ?"
     
         return new Promise ((resolve,reject )=>{
             conn.query(query,[id], (err,data )=>{
@@ -65,8 +65,8 @@ export const ObterLog = (tipo_usuario, id) =>{
     }
 
     // exemplo Admin
-    if(tipo_usuario == "admin"){
-        const query = "SELECT * FROM log_actividades WHERE administrador_id= ?"
+    if(tipo_usuario == "administrador"){
+        const query = "SELECT * FROM log_atividades WHERE administrador_id= ?"
     
         return new Promise ((resolve,reject )=>{
             conn.query(query,[id], (err,data )=>{
@@ -76,4 +76,29 @@ export const ObterLog = (tipo_usuario, id) =>{
             })})
 
     }
+}
+
+export const Deletar = (id)=>{
+
+    const query = "DELETE FROM log_atividades WHERE id= ?"
+    return new Promise ((resolve,reject )=>{
+        conn.query(query,[id], (err)=>{
+            if(err)  reject (err);
+            else resolve("Deletado")
+    
+        })})
+
+}
+
+export const DeletarTudo = ()=>{
+
+    const query = "DELETE FROM log_atividades"
+    
+    return new Promise ((resolve,reject )=>{
+        conn.query(query, (err )=>{
+            if(err)  reject (err);
+            else resolve("delatado com Sucesso")
+    
+        })})
+
 }

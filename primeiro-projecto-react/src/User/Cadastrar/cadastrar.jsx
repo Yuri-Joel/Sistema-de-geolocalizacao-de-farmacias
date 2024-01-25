@@ -8,6 +8,9 @@ import {toast} from 'react-toastify'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import  k from'../../assets/Geo Farma/Geo Farma.png'
+import "../../pagesHome/Login/loading.css"
+import { LogActividades } from '../../Log_Actividades/Log_actividades';
+
 export default function Cadastrar() {
   const Navigate = useNavigate()
    
@@ -18,10 +21,14 @@ export default function Cadastrar() {
       senha:''
   })
   const [confirmSenha , setsenha] = useState('')
+  const [loading, setloading] = useState(false)
+
 
  
  const handleSubmit = async(e)=>{
   e.preventDefault();
+  setloading(true)
+
               
   if(( confirmSenha  ===  Cadastro.senha) && Cadastro.nome && Cadastro.email && Cadastro.senha && Cadastro.telefone){
     await  axios.post(`http://localhost:8800/api/cadastro`, Cadastro)
@@ -44,7 +51,7 @@ export default function Cadastrar() {
     }
   return (
     <>
- 
+    <LogActividades />
        <main>
        <section className="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
            <div className="container ">
@@ -71,13 +78,18 @@ export default function Cadastrar() {
                       </div>
                     
                       <input className='form-control' type="text" placeholder='Nome*' style={{width:'15rem',height:'2rem',backgroundColor:'#00968c55',border:'none',borderRadius:'0.3rem'}}  onChange={e => setCadastro({...Cadastro, nome: e.target.value})} />
-                      <input className='form-control' type="text" placeholder='Numero*' style={{width:'15rem',height:'2rem',backgroundColor:'#00968c55',border:'none',borderRadius:'0.3rem'}} onChange={e => setCadastro({...Cadastro, telefone: e.target.value})}/>
+                      <input className='form-control' type="text" placeholder='Numero de Telemovel*' style={{width:'15rem',height:'2rem',backgroundColor:'#00968c55',border:'none',borderRadius:'0.3rem'}} onChange={e => setCadastro({...Cadastro, telefone: e.target.value})}/>
                       <input className='form-control' type="text" placeholder='Email*' style={{width:'15rem',height:'2rem',backgroundColor:'#00968c55',border:'none',borderRadius:'0.3rem'}} onChange={e => setCadastro({...Cadastro, email: e.target.value})} />
-                      <input className='form-control' type="text" placeholder='Senha*' style={{width:'15rem',height:'2rem',backgroundColor:'#00968c55',border:'none',borderRadius:'0.3rem'}} onChange={e => setCadastro({...Cadastro, senha: e.target.value})}/>
-                      <input className='form-control' type="text" placeholder='Confirmar a senhha*' style={{width:'15rem',height:'2rem',backgroundColor:'#00968c55',border:'none',borderRadius:'0.3rem'}} value={confirmSenha} onChange={e => setsenha(e.target.value)} />
+                      <input className='form-control' type="password" placeholder='Senha*' style={{width:'15rem',height:'2rem',backgroundColor:'#00968c55',border:'none',borderRadius:'0.3rem'}} onChange={e => setCadastro({...Cadastro, senha: e.target.value})}/>
+                      <input className='form-control' type="password" placeholder='Confirmar a senhha*' style={{width:'15rem',height:'2rem',backgroundColor:'#00968c55',border:'none',borderRadius:'0.3rem'}} value={confirmSenha} onChange={e => setsenha(e.target.value)} />
                        <Link  ><button onClick={handleSubmit} style={{width:'15rem',height:'2rem',backgroundColor:'#00968c',color:'white',border:'none',borderRadius:'0.3rem'}}> Cadastrar</button></Link>
                      
                    </div> 
+                   { ( loading &&
+           <div className="loading" id="loading">
+            <div className="spinner"></div>
+                 </div>
+            )}
                </div>
            </div>
            </section>

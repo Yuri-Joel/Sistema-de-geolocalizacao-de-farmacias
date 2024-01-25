@@ -1,5 +1,5 @@
-import { Actualiadmin, Actualiadminsenha, ObteradminId, newadmin } from "../Models/AdministradoresModels.js"
-import { VerificarSenha } from "../Models/usuarioModels.js"
+import { Actualiadmin, Actualizaradminsenha, DeleteAdmin, ObteradminId, TodosAdmin, TornarPrincipal, VerificarAdmin, newadmin } from "../Models/AdministradoresModels.js"
+import { EliminarFoto, VerificarSenha } from "../Models/usuarioModels.js"
 import { Validateall, Validatepass, hashSenha } from "./usuarioControllers.js"
 
 
@@ -10,19 +10,53 @@ export const ObterAdmin = async (req,res)=>{
      res.status(200).json({data})
 }
 
+export const TornarAdmin = async(req,res) =>{
+    const {id} = req.body;
 
-export const CriarAdmin = async (req,res)=> {
-    const senha = await hashSenha( req.body.senha);
-    const values =[
-        req.body.nome,
-        req.body.email,
-        senha,
-        
-    ];
+        const verificarAdmin = await VerificarAdmin(id)
 
-    const data = await newadmin(values)
+        if(verificarAdmin == true){
+
+            const data = await TornarPrincipal(id,false)
+            res.status(200).json({data})
+        } 
+        else{
+            const data = await TornarPrincipal(id,true)
+            res.status(200).json({data})
+        }
+    
+}
+
+export const AllAdmin =async (_,res)=>{
+    const data = await TodosAdmin()
     res.status(200).json({data})
 }
+
+export const CriarAdmin = async (req,res)=> {
+    
+    const {nome} = req.body;
+    const {email} = req.body;
+    const {senha} = req.body;
+    const validar = Validateall(nome, email,senha, "9348944574")
+    
+    if(validar){
+        const senha2 = await hashSenha(senha);
+   
+        const values =[
+          nome,
+          email,
+          senha2
+      ]; 
+      const data = await newadmin(values)
+      res.status(200).json({data})
+    } else{
+
+        return res.status(200).json({data: "Erro na Actualização"});
+    }
+    
+}
+
+
 export const Actualizaradmin = async (req,res)=> {
   const {id} = req.params;
   const {nome} = req.body;
@@ -58,8 +92,8 @@ export const ActualiadminSenha = async (req,res)=>{
             const validar = await Validatepass(novaSenha)
             if(validar){
             
-                const senha = await hashSenha(novaSenha)
-            const data = await Actualiadmin(senha,id);
+            const senha = await hashSenha(novaSenha)
+            const data = await Actualizaradminsenha(senha,id);
            
             res.status(200).json({data})
               }
@@ -73,4 +107,23 @@ export const ActualiadminSenha = async (req,res)=>{
     else {
         return res.status(200).json({status: "Credências Invalidas!"})
     }
+}
+
+export const  EliminarAdmin =async (req,res)=>{
+
+
+    const {id}= req.params;
+
+    const data = await DeleteAdmin(id);
+    
+    res.status(200).json({data})
+
+}
+
+export const deletarFoto = async(req,res)=>{
+    const {id}= req.params;
+
+    const data = await EliminarFoto("administradores",id);
+    
+    res.status(200).json({data})
 }

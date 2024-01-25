@@ -1,4 +1,5 @@
-import { ActuaGestor, deleteGestor, CGestores, newGestores, TodosGestores, ObtergestorId} from "../Models/gestoresModels.js"
+import { ActuaGestor, deleteGestor, CGestores, newGestores, TodosGestores, ObtergestorId, Nomefarmacias, ActuaGestorsenha} from "../Models/gestoresModels.js"
+import { EliminarFoto } from "../Models/usuarioModels.js"
 import { hashSenha } from "./usuarioControllers.js"
 
 
@@ -38,17 +39,21 @@ export const CriarGestor = async (req,res)=> {
 }
 export const ActualizarGestor = async (req,res)=> {
   const {id} = req.params;
-  const senha = await hashSenha(req.body.senha)
     const values =[
         req.body.nome,
         req.body.email,
-        senha,
-        req.body.telefone,
-        req.body.farmacia 
     ];
     const data = await ActuaGestor(values,id)
    
     res.status(200).json({data})
+}
+export const ActualizarGestorSenha = async (req, res) => {
+    const { id } = req.params;
+    const senha = await hashSenha(req.body.senha)
+    
+    const data = await ActuaGestorsenha(senha, id)
+
+    res.status(200).json({ data })
 }
 
 
@@ -59,3 +64,18 @@ export const DeletaGestor = async (req,res)=> {
     res.status(200).json({data})
 }
 
+export const Nomefarma = async(req, res)=>{
+
+    const {id} = req.params
+    const data = await Nomefarmacias(id);
+
+    res.status(200).json({data})
+
+}
+
+export const DeletarFotoGestor = (req, res)=>{
+
+    const {id} = req.params;
+    const data = EliminarFoto("gestores", id)
+    res.status(200).json({ data })
+}

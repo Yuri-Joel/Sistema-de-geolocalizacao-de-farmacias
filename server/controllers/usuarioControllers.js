@@ -1,16 +1,14 @@
-import { ActualizarUsuarioId, CriarUsuario, ObterUsuarioId, TodosUsuarios, TodosUsuariosNumeros, VerificarSenha, deleteUsuarios, ActualizarSenhaUser} from "../Models/usuarioModels.js";
-import { compare, hash } from "bcrypt";
+import { ActualizarUsuarioId, CriarUsuario, ObterUsuarioId, TodosUsuarios, TodosUsuariosNumeros, VerificarSenha, deleteUsuarios, ActualizarSenhaUser, EliminarFoto} from "../Models/usuarioModels.js";
+import bcrypt from 'bcryptjs'
 import { Verify } from "../services/recuperacao de senha/recuperacaoModel.js";
 
 export const hashSenha = async  (senha)=>{
     
         const saltRounds = 5;
-        const v  =  hash(senha, saltRounds)
+        const v  =  bcrypt.hash(senha, saltRounds)
 
        return v;
-   
 }
-
 
 export const TodosU = async (_,res)=>{
     const data = await  TodosUsuarios()
@@ -20,6 +18,7 @@ export const TodosU = async (_,res)=>{
 }
 
 export const ContarUsuarios = async (_,res)=>{
+    
     const data = await TodosUsuariosNumeros()
     const total = data[0].total
     res.status(200).json({total})
@@ -99,7 +98,7 @@ export const ActualizarSenha = async (req,res)=>{
     
     
     if(Usuario.length > 0){
-        const result = await compare(senhaActual, Usuario[0].senha)   
+        const result = await bcrypt.compare(senhaActual, Usuario[0].senha)   
         if(result){
 
             const validar = await Validatepass(novaSenha)
@@ -129,6 +128,14 @@ export const ActualizarSenha = async (req,res)=>{
 export const DeletaU = async (req,res)=> {
     const {id} = req.params
     const data = await deleteUsuarios(id)
+   
+    res.status(200).json({data})
+}
+
+export const DeleteFoto = async(req,res)=>{
+    
+    const {id} = req.params
+    const data = await EliminarFoto("usuarios",id)
    
     res.status(200).json({data})
 }
