@@ -1,10 +1,12 @@
 import { BarChart, Bar, XAxis, YAxis, Tooltip } from 'recharts';
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { generatePDF } from '../../../../../PDF/DownloadingPdf';
 
 
 export const GraficosBarTriangle = ()=>{
 
+  const chartRef = useRef(null)
 
 const [data, setdata] = useState([])
 const [dataload, setdataload] = useState(false)
@@ -47,14 +49,18 @@ return (
  <>
  <div className="container">
     <div className="row">
+      <div  ref={chartRef}>
     <BarChart width={600} height={300} data={data}>
     <XAxis dataKey="nome"  />
     <YAxis />
     <Tooltip content={<CustomTooltip />}/>
     <Bar dataKey="total" fill="#8884d8" />
   </BarChart> 
+ 
 
   <p>Grafico de medicamentos favoritas</p>
+  </div>
+        <button onClick={() => generatePDF(chartRef, "Grafico de medicamentos favoritas")}>Baixar PDF</button>
     </div>
     </div>
  

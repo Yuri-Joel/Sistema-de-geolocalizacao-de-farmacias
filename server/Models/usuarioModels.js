@@ -1,4 +1,6 @@
 import { conn } from "../utils/conexao.js";
+import fs from 'fs'
+
 
 export const TodosUsuarios = ()=>{
     const query = "SELECT * FROM usuarios";
@@ -79,9 +81,13 @@ export const TodosUsuariosNumeros = () =>{
 
 }
 
+export const EliminarFoto =async (tabela,id)=>{
 
-export const EliminarFoto = (tabela,id)=>{
-
+        const RecuperarImage = await recuperarCaminhoImagem(tabela,id);
+        console.log(RecuperarImage)
+       
+        const EliminarFoto = await excluirImagemNoDiretorio(RecuperarImage)
+        console.log(EliminarFoto);
     const query = "UPDATE ?? SET `foto` = null  where id = ?";
     return new Promise ((resolve, reject)=>{
         conn.query(query,[tabela,id],(err)=>{
@@ -91,3 +97,22 @@ export const EliminarFoto = (tabela,id)=>{
         })})
 
 }
+
+const excluirImagemNoDiretorio = async(caminho) => {
+    fs.unlink(caminho, (error) => {
+        if (error) {
+          throw (error);  
+        }
+       return "eliminado"
+    });
+};
+
+const recuperarCaminhoImagem = (tabela,id) => {
+    const query = 'SELECT foto FROM ?? WHERE id = ?';
+   return new Promise((resolve, reject)=>{
+    conn.query(query, [tabela,id], (error, results) => {
+        if (error)  reject(error)
+        else resolve(results[0].foto)
+    });
+   })
+};

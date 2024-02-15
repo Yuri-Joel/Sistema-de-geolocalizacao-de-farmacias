@@ -46,7 +46,7 @@ export const CriarNewFarmacia = (dados) => {
 }
 
 export const ActualizarFarmacias = (dados, id) => {
-    const query = "UPDATE farmacias SET  `nome`=? , `nif`=? , `telefone`=? ,  `endereco`=?,`latitude`=? , `longitude`=? ,`horario_funcionamento`=?  WHERE `id` =?;"
+    const query = "UPDATE farmacias SET  `nome`=? , `nif`=? ,`email`= ?, `telefone`=? ,`horario_funcionamento`=?  WHERE `id` =?;"
     return new Promise((resolve,reject)=>{
 
         conn.query(query,[...dados, id], (err)=>{
@@ -56,6 +56,28 @@ export const ActualizarFarmacias = (dados, id) => {
     })
 }
 
+export const ActualizarFarmaciaAdmin = (dados, id)=> {
+
+    const query = "UPDATE farmacias SET   `endereco`=?,`latitude`=? , `longitude`=?  WHERE `id` =?;"
+    return new Promise((resolve, reject) => {
+
+        conn.query(query, [...dados, id], (err) => {
+            if (err) reject(err);
+            else resolve("Farmacia Actualizada com sucesso")
+        })
+    })
+}
+
+
+export const FarmaciaAberta = (value, id)=> {
+    const query = "UPDATE farmacias SET  `aberto`= ?  WHERE `id` =?;"
+    return new Promise((resolve, reject) => {
+        conn.query(query, [value, id], (err) => {
+            if (err) reject(err)
+            else resolve("Farmacia")
+        })
+    })
+}
 export const DeleteFarmacia = (farmaId)=>{
     const query = "DELETE FROM farmacias where id =?";
     return new Promise ((resolve,reject)=>{

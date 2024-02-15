@@ -13,13 +13,17 @@ import 'bootstrap/js/dist/button';
 import 'bootstrap/js/dist/offcanvas';
 import 'bootstrap/js/dist/scrollspy';
 import FooterDashboard from "../../../Dashboard/components/footer/footer";
-import { LogActividades } from "../../../Log_Actividades/Log_actividades";
+import { Card } from "react-bootstrap";
+import {LogActividades} from "../../../Log_Actividades/Log_actividades";
 
 
 
 export const FavoritosMedicamentos = () => {
 
-    const { id } = useParams()
+
+    const IsAutenticado = !!localStorage.getItem("usuario");
+        
+    const {id} = useParams()
     const [med, setMedi] = useState([])
 
     const FavMedi = async () => {
@@ -44,7 +48,7 @@ export const FavoritosMedicamentos = () => {
 
         await axios.delete(`http://localhost:8800/fav/favoritodel/${id}/${tabela}`)
             .then((res) => {
-                console.log(res.data)
+                
                 if (res.data.data) {
 
                     toast.success(res.data.data)
@@ -57,10 +61,12 @@ export const FavoritosMedicamentos = () => {
     }
     return (
         <>
-
+        { IsAutenticado ?
+        <>
+                    <LogActividades tipo={"usuario"} />
             <HeaderUser nome={<Nome />} placeholder={'pesquisar'} />
             <UserSide />
-            <LogActividades />
+           
             <main id="main" className="main">
                 <div className="pagetitle">
                     <h1 style={{ color: 'white' }}>Dashboard</h1>
@@ -71,12 +77,14 @@ export const FavoritosMedicamentos = () => {
                         </ol>
                     </nav>
                 </div>
-                <section className="container">
+                <div className="container">
                     <div className="row">
-                        <div className="card info-card sales-card   min-vh-40" style={{ height: '30rem' }}>
-                            <table className="table table-borderless datatable">
-
-                                <thead>
+                        <Card>
+                          
+                            <div className="container">
+                               <div className="row">
+                               <table className="table">
+                               <thead>
                                     <tr>
                                         <th>Nome </th>
                                         <th>Preço</th>
@@ -117,22 +125,32 @@ export const FavoritosMedicamentos = () => {
                                             </tr>
                                         ))}
                                 </tbody>
+                                </table>
+                                </div>
+                               </div>
+                               
+                               
 
 
-                            </table>
+                         
 
 
-                        </div>
+                        </Card>
 
                     </div>
 
-                </section>
+                </div>
 
             </main>
 
             <FooterDashboard />
 
         </>
-
+        : 
+        <>
+        Voce Não está Autenticado! Por favor faça Login 
+        </>
+        }
+        </>
     )
 }

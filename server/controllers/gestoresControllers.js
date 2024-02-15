@@ -51,7 +51,7 @@ export const ActualizarGestorSenha = async (req, res) => {
     const { id } = req.params;
     const senha = await hashSenha(req.body.senha)
     
-    const data = await ActuaGestorsenha(senha, id)
+    const data = await ActuaGestorsenha("gestores",senha, id)
 
     res.status(200).json({ data })
 }

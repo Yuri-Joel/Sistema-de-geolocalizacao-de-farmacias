@@ -12,6 +12,7 @@ import FooterDashboard from "../../../../../components/footer/footer";
 
 export const ListarAdmin = ()=>{
 
+    const IsAutenticado = !!localStorage.getItem("usuario")
 const [admin, setadmin] = useState([]);
     const Listar = async()=>{
         try {
@@ -59,7 +60,9 @@ const EliminarAdmin = async(id)=>{
 }
     return(
         <>
-        <LogActividades />
+        { IsAutenticado ?
+        <>
+        <LogActividades tipo={"administrador"} />
         <HeaderAdmin />
         <AdminSide />
         <main id="main" className="main">
@@ -108,6 +111,12 @@ const EliminarAdmin = async(id)=>{
 
             </main>
         <FooterDashboard />
+        </>
+    :
+    <div>
+        Você não está Autenticado, por favor faça login
+    </div>    
+    }
         </>
     )
 

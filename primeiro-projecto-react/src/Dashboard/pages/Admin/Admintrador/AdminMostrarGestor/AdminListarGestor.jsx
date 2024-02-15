@@ -12,6 +12,7 @@ import { LogActividades } from "../../../../../Log_Actividades/Log_actividades";
 
 export const AdminListarGestor = () => {
 
+    const IsAutenticado = !!localStorage.getItem("usuario")
     const [Gestores, setGestores] = useState([])
 
     const ListarGestor = async () => {
@@ -39,28 +40,10 @@ export const AdminListarGestor = () => {
 
     return (
         <>
+        { IsAutenticado ?
+        <>
 
-            {/*  {
-              Gestores.map((ges)=>(
-                <div key={ges.id}>
-                    <div>
-                        { ges.foto ?
-                        <img src={`http://localhost:8800/${ges.foto}`} alt="carregando.." />
-                    : 
-                    <img src={imagem} alt="carregando.." />
-                    }
-                    </div>
-                    <h6>{ges.nome}</h6>
-                    <h6>{ges.email}</h6>
-                    <div>
-
-                    <button onClick={()=> Deletar(ges.id)}>Eliminar</button>    
-                       </div> 
-
-                </div> 
-              ))  
-            } */}
-            <LogActividades />
+            <LogActividades  tipo={"administrador"} />
             <HeaderAdmin />
             <AdminSide />
             <main id="main" className="main">
@@ -93,11 +76,11 @@ export const AdminListarGestor = () => {
                                                                 }
                                                             </CardTitle>
 
-                                                            <CardText style={{ display: 'flex', flexDirection: 'column' }} >
+                                                            <Card style={{ display: 'flex', flexDirection: 'column' }} >
                                                             <div>Nome: {gestores.nome}</div>
                                                                 {/* <img src={user.photo} alt={user.name} /> */}
                                                                 <div>E-mail: {gestores.email}</div>
-                                                            </CardText>
+                                                            </Card>
                                                             </div>
                                                             <div>
                                                             <Link  className="btn btn-danger btn-sm" title="Remove my profile image">
@@ -122,6 +105,12 @@ export const AdminListarGestor = () => {
             </main>
 
             <FooterDashboard />
+        </>
+    :
+    <>
+    Você não está Autenticado por favor faça Login
+    </>    
+    }
         </>
     )
 }

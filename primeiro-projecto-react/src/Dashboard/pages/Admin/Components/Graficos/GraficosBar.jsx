@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AreaChart, XAxis, YAxis, Tooltip, Area,CartesianGrid } from "recharts";          
 import axios from 'axios'          
+import { generatePDF } from "../../../../../PDF/DownloadingPdf";
 
 export const GraficosAreChart = ()=>{
 
-
+const chartRef = useRef(null)
   const [data, setdata] = useState([])
   const [dataload, setdataload] = useState(false)
   const ListarG = async()=>{
@@ -26,6 +27,7 @@ return(
   <>
    <div className="container">
     <div className="row">
+      <div ref={chartRef}>
     <AreaChart width={730} height={250} data={data}
         margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
         <defs>
@@ -45,7 +47,9 @@ return(
         {/* <Area type="monotone" dataKey="id" stroke="#8884d8" fillOpacity={1} fill="url(#colorUv)" /> */}
         <Area type="monotone" dataKey="total" stroke="#82ca9d" fillOpacity={1} fill="url(#colorPv)" />
       </AreaChart>
+      </div>
       <p>Grafico de favoritos das Farmacias</p>
+        <button onClick={() => generatePDF(chartRef, "Grafico de favoritos das Farmacias")}>Baixar PDF</button>
     </div>
    </div>
   

@@ -12,7 +12,6 @@ export const NomeGestor = () => {
             const res = await axios.get(`http://localhost:8800/ges/obtera/${Idusuario}`);
             SetUser(res.data.data[0].nome)
             setload(true)
-            console.log(res.data)
         } catch (error) {
             console.error(error)
         }

@@ -11,6 +11,7 @@ import HeaderAdmin from "../../../../components/heder/admin/headerAdmin"
 
 export const AdminCadastrarAdmin = ()=>{
 
+        const IsAutenticado = !!localStorage.getItem("usuario");
          const [admin, setadmin] = useState({
             nome: '',
             email: "",
@@ -36,47 +37,50 @@ export const AdminCadastrarAdmin = ()=>{
 
 
     return(
+
+      <>{ 
+        IsAutenticado ?
         <>
           <HeaderAdmin />
         <AdminSide />
-        <LogActividades />
+        <LogActividades tipo={"administrador"} />
 
         <main>
-    <div class="container">
+    <div className="container">
 
-      <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
-        <div class="container">
-          <div class="row justify-content-center">
-            <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
-              <div class="card mb-3">
+      <section className="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
+        <div className="container">
+          <div className="row justify-content-center">
+            <div className="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+              <div className="card mb-3">
 
-                <div class="card-body">
+                <div className="card-body">
 
-                  <div class="pt-4 pb-2">
-                    <h5 class="card-title text-center pb-0 fs-4">Cadastrar Admin</h5>
+                  <div className="pt-4 pb-2">
+                    <h5 className="card-title text-center pb-0 fs-4">Cadastrar Admin</h5>
                   </div>
 
-                  <form class="row g-3 needs-validation" novalidate onSubmit={HandleAdmin}>
-                    <div class="col-12">
-                      <label for="yourName" class="form-label">Nome</label>
-                      <input type="text" name="name" class="form-control" id="yourName" required  onChange={(e)=> setadmin({...admin, nome: e.target.value})}/>
-                      <div class="invalid-feedback">Please, enter your name!</div>
+                  <form className="row g-3 needs-validation" novalidate onSubmit={HandleAdmin}>
+                    <div className="col-12">
+                      <label for="yourName" className="form-label">Nome</label>
+                      <input type="text" name="name" className="form-control" id="yourName" required  onChange={(e)=> setadmin({...admin, nome: e.target.value})}/>
+                      <div className="invalid-feedback">Please, enter your name!</div>
                     </div>
 
-                    <div class="col-12">
-                      <label for="yourEmail" class="form-label">Email</label>
-                      <input type="email" name="email" class="form-control" id="yourEmail" required onChange={(e)=> setadmin({...admin, email: e.target.value})} />
-                      <div class="invalid-feedback">Please enter a valid Email adddress!</div>
+                    <div className="col-12">
+                      <label for="yourEmail" className="form-label">Email</label>
+                      <input type="email" name="email" className="form-control" id="yourEmail" required onChange={(e)=> setadmin({...admin, email: e.target.value})} />
+                      <div className="invalid-feedback">Please enter a valid Email adddress!</div>
                     </div>
 
-                       <div class="col-12">
-                      <label for="yourPassword" class="form-label">Password</label>
-                      <input type="password" name="password" class="form-control" id="yourPassword" required onChange={(e)=> setadmin({...admin, senha: e.target.value})} />
-                      <div class="invalid-feedback">Please enter your password!</div>
+                       <div className="col-12">
+                      <label for="yourPassword" className="form-label">Password</label>
+                      <input type="password" name="password" className="form-control" id="yourPassword" required onChange={(e)=> setadmin({...admin, senha: e.target.value})} />
+                      <div className="invalid-feedback">Please enter your password!</div>
                     </div>
 
-                    <div class="col-12">
-                      <button class="btn btn-primary w-100" type="submit" style={{backgroundColor:'#00968c'}}>Cadastrar</button>
+                    <div className="col-12">
+                      <button className="btn btn-primary w-100" type="submit" style={{backgroundColor:'#00968c'}}>Cadastrar</button>
                     </div>
                     
                   </form>
@@ -92,6 +96,10 @@ export const AdminCadastrarAdmin = ()=>{
     </div>
   </main>
 
+        </>
+      :
+      <div>Você não está Autenticado, faça login por favor</div>  
+      }
         </>
     )
 }

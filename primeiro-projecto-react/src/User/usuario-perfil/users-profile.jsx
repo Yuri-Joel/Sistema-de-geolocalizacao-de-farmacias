@@ -16,10 +16,11 @@ import {toast} from 'react-toastify';
 import HeaderUser from '../../Dashboard/components/heder/user/headerUser';
 import UserSide from '../../Dashboard/components/aside/user/userSide';
 import imagem from '../../assets/Screenshot_20240110-233026.png'
+import { LogActividades } from '../../Log_Actividades/Log_actividades';
 
 export default function User() {
    
-   
+  const IsAutenticado = !!localStorage.getItem("usuario");
 const Idusuario = localStorage.getItem("usuario");
 const [userPhoto, setUserPhoto] = useState('');
 const [newImage, setNewImage] = useState(null);
@@ -113,7 +114,7 @@ const ActualizarUser = async (e)=>{
         console.log(res.data.data)
         toast.success("Perfil Actualizado");
         ObterUserId();
-         Navigate("/map")
+         Navigate("/users-profile")
      
       
        
@@ -144,19 +145,23 @@ const handleUploadNewImage = async () => {
 
 const DeletarFoto = (id)=>{
   try {
-    const tabela = "usuario"
-    const res = axios.delete(`http://localhost:8800/api/delfoto/${id}/${tabela}`)
+    
+    const res = axios.delete(`http://localhost:8800/api/delfoto/${id}`)
       if(res.data.data === "Sucess"){
-        toast.success(res.data.data)
+        toast.success("Foto Eliminada")
+        Navigate("/users-profile")
       }
   } catch (error) {
-    console.log(`${error}`)
+    console.log(error)
   }
 
 }
   return (
     <>
- <HeaderUser nome={<Nome />}/>
+    { IsAutenticado ?
+    <>
+    <LogActividades tipo={"usuario"} />
+ <HeaderUser/>
 
     <UserSide   />
 
@@ -167,7 +172,7 @@ const DeletarFoto = (id)=>{
       <h1>Perfil</h1>
       <nav>
         <ol className="breadcrumb">
-          <li className="breadcrumb-item"><Link to={'/'}>Home</Link></li>
+          <li className="breadcrumb-item"><Link to={'/map'}>Home</Link></li>
           <li className="breadcrumb-item">Usuario</li>
           <li className="breadcrumb-item active">Perfil</li>
         </ol>
@@ -245,7 +250,7 @@ const DeletarFoto = (id)=>{
                  ( dataload &&
                   <form  onSubmit={ActualizarUser}>
                     <div className="row mb-3">
-                      <label for="profileImage" className="col-md-4 col-lg-3 col-form-label">Imagem</label>
+                      <label htmlFor="profileImage" className="col-md-4 col-lg-3 col-form-label">Imagem</label>
                       <div className="col-md-8 col-lg-9">
                     
       
@@ -274,7 +279,7 @@ const DeletarFoto = (id)=>{
                     </div>
 
                     <div className="row mb-3">
-                      <label for="fullName" className="col-md-4 col-lg-3 col-form-label">Nome</label>
+                      <label htmlFor="fullName" className="col-md-4 col-lg-3 col-form-label">Nome</label>
                       <div className="col-md-8 col-lg-9">
                         <input name="fullName" type="text" className="form-control" id="fullName"  value={nome} onChange={(e)=> setnome(e.target.value)} />
                       </div>
@@ -282,14 +287,14 @@ const DeletarFoto = (id)=>{
 
 
                     <div className="row mb-3">
-                      <label for="Phone" className="col-md-4 col-lg-3 col-form-label">Contacto</label>
+                      <label htmlFor="Phone" className="col-md-4 col-lg-3 col-form-label">Contacto</label>
                       <div className="col-md-8 col-lg-9">
                         <input name="phone" type="text" className="form-control" id="Phone"  value={telefone} onChange={(e)=> setTelefone(e.target.value)}/>
                       </div>
                     </div>
 
                     <div className="row mb-3">
-                      <label for="Email" className="col-md-4 col-lg-3 col-form-label">Email</label>
+                      <label htmlFor="Email" className="col-md-4 col-lg-3 col-form-label">Email</label>
                       <div className="col-md-8 col-lg-9">
                         <input name="email" type="email" className="form-control" id="Email"  value={email} onChange={(e)=> setemail(e.target.value)}/>
                       </div>
@@ -307,21 +312,21 @@ const DeletarFoto = (id)=>{
                   <form onSubmit={HandleSubmit}>
 
                     <div className="row mb-3">
-                      <label for="currentPassword" className="col-md-4 col-lg-3 col-form-label">Senha actual</label>
+                      <label htmlFor="currentPassword" className="col-md-4 col-lg-3 col-form-label">Senha actual</label>
                       <div className="col-md-8 col-lg-9">
                         <input name="password" type="password" className="form-control" id="currentPassword" onChange={(e)=> setsenha({...Alterar, senhaActual: e.target.value})}/>
                       </div>
                     </div>
 
                     <div className="row mb-3">
-                      <label for="newPassword" className="col-md-4 col-lg-3 col-form-label">Nova Senha</label>
+                      <label htmlFor="newPassword" className="col-md-4 col-lg-3 col-form-label">Nova Senha</label>
                       <div className="col-md-8 col-lg-9">
                         <input name="newpassword" type="password" className="form-control" id="newPassword"  onChange={(e)=> setsenha({...Alterar, novaSenha: e.target.value})} />
                       </div>
                     </div>
 
                     <div className="row mb-3">
-                      <label for="renewPassword" className="col-md-4 col-lg-3 col-form-label">Confirmar a Senha</label>
+                      <label htmlFor="renewPassword" className="col-md-4 col-lg-3 col-form-label">Confirmar a Senha</label>
                       <div className="col-md-8 col-lg-9">
                         <input name="renewpassword" type="password" className="form-control" id="renewPassword" value={ConfimarSenha} onChange={(e)=> setConfirmar(e.target.value)} />
                       </div>
@@ -345,6 +350,12 @@ const DeletarFoto = (id)=>{
 
   </main>
       <FooterDashboard />
+    </>
+    : 
+    <>
+    Você não está Autenticado por favor favor faça Login
+    </>
+}
     </>
   )
 }

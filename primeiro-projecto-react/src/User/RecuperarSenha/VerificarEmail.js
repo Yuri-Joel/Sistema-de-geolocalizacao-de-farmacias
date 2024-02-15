@@ -6,7 +6,7 @@ import k from '../../assets/Geo Farma/Geo.svg'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/js/dist/util/scrollbar'
-import { LogActividades } from "../../Log_Actividades/Log_actividades";
+import "../../pagesHome/Login/loading.css"
 
 
 
@@ -14,11 +14,12 @@ export const Recuperar = ()=>{
 
     const Navigate = useNavigate()
     const [email, setInput] = useState('');
+    const [loading, setloading] = useState(false);
    
 
     const handleSubmit = async (e)=>{
         e.preventDefault();
-
+        setloading(true)
         try {
             const res =  await  axios.post(`http://localhost:8800/rede/recuperar`,{email})
             if(res.data.message === 'Sucess'){
@@ -35,6 +36,8 @@ export const Recuperar = ()=>{
             console.log(res.data)
         } catch (error) {
             console.log(error)
+        } finally {
+            setloading(false)
         }
             
        
@@ -42,7 +45,7 @@ export const Recuperar = ()=>{
     return (
         <>
           <main>
-            <LogActividades />
+           
        <section className="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
            <div className="container ">
            <div className=" justify-content-center d-flex  align-items-center row">    
@@ -77,6 +80,11 @@ export const Recuperar = ()=>{
                        >Verificar</button></Link>     
                        
                    </div>
+                   { ( loading &&
+           <div className="loading" id="loading">
+            <div className="spinner"></div>
+                 </div>
+            )}
                </div>
            </div>
            </section>

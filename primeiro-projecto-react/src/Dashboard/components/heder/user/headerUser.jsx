@@ -12,10 +12,14 @@ import {Terminar} from '../../../../components/Logout/Logout'
 import k from '../../../../assets/Geo Farma/Geo Farma.png'
 import axios from 'axios'
 import imagem from '../../../../assets/Screenshot_20240110-233026.png'
-export default function HeaderUser({nome,onKeyDown,value,placeholder,onChange,onSubmit}) {
+import { Nome } from '../../../../components/NomeUser/Nome';
+
+
+export default function HeaderUser({onKeyDown,value,placeholder,onChange,onSubmit}) {
      
   const Idusuario  = localStorage.getItem("usuario");
  const [Foto, SetFoto] = useState('');
+ 
   const [numero,SetNumero]=useState(1)
   const [side,SetSide]=useState('') 
   const body=document.body
@@ -33,9 +37,6 @@ const ObterUserFoto = async ()=>{
   try {
       const res = await axios.get(`http://localhost:8800/api/usuarioId/${Idusuario}`);
       SetFoto(res.data.data[0].foto)
-     
-      
-    console.log(res.data)
   } catch (error) {
       console.error(error)
   }
@@ -51,7 +52,7 @@ ObterUserFoto();
 <header  id="header" className="header fixed-top d-flex align-items-center" >
 
 <div className="d-flex align-items-center justify-content-between">
-<Link href="index.html" className="logo d-flex align-items-center">
+<Link to={"/"} className="logo d-flex align-items-center">
  <img src={k} alt="eee" />
  <span className="d-none d-lg-block"style={{color:'white'}}>GeoFarma</span>
 </Link>
@@ -68,19 +69,19 @@ ObterUserFoto();
 <nav className="header-nav ms-auto" style={{marginRight:'1.6rem'}}>
 <ul className="d-flex align-items-center">
 <li className="nav-item dropdown pe-3">
-   <Link className="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+   <Link className="nav-link nav-profile d-flex align-items-center pe-0" to={"#"} data-bs-toggle="dropdown">
 { Foto ?
-     <img src={`http://localhost:8800/${Foto}`} style={{borderRadius:'100%',height:'3rem',width:'3rem'}} />
+     <img src={`http://localhost:8800/${Foto}`} style={{borderRadius:'100%',height:'3rem',width:'3rem'}} alt='profile'/>
     :
-    <img src={imagem}  style={{borderRadius:'100%',height:'3rem',width:'3rem'}} />
+    <img src={imagem}  style={{borderRadius:'100%',height:'3rem',width:'3rem'}} alt='profile' />
     }
 
      {/* <i className='bi bi-person-circle fs-3 '></i> */}
-     <span className="d-none d-md-block dropdown-toggle ps-2" style={{color:'white'}}>{nome}</span>
+     <span className="d-none d-md-block dropdown-toggle ps-2" style={{color:'white'}}><Nome /></span>
    </Link>
    <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
      <li className="dropdown-header">
-       <h6>{nome}</h6>
+       <h6><Nome /></h6>
        <span>user 00{Idusuario}</span>
      </li>
      <li>

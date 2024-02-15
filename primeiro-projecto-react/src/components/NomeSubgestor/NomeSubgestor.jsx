@@ -9,10 +9,10 @@ export const NomeSubGestor = () => {
 
     const ObterAdminId = async () => {
         try {
-            const res = await axios.get(`http://localhost:8800/sub/subtodos/${Idusuario}`);
+            const res = await axios.get(`http://localhost:8800/sub/obtera/${Idusuario}`);
             SetUser(res.data.data[0].nome)
             setload(true)
-            console.log(res.data)
+         
         } catch (error) {
             console.error(error)
         }

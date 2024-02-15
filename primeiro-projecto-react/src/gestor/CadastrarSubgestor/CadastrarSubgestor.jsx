@@ -1,16 +1,18 @@
 import axios from "axios"
 import { useState } from "react"
 import { toast } from "react-toastify";
-import {useNavigate} from 'react-router-dom'
-
-
-
+import {Link, useNavigate} from 'react-router-dom'
+import { HeaderGestor } from "../../Dashboard/components/heder/gestor/headerGestor";
+import GestorSide from "../../Dashboard/components/aside/gestor/gestorSide";
+import FooterDashboard from "../../Dashboard/components/footer/footer";
+import { Card } from "react-bootstrap";
+import { LogActividades } from "../../Log_Actividades/Log_actividades";
 
 
 export const CadastrarsubGestor = ()=>{
     
 
-        const Navigate = useNavigate()
+const Navigate = useNavigate()
     const Idgestor = localStorage.getItem("usuario");
 
     const [Subgestor, setSubgestor] = useState({
@@ -23,35 +25,70 @@ export const CadastrarsubGestor = ()=>{
     })
     const handleGestor = async(e)=>{
         e.preventDefault();
-        try {
-            const res = await axios.post(`http://localhost:8800/sub/subcges`, Subgestor)
-                toast.success(res.data.data)
-            Navigate("/listarsubgestor")
-                
 
-        } catch (error) {
-            console.log(error)
+        if(Subgestor.senha && Subgestor.email && Subgestor.telefone && Subgestor.nome){
+            try {
+                const res = await axios.post(`http://localhost:8800/sub/subcges`, Subgestor)
+
+                if (res.data.data === "Sucess"){
+                    toast.success(res.data.data)
+                    Navigate("/listarsubgestor")
+                } else{
+                    toast.error(res.data.data)
+                }
+              
+
+            } catch (error) {
+                console.log(error)
+            }
+        } else{
+            toast.warn("ERRO! os Campos não podem ser vazios")
         }
+       
     }
 
     return(
         <>
-        <form onSubmit={handleGestor}>
+        <LogActividades tipo={"gestor"} />
+        <HeaderGestor />
+        <GestorSide />
+        <main id="main" className="main">
+                
+                <div className="pagetitle">
+                    <h1>Dashboard</h1>
+                    <nav>
+                        <ol className="breadcrumb">
+                            <li className="breadcrumb-item"><Link to={'/gestor'}>Home</Link></li>
+                            <li className="breadcrumb-item active">Dashboard </li>
+                        </ol>
+                    </nav>
+                </div>
+                  <div className="container">
+                     <div className="row">
+                        <Card style={{display:'flex',alignItems:'center',justifyContent:'center'}}>
+
+                        
+                     <form onSubmit={handleGestor} style={{display:'flex',flexDirection:'column',gap:'1rem'}}>
             <div>
-                <input type="text" placeholder="nome do funcionario" onChange={(e)=> setSubgestor({...Subgestor, nome: e.target.value})} />
+                <input className="form-control" required type="text" placeholder="nome do funcionario" onChange={(e)=> setSubgestor({...Subgestor, nome: e.target.value})} />
             </div>
             <div>
-                <input type="text" placeholder="email do funcionario" onChange={(e)=> setSubgestor({...Subgestor, email: e.target.value})} />
+                <input className="form-control" required type="text" placeholder="email do funcionario" onChange={(e)=> setSubgestor({...Subgestor, email: e.target.value})} />
             </div>
             <div>
-                <input type="pass"placeholder="senha" onChange={(e)=> setSubgestor({...Subgestor,senha: e.target.value})} />
+                <input className="form-control" required type="pass"placeholder="senha" onChange={(e)=> setSubgestor({...Subgestor,senha: e.target.value})} />
             </div>
             <div>
-                <input type="text" placeholder="9XX XXX XXX" onChange={(e)=> setSubgestor({...Subgestor, telefone: e.target.value})} />
+                <input className="form-control" required type="text" placeholder="9XX XXX XXX" onChange={(e)=> setSubgestor({...Subgestor, telefone: e.target.value})} />
             </div>
-            <button type="submit">Cadastrar</button>
+            <button className="btn btn-sucess" required style={{backgroundColor:'#00968c',color:'white'}} type="submit">Cadastrar</button>
            </form> 
-        
+           </Card>
+                     </div>
+                  </div>
+                </main>
+       
+           <FooterDashboard />
         </>
     )
 }

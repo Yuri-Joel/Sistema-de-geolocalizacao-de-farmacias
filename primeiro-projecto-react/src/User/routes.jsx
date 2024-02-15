@@ -12,6 +12,8 @@ import { FavoritosMedicamentos } from "./Verfavoritos/Medicamentos/Medicamentos"
 import {FavoritosFarmacia } from "./Verfavoritos/Farmacias/Farmacias"
 import {Comentarios} from "./Comentarios/Comment"
 import {Home} from '../pagesHome/Home/Home'
+import { ConfirmCadastro } from "./Cadastrar/ConfirmarCadastro/Confirmcadastro";
+import { ObterLogUser } from "./UserLogActividades/UserLog";
 
 
 export default function RoutesDashboard (){
@@ -20,6 +22,7 @@ export default function RoutesDashboard (){
                <Routes> 
                 <Route  path="/" exact Component={Home}></Route>
                 <Route path="/map" element={<Map />} ></Route>
+                <Route path="/confirmcadastro" Component={ConfirmCadastro}></Route>
               
                 <Route path="/users-profile" element={<User />}></Route>
                
@@ -34,6 +37,7 @@ export default function RoutesDashboard (){
                 <Route  path="/favmed/:id" Component={FavoritosMedicamentos}></Route>
                 <Route  path="/favfarma/:id" Component={FavoritosFarmacia}> </Route>
                 <Route  path="/comentar/:usuario" Component={Comentarios}></Route>
+                <Route path="/userlog" Component={ObterLogUser}></Route>
              </Routes>  
       </>
     )

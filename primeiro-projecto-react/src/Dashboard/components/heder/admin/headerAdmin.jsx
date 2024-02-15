@@ -13,6 +13,7 @@ import { NomeAdmin } from '../../../../components/NomeAdmin/NomeAdmin';
 import logo from '../../../../assets/Geo Farma/Geo Farma.png'
 import imagem from '../../../../assets/Screenshot_20240110-233026.png'
 import axios from 'axios';
+import { Formattime } from '../../../pages/Admin/Admintrador/AdminMensagens/AdminMensagens';
 
 
 export default function HeaderAdmin() {
@@ -64,13 +65,13 @@ export default function HeaderAdmin() {
 
   return (
     <>
-      <header id="header" className="header fixed-top d-flex align-items-center" >
+      <header id="header" className="header fixed-top d-flex align-items-center">
 
         <div className="d-flex align-items-center justify-content-between">
-          <a href="index.html" className="logo d-flex align-items-center">
+          <Link to={"/"} className="logo d-flex align-items-center">
             <img src={logo} alt="eee" />
             <span className="d-none d-lg-block" style={{ color: 'white' }}>GeoFarma</span>
-          </a>
+          </Link>
           <i className="bi bi-list toggle-sidebar-btn" style={{ color: 'white' }} onClick={open}></i>
 
 
@@ -87,17 +88,17 @@ export default function HeaderAdmin() {
           <ul className="d-flex align-items-center">
 
             <li className="nav-item d-block d-lg-none">
-              <a className="nav-link nav-icon search-bar-toggle " href="#">
+              <Link className="nav-link nav-icon search-bar-toggle " to={"#"}>
                 <i className="bi bi-search"></i>
-              </a>
+              </Link>
             </li>
 
-            <li className="nav-item dropdown">
+          {/*   <li className="nav-item dropdown">
 
-              <a className="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+              <Link className="nav-link nav-icon" to={"#"} data-bs-toggle="dropdown">
                 <i className="bi bi-bell" style={{ color: 'white' }}></i>
                 <span className="badge bg-primary badge-number">{total}</span>
-              </a>
+              </Link>
 
               <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
                 <li className="dropdown-header">
@@ -131,19 +132,19 @@ export default function HeaderAdmin() {
                   <hr className="dropdown-divider" />
                 </li>
                 <li className="dropdown-footer">
-                  <a href="#">Mostrar Todas as Notificações</a>
+                  <Link to={"#"}>Mostrar Todas as Notificações</Link>
                 </li>
 
               </ul>
 
-            </li>
+            </li> */}
 
-            <li className="nav-item dropdown">
+            <li className="nav-item dropdown" >
 
-              <a className="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+              <Link className="nav-link nav-icon" to={"#"} data-bs-toggle="dropdown" >
                 <i className="bi bi-chat-left-text" style={{ color: 'white' }}></i>
-                <span className="badge bg-success badge-number">{total}</span>
-              </a>
+                <span className="badge bg-success badge-number"  >{total}</span>
+              </Link>
 
               <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
                 <li className="dropdown-header">
@@ -156,9 +157,9 @@ export default function HeaderAdmin() {
                 </li>
                 {
 
-                  mensagens.map((m) => (
+                  mensagens.map((m, index) => (
                     <>
-                      <div key={m.id}>
+                      <div key={index}>
                       <li className="message-item" >
                         <Link to="/adminmensagem">
                           {m.foto ?
@@ -169,7 +170,7 @@ export default function HeaderAdmin() {
                           <div>
                             <h4>{m.nome}</h4>
                             <p>{m.mensagem}</p>
-                            <p>{m.data_envio}</p>
+                            <p>{Formattime(m.data_envio)}</p>
                           </div>
                         </Link>
                       </li>
@@ -189,7 +190,7 @@ export default function HeaderAdmin() {
             </li>
             <li className="nav-item dropdown pe-3" style={{ marginRight: '1.6rem' }}>
 
-              <a className="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+              <Link className="nav-link nav-profile d-flex align-items-center pe-0" to={"#"} data-bs-toggle="dropdown">
                 {userPhoto ?
                   <img src={`http://localhost:8800/${userPhoto}`} alt="Profile" className="rounded-circle" />
                   :
@@ -198,7 +199,7 @@ export default function HeaderAdmin() {
 
                 {/* <i className='bi bi-person-circle fs-3 '></i> */}
                 <span className="d-none d-md-block dropdown-toggle ps-2" style={{ color: 'white' }}><NomeAdmin /></span>
-              </a>
+              </Link>
               <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                 <li className="dropdown-header">
                   <h6><NomeAdmin style={{ color: 'white' }} /></h6>

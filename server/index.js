@@ -60,3 +60,4 @@ app.use((_,res)=>{
 
 app.listen(port ,'0.0.0.0',  
 ()=> console.log(`servidor rodando na porta: http://localhost:${port}`))
+

@@ -1,5 +1,7 @@
 import { ActuaSubGestor, deleteSubGestor, newSubGestores, TodosSubGestores, ObterSubgestorId, CGestores, ObterSubgestorgestor} from "../Models/SubgestorModels.js"
-import { hashSenha } from "./usuarioControllers.js"
+import { ActuaGestorsenha } from "../Models/gestoresModels.js"
+import { EliminarFoto } from "../Models/usuarioModels.js"
+import { Validateall, hashSenha } from "./usuarioControllers.js"
 
  
 export const ContarGestores = async(req,res) =>{
@@ -16,12 +18,13 @@ export const CTodosSubGestores = async (_,res)=>{
    
 }
 
-export const ObterSubGes = async (req,res)=>{
+export const GetSubGestorId = async (req,res)=>{
           const {id} = req.params
            const data = await ObterSubgestorId(id)
      res.status(200).json({data})
+
 }
-export const ObtersubGestor = async(req, res)=>{
+export const ObtersubGestorOfGestor = async(req, res)=>{
     
     const { id } = req.params
     const data = await ObterSubgestorgestor(id)
@@ -31,30 +34,47 @@ export const ObtersubGestor = async(req, res)=>{
 
 export const CriarSubGestor = async (req,res)=> {
     const senha = await hashSenha(req.body.senha)
-    const values =[
-        req.body.nome,
-        req.body.email,
-        senha,
-        req.body.telefone,
-        req.body.gestor
-    ];
+   
+   
+   
+    const {nome,email, telefone,gestor} = req.body
+   
+    const validar = await Validateall(nome,email,senha, telefone)
 
-    const data = await newSubGestores(values)
-    res.status(200).json({data})
+    if(validar){
+
+        const values = [
+            nome,
+            email,
+            senha,
+            telefone,
+            gestor
+        ]
+        const data = await newSubGestores(values)
+        res.status(200).json({ data })
+    } else{
+        res.status(200).json({ data: "ERRO ao cadastrar!" })
+    }
+    
 }
 export const ActualizarSubGestor = async (req,res)=> {
   const {id} = req.params;
-  const senha = await hashSenha(req.body.senha)
     const values =[
         req.body.nome,
         req.body.email,
-        senha,
-        req.body.telefone,
-        req.body.farmacia 
     ];
     const data = await ActuaSubGestor(values,id)
    
     res.status(200).json({data})
+}
+
+export const ActualizarSubSenha = async(req, res)=>{
+    const { id } = req.params;
+    const senha = await hashSenha(req.body.senha)
+    
+    const data = await ActuaGestorsenha("subgestores",senha, id)
+
+    res.status(200).json({ data })
 }
 
 
@@ -65,3 +85,10 @@ export const DeletaSubGestor = async (req,res)=> {
     res.status(200).json({data})
 }
 
+export const DeletarFotoSubGestor = async(req, res)=>{
+
+    const {id} = req.params;
+    const data = EliminarFoto("subgestores", id)
+    res.status(200).json({ data })
+
+}

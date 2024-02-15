@@ -11,13 +11,16 @@ import FooterDashboard from "../../../../components/footer/footer"
 
 export const AdminDados = () => {
 
+    const IsAutenticado = !!localStorage.getItem("usuario");
 
 
     return (
         <>
+        { IsAutenticado ?
+        <>
             <HeaderAdmin />
             <AdminSide />
-            <LogActividades />
+            <LogActividades tipo={"administrador"} />
             <main id="main" className="main">
             <section className="section">   
             <div className='container'>
@@ -29,17 +32,17 @@ export const AdminDados = () => {
                                 <Link className="icon" data-bs-toggle="dropdown"><i className="bi bi-three-dots"></i></Link>
                                 <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                                     <li className="dropdown-header text-start">
-                                        <h6>Filter</h6>
+                                        <h6>Filtrar</h6>
                                     </li>
 
-                                    <li><Link className="dropdown-item" >Today</Link></li>
-                                    <li><Link className="dropdown-item" >This Month</Link></li>
-                                    <li><Link className="dropdown-item" >This Year</Link></li>
+                                    <li><Link className="dropdown-item" >Hoje</Link></li>
+                                    <li><Link className="dropdown-item" >Este Mês</Link></li>
+                                    <li><Link className="dropdown-item" >Este Ano</Link></li>
                                 </ul>
                             </div>
 
                             <div className="card-body">
-                                <h5 className="card-title">Reports <span>/Today</span></h5>
+                       
 
                                 <div id="reportsChart">
                                     <Graficos />
@@ -47,7 +50,7 @@ export const AdminDados = () => {
                             </div>
                             
                             <div className="card-body">
-                                <h5 className="card-title">Reports <span>/Today</span></h5>
+                       
 
                                 <div id="reportsChart">
                                     <GraficosLinear />
@@ -55,7 +58,7 @@ export const AdminDados = () => {
 
                             </div>
                             <div className="card-body">
-                                <h5 className="card-title">Reports <span>/Today</span></h5>
+                       
 
                                 <div id="reportsChart">
                                     <GraficosAreChart />
@@ -63,7 +66,7 @@ export const AdminDados = () => {
 
                             </div>
                             <div className="card-body">
-                                <h5 className="card-title">Reports <span>/Today</span></h5>
+                       
 
                                 <div id="reportsChart">
                                     <GraficosBarTriangle />
@@ -77,6 +80,10 @@ export const AdminDados = () => {
             </main>
             <FooterDashboard />
 
+        </>
+        :
+        <div> Você não está Autenticado, por favor faça login</div>
+}
         </>
     )
 }

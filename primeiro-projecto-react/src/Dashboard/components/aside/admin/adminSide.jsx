@@ -19,7 +19,7 @@ export default function AdminSide() {
         <ul className="sidebar-nav" id="sidebar-nav">
           <hr style={{ color: 'white' }} />
           <li className="nav-item">
-            <Link className="nav-link " href="index.html">
+            <Link className="nav-link " to={"/admin"}>
               <i className="bi bi-grid"></i>
               <span>Dashboard</span>
             </Link>
@@ -121,6 +121,13 @@ export default function AdminSide() {
             <Link className="nav-link collapsed" to={`/admindados`}>
               <i className="bi bi-graph-up"></i>
               <span>Dados Estatisticos</span>
+            </Link>
+          </li>
+
+          <li className="nav-item">
+            <Link className="nav-link collapsed" to={`#`}>
+              <i className="bi bi-geo-alt-fill"></i>
+              <span>Map</span>
             </Link>
           </li>
         </ul>

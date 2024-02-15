@@ -6,7 +6,6 @@ const query1 = "CREATE TABLE IF NOT EXISTS favoritos_farmacia( id int NOT NULL A
 
 const query2 = " CREATE TABLE IF NOT EXISTS favoritos_medicamentos( id int NOT NULL AUTO_INCREMENT, `usuario_id` int(11) DEFAULT NULL, `medicamento_id` int(11) DEFAULT NULL,`farmacia_id` int(11) DEFAULT NULL, PRIMARY KEY (`id`), KEY `usuario_id` (`usuario_id`), KEY `medicamento_id` (`farmacia_id`),KEY `farmacia_id` (`farmacia_id`) )ENGINE=MyISAM AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;";
 
-
 // admin
 const query3 = "CREATE TABLE IF NOT EXISTS `administradores` (  `id` int(11) NOT NULL AUTO_INCREMENT,`nome` varchar(255) NOT NULL,`email` varchar(255) NOT NULL,`senha` varchar(255) NOT NULL, `foto` varchar(255) DEFAULT NULL, `administrador_principal` BOOLEAN NOT NULL DEFAULT FALSE, PRIMARY KEY (`id`) ) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;"
 

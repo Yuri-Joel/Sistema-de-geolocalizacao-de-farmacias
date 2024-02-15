@@ -13,11 +13,13 @@ import 'bootstrap/js/dist/button';
 import 'bootstrap/js/dist/offcanvas';
 import 'bootstrap/js/dist/scrollspy';
 import FooterDashboard from "../../../Dashboard/components/footer/footer";
+import { Card } from "react-bootstrap";
 import { LogActividades } from "../../../Log_Actividades/Log_actividades";
 
 export const FavoritosFarmacia = ()=>{
 
   const {id}= useParams();
+  const IsAutenticado = !!localStorage.getItem("usuario")
     const [Farma, setfarma] = useState([]);
     const Favfarma = async ()=>{
         try{
@@ -39,7 +41,8 @@ export const FavoritosFarmacia = ()=>{
         const tabela = "favoritos_farmacia"
         await axios.delete(`http://localhost:8800/fav/favoritodel/${id}/${tabela}`)
         .then((res) => {
-            console.log(res.data)
+            
+          toast.error("nada de mais")
             if(res.data.data){
                
                 toast.success(res.data.data);
@@ -51,10 +54,14 @@ export const FavoritosFarmacia = ()=>{
         });
     }
     return(
-        <> 
+        <>
+        <LogActividades tipo={"usuario"} />
+        {
+            IsAutenticado ? 
+              <> 
             <HeaderUser nome={<Nome />} placeholder={'pesquisar....'} />
             <UserSide />
-            <LogActividades />
+          
             <main id="main" className="main" style={{backgroundColor:'#00968c53'}} >
             <div className="pagetitle">
       <h1 style={{color:'white'}}>Dashboard</h1>
@@ -67,14 +74,19 @@ export const FavoritosFarmacia = ()=>{
     </div>
   <div className="container">
       <div className="row">       
-   <div className="card info-card sales-card   min-vh-40" style={{height:'30rem'}}>
-   <table className="table table-borderless datatable">
-            <thead>
+   <Card>
+    
+           <div className="container">
+             <div className="row">
+   <table className="table">
+
+             <thead>
                     <tr>
                     <th>Nome </th>
                     <th>endereço</th>
                     <th>telefone</th>
                     <th>NIF</th>
+                     <th>Ver</th>
                     <th>Eliminar</th>
                     </tr>
                 </thead>
@@ -107,11 +119,16 @@ export const FavoritosFarmacia = ()=>{
                 </tr>
             ))}
              </tbody>
+             </table>
+             </div>
+           </div>
+          
+               
         
-        </table>
+        
  
 
-    </div>
+    </Card>
     
     </div>
     
@@ -120,6 +137,12 @@ export const FavoritosFarmacia = ()=>{
             </main>
            <FooterDashboard />        
         </>
-
+        :
+             <>
+             Voce Não está Autenticado! Por favor faça Login 
+             </>
+        }
+      
+      </>
     )
 }

@@ -3,7 +3,6 @@ import { Link,useParams } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import HeaderUser from "../../Dashboard/components/heder/user/headerUser";
-import { Nome } from "../../components/NomeUser/Nome";
 import UserSide from "../../Dashboard/components/aside/user/userSide";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
@@ -17,6 +16,8 @@ import { LogActividades } from "../../Log_Actividades/Log_actividades";
 
 export const Comentarios = ()=>{
     
+
+    const IsAutenticado = !!localStorage.getItem("usuario");
 const {usuario} = useParams()
 const [texto, setTexto] = useState('');
 
@@ -27,6 +28,7 @@ const HandleSubmit = async(e)=>{
         const res = await axios.post("http://localhost:8800/sms/novasms", {usuario, texto})
             if(res.data.data === "Sucess"){
                 toast.success("Enviada com Sucesso");
+                setTexto("")
                 console.log(res.data)
             } else{
                 toast.error("ERRO!")
@@ -40,12 +42,14 @@ const HandleSubmit = async(e)=>{
 }
     return(
         <>
-       
-          < HeaderUser nome={<Nome />} />
+        { IsAutenticado ?
+        <>
+        <LogActividades tipo={"usuario"} />
+          < HeaderUser />
      
          <UserSide />
 
-  <LogActividades />
+  
          <main id="main" className="main" style={{backgroundColor:'#00968c53'}}>
             <div className="pagetitle">
       <h1 style={{color:'white'}}>Dashboard</h1>
@@ -80,6 +84,12 @@ const HandleSubmit = async(e)=>{
             
             </main>
          
+        </>
+        : 
+        <>
+        Voce não esta Autenticado
+        </>
+}
         </>
     )
 }

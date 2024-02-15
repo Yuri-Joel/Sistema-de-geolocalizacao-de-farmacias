@@ -1,7 +1,8 @@
 import { ActualizarUsuarioId, CriarUsuario, ObterUsuarioId, TodosUsuarios, TodosUsuariosNumeros, VerificarSenha, deleteUsuarios, ActualizarSenhaUser, EliminarFoto} from "../Models/usuarioModels.js";
 import bcrypt from 'bcryptjs'
-import { Verify } from "../services/recuperacao de senha/recuperacaoModel.js";
-
+import { VerificarToken, Verify, addrecuperacao } from "../services/recuperacao de senha/recuperacaoModel.js";
+import { createTransport } from 'nodemailer';
+import {conn} from '../utils/conexao.js'
 export const hashSenha = async  (senha)=>{
     
         const saltRounds = 5;
@@ -9,7 +10,6 @@ export const hashSenha = async  (senha)=>{
 
        return v;
 }
-
 export const TodosU = async (_,res)=>{
     const data = await  TodosUsuarios()
     
@@ -44,17 +44,26 @@ export const CriarU = async (req,res)=> {
       
 
         const validar = await Validateall(nome,email,senha,telefone);
-        console.log(validar)
+       
         if(validar){
+          
             const senha1 = await hashSenha(senha)
-            const values =[
-                nome,
-                telefone,
-                email,
-                senha1
-             ];
-        const data = await CriarUsuario(values)
-        res.status(200).json({status: data})
+          const values = [
+            nome,
+            telefone,
+            email,
+            senha1
+          ]
+          const data = await CriarUsuario(values)
+          res.status(200).json({ status: data })
+          /*    const Confirmar = await ConfirmarEmail(email);
+            
+             if(Confirmar.message == "Sucess"){
+                return res.status(200).json({status: "Sucess", values: {nome, telefone, email, senha1}})
+             } else{
+                return res.status(200).json({status: "Erro no envio do email"})
+             }
+     */
         } 
         else{
             return  res.status(200).json({ status: 'Erro! na autenticação' });
@@ -65,6 +74,32 @@ export const CriarU = async (req,res)=> {
    
 
 }
+
+  export const ConfirmarCadastro = async (req, res)=>{
+    const {token} = req.body
+ 
+    const values = [
+      req.body.nome,
+      req.body.telefone,
+      req.body.email,
+      req.body.senha1 
+    ]
+    const result = await VerificarToken(token)
+    if (!result || result.length === 0) {
+      return res.status(200).json({ data: 'Token não encontrado ou expirado!' });
+    }
+
+    const token1 = result[0].token;
+    if(token == token1){
+
+      const data = await CriarUsuario(values)
+        await DeletarConfirmacaoEmail(token)
+
+      return res.status(200).json({data})
+    }
+    
+  }
+
 export const ActualizarU = async (req,res)=> {
   const {id} = req.params;
   const {email} = req.body
@@ -180,19 +215,82 @@ export const Validatepass = async(senha)=>{
     }
     return true;
 }
+
 export const ValidateNumber = async(telefone)=>{
+
+  if(telefone.length < 9){
+
+    return false
+  }
    
     const regexTelefone = /^[0-9\-]+$/;
     return regexTelefone.test(telefone);
    
 }
 
-  // Função de validação de senha
-  /*
-  const validarSenha = (senha) => {
-    // Pelo menos 8 caracteres, pelo menos uma letra maiúscula, uma letra minúscula e um número
-    const regexSenha = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
-    return regexSenha.test(senha);
-  };
-  */
-  
+const DeletarConfirmacaoEmail =async (token)=>{
+    const query = 'DELETE FROM recuperacao_senha WHERE token = ?';
+
+    return new Promise ((resolve,reject)=>{
+        conn.query(query,[token],(err)=>{
+            if(err) reject(err)
+            else resolve("Sucesso")
+        })})
+}
+    
+  export const ConfirmarEmail = async(email)=>{
+    
+    const tokenAleatorioCrypto = ()=>  {
+      
+        return new Promise((resolve, reject) => {
+       const seisDigitos = Math.floor(100000 + Math.random()* 900000);
+ 
+       if(seisDigitos){
+         resolve(seisDigitos.toString());
+       }else{
+         reject('erro ao gerar Token')
+       }
+     })   
+     }
+ 
+     const token = await tokenAleatorioCrypto();
+     
+       const expiraEm = new Date();
+      expiraEm.setHours(expiraEm.getHours() + 1)
+ 
+      const dados = [ email, token, expiraEm]
+      const AddEmail = await addrecuperacao(dados)
+     
+      if(AddEmail){
+        
+     const transporter = createTransport({
+        service: 'gmail',
+        auth: {
+          user: 'ceoyuri23@gmail.com',
+          pass: 'cume iuee ojjg qjls',
+        },
+      });
+    
+      const mailOptions = {
+        to: email,
+        subject: 'Confirmação de email Geo Farma Go',
+        text: `${token}`,
+      };
+
+        
+     return new Promise((resolve, reject) => {
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    console.error("Erro ao enviar o e-mail:", error);
+                    reject({ message: 'Erro ao enviar o Pacote', status: error.message });
+                } else {
+                   
+                    resolve({ message: "Sucess", status: `E-mail enviado com sucesso: ${info.response}` });
+                }
+            });
+        });
+     
+      }else{
+        return {message: "Erro no servidor!"}
+      }
+  }

@@ -6,16 +6,18 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/js/dist/util/scrollbar'
 import { toast } from "react-toastify";
+import "../../pagesHome/Login/loading.css"
 
 
 export const RedefenirSenha = ()=>{
 
     const Navigate = useNavigate()
     const [token, setToken]= useState('')
-
+    const [loading, setloading] = useState(false)
     const handleSubmit =async(e)=>{
         e.preventDefault();
 
+            setloading(true)
         try {
             const res =  await  axios.post(`http://localhost:8800/rede/redefinir-senha`, {token})
            
@@ -29,6 +31,8 @@ export const RedefenirSenha = ()=>{
             console.log(res.data)
         } catch (error) {
             console.log(error)
+        } finally {
+            setloading(false)
         }
         
     }
@@ -71,6 +75,11 @@ export const RedefenirSenha = ()=>{
                        >Verificar</button></Link>     
                        
                    </div>
+                   { ( loading &&
+           <div className="loading" id="loading">
+            <div className="spinner"></div>
+                 </div>
+            )}
                </div>
            </div>
            </section>

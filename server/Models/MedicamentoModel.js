@@ -1,32 +1,29 @@
 import {conn}  from "../utils/conexao.js";
+import fs from 'fs'
 
 
 export const Medicamento = (usuario, farma) =>{
 
-   const query = "SELECT medicamentos.*, favoritos_medicamentos.id AS favorito_id from farmacia_medicamentos  join medicamentos on farmacia_medicamentos.medicamento_id = medicamentos.id LEFT join favoritos_medicamentos on favoritos_medicamentos.medicamento_id = medicamentos.id AND favoritos_medicamentos.usuario_id = ? where farmacia_medicamentos.farmacia_id = ?";
-
+  const query = "SELECT medicamentos.*, farmacias.nome AS farmacia_nome, farmacias.email, farmacias.aberto, favoritos_medicamentos.id AS favorito_id from farmacia_medicamentos join medicamentos on farmacia_medicamentos.medicamento_id = medicamentos.id LEFT JOIN farmacias on farmacias.id = farmacia_medicamentos.farmacia_id LEFT join favoritos_medicamentos on favoritos_medicamentos.medicamento_id = medicamentos.id AND favoritos_medicamentos.usuario_id = ? where farmacia_medicamentos.farmacia_id = ?;"
 
     return new Promise((resolve,reject)=>{
-
         conn.query(query,[usuario,farma],(err, result)=>{
             if(err)  reject (err);
             else resolve(result);
-    })
-    })
+    })})
 }
 export const farmamedicamentos = (farma)=>{
 
-    const query = "SELECT m.* from medicamentos m join farmacia_medicamentos fm on fm.medicamento_id = m.id LEFT JOIN farmacias f on f.id = fm.farmacia_id where f.id = ?; "
 
+    const query = "SELECT m.* from medicamentos m join farmacia_medicamentos fm on fm.medicamento_id = m.id LEFT JOIN farmacias f on f.id = fm.farmacia_id where f.id = ?; "
 
     return new Promise((resolve, reject) => {
 
-        conn.query(query, [farma], (err, data) => {
+        conn.query(query,[farma], (err, data) => {
             if (err) reject(err);
             else resolve(data);
         })
-    })
-}
+    })}
 
 export const ObterMedid = (id)=>{
 
@@ -56,7 +53,6 @@ export const ComparaMedicamentos = (nome) =>{
 export const AddMedicamento = (dados,farmaId)=>{
     const query = "INSERT INTO medicamentos(nome, preco, data_validade, informacoes, tipo, imagem_path,disponibilidade) VALUES(?)";
 
-
     const sql = "SELECT LAST_INSERT_ID() as lastId";
     const q = `INSERT INTO farmacia_medicamentos(farmacia_id, medicamento_id) VALUES(${farmaId}, ?)`;
 
@@ -66,34 +62,35 @@ export const AddMedicamento = (dados,farmaId)=>{
         if(err) {
              reject (err)
               }
-        else {
-            
+        else {    
             conn.query(sql,(err, data)=>{
                 if(err) reject(err);
                        else{
                     
                     conn.query(q,[ data[0].lastId], (err) => {
                         if (err) reject(err);
-                            else resolve("medicamento adicionado")
+                        else resolve("medicamento adicionado")
                     })
                 }
             })
         }
-        
-
-  
-
-
     }) })
 }
 
-export const ActualizarMedi = (dados, id)=>{
+export const ActualizarMedi = async(dados, id)=>{
+
+    const RecuperarImage = await recuperarCaminhoImagem(id);
+    console.log(RecuperarImage)
+    const EliminarFoto = await excluirImagemNoDiretorio(RecuperarImage)
+    
+    console.log(EliminarFoto);
+    
     const query = "UPDATE medicamentos set nome=?, preco= ?, data_validade = ?, informacoes=?,tipo=?,imagem_path=?, disponibilidade=? where id=?";
 
     return new Promise ((resolve, reject)=>{
         conn.query(query, [...dados,id], (err)=>{
-            if(err) reject( err);
-            else resolve("Medicamento actualizado")
+            if(err) reject(err);
+            else resolve(`Medicamento actualizado`)
         })
 })
 }
@@ -108,22 +105,44 @@ export const DisponivelMed = (dispo,id)=>{
         if(err) reject( err);
         else resolve("Medicamento actualizado")
     })
-})
-  
-}
+})}
 
-export const DeletarMed = (id) =>{
+
+
+export const DeletarMed = async (id)=> {
+
+    const RecuperarImage = await recuperarCaminhoImagem(id);
+    console.log(RecuperarImage)
+      
+    const EliminarFoto = await excluirImagemNoDiretorio(RecuperarImage)
+    console.log(EliminarFoto)
     const query ="DELETE from medicamentos where id =?"
 
 return new Promise ((resolve,reject) =>{
     conn.query(query,[id],(err)=>{
         if(err) reject( err);
-        else resolve("Medicamento apagado com sucesso")
+        else resolve(`Medicamento Eliminado com sucesso`)
 
     })
-})
-    
+})}
+
+const excluirImagemNoDiretorio = async(caminho) => {
+    fs.unlink(caminho, (error) => {
+        if (error) {
+        throw (error);  
+        }
+       return "eliminado"
+    });
 }
+
+const recuperarCaminhoImagem = async(id) => {
+    const query = 'SELECT imagem_path FROM medicamentos WHERE id = ?';
+   return new Promise((resolve, reject)=>{
+    conn.query(query, [id], (error, results) => {
+        if (error)  reject(error)
+        else resolve(results[0].imagem_path)
+    });
+   })};
 
 export const totalMedicamento = (id)=>{
     
@@ -134,7 +153,6 @@ export const totalMedicamento = (id)=>{
         conn.query(query,[id],(err,data)=>{
             if(err) reject( err);
             else resolve(data)
-    
         })
     })
 
@@ -149,8 +167,7 @@ export const totalFavoritosMedi = (id)=>{
             else resolve(data)
     
         })
-    })
-}
+    })}
 
 //Graficos
 export const GraficoMedfavoritosFarma = (id) => {

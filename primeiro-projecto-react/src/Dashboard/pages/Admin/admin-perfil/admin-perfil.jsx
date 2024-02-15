@@ -15,10 +15,13 @@ import { NomeAdmin } from '../../../../components/NomeAdmin/NomeAdmin'
 import axios from 'axios'
 import {toast} from 'react-toastify';
 import imagem from '../../../../assets/Screenshot_20240110-233026.png'
+import { LogActividades } from '../../../../Log_Actividades/Log_actividades';
 
 
 export default function Adminperfil(){
 
+
+    const IsAutenticado = !!localStorage.getItem("usuario");
   const [admin, setadmin] = useState([])
   const [toggle,settoggle]= useState(true)
 
@@ -158,13 +161,13 @@ const DeletarFoto = (id)=>{
 }
   return (
     <>
+    { IsAutenticado ?
+    <>
+          <LogActividades  tipo={"administrador"}/>
          <HeaderAdmin on={Toggle} />
               
 {toggle &&
-         <AdminSide 
-         rotacadasGestor={'/adminCadastrarGestor'}
-         rotacadasFarmacia={'/adminCadastrarFarmacias'}
-         />}
+         <AdminSide  />}
          <main id="main" className="main">
 
 <div className="pagetitle">
@@ -249,7 +252,7 @@ const DeletarFoto = (id)=>{
              ( dataload &&
               <form  onSubmit={ActualizarUser}>
                 <div className="row mb-3">
-                  <label for="profileImage" className="col-md-4 col-lg-3 col-form-label">Imagem</label>
+                  <label htmlFor="profileImage" className="col-md-4 col-lg-3 col-form-label">Imagem</label>
                   <div className="col-md-8 col-lg-9">
                 
   
@@ -272,7 +275,7 @@ const DeletarFoto = (id)=>{
                 </div>
 
                 <div className="row mb-3">
-                  <label for="fullName" className="col-md-4 col-lg-3 col-form-label">Nome</label>
+                  <label htmlFor="fullName" className="col-md-4 col-lg-3 col-form-label">Nome</label>
                   <div className="col-md-8 col-lg-9">
                     <input name="fullName" type="text" className="form-control" id="fullName"  value={nome} onChange={(e)=> setnome(e.target.value)} />
                   </div>
@@ -287,7 +290,7 @@ const DeletarFoto = (id)=>{
                 </div>
                   */}
                 <div className="row mb-3">
-                  <label for="Email" className="col-md-4 col-lg-3 col-form-label">Email</label>
+                  <label htmlFor="Email" className="col-md-4 col-lg-3 col-form-label">Email</label>
                   <div className="col-md-8 col-lg-9">
                     <input name="email" type="email" className="form-control" id="Email"  value={email} onChange={(e)=> setemail(e.target.value)}/>
                   </div>
@@ -305,21 +308,21 @@ const DeletarFoto = (id)=>{
               <form onSubmit={HandleSubmit}>
 
                 <div className="row mb-3">
-                  <label for="currentPassword" className="col-md-4 col-lg-3 col-form-label">Senha actual</label>
+                  <label htmlFor="currentPassword" className="col-md-4 col-lg-3 col-form-label">Senha actual</label>
                   <div className="col-md-8 col-lg-9">
                     <input name="password" type="password" className="form-control" id="currentPassword" onChange={(e)=> setsenha({...Alterar, senhaActual: e.target.value})}/>
                   </div>
                 </div>
 
                 <div className="row mb-3">
-                  <label for="newPassword" className="col-md-4 col-lg-3 col-form-label">Nova Senha</label>
+                  <label htmlFor="newPassword" className="col-md-4 col-lg-3 col-form-label">Nova Senha</label>
                   <div className="col-md-8 col-lg-9">
                     <input name="newpassword" type="password" className="form-control" id="newPassword"  onChange={(e)=> setsenha({...Alterar, novaSenha: e.target.value})} />
                   </div>
                 </div>
 
                 <div className="row mb-3">
-                  <label for="renewPassword" className="col-md-4 col-lg-3 col-form-label">Confirmar a Senha</label>
+                  <label htmlFor="renewPassword" className="col-md-4 col-lg-3 col-form-label">Confirmar a Senha</label>
                   <div className="col-md-8 col-lg-9">
                     <input name="renewpassword" type="password" className="form-control" id="renewPassword" value={ConfimarSenha} onChange={(e)=> setConfirmar(e.target.value)} />
                   </div>
@@ -344,6 +347,11 @@ const DeletarFoto = (id)=>{
 </main>
 
          <FooterDashboard />
+    </>
+:
+<div>
+  você não está Autenticado!
+</div>}
     </>
   )
 }

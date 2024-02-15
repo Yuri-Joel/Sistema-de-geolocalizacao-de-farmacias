@@ -7,6 +7,7 @@ import { RoutesAdmin } from './Dashboard/pages/Admin/routesAdmin';
 import { Load } from './User/LoadScript'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import 'bootstrap/js/dist/scrollspy';
 import { RoutesGestor } from './gestor/routesGestor';
 
 
@@ -16,7 +17,7 @@ function App() {
         return (
                 <>
                         <BrowserRouter>
-                                 <Load>
+                                <Load>
                                 <RoutesDashboard />
                                 <RoutesAdmin />
                                 <RoutesGestor />

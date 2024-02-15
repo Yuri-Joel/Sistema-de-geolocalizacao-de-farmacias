@@ -1,4 +1,4 @@
-import { ActualizarFarmacias, ContarFarmacias, CriarNewFarmacia, DeleteFarmacia, ObterFarmaciaId, Todasfarmacias } from "../Models/farmaciaModels.js"
+import { ActualizarFarmaciaAdmin, ActualizarFarmacias, ContarFarmacias, CriarNewFarmacia, DeleteFarmacia, FarmaciaAberta, ObterFarmaciaId, Todasfarmacias } from "../Models/farmaciaModels.js"
 
 
 
@@ -41,18 +41,43 @@ export const ActualizarFarma = async (req,res)=>{
     
     const {id}= req.params
     const values = [
-        req.body.nome,
-        req.body.nif,
-        req.body.telefone,
-        req.body.endereco,
-        req.body.latitude,
-        req.body.longitude,
-        req.body.horario_funcionamento
+        req.body.Nomefarma,
+        req.body.Niffarma,
+        req.body.Email,
+        req.body.Telefonefarma,
+        req.body.Horariofarma
     ]
     const data = await ActualizarFarmacias(values,id)
     res.json({data})
 }
 
+export const ActualizarFarmaAdmin = async(req, res) =>{
+    const { id } = req.params
+    const values = [
+        req.body.endereco,
+        req.body.latitude,
+        req.body.longitude
+    ]
+    const data = await ActualizarFarmaciaAdmin(values, id)
+    res.json({ data })
+
+}
+
+
+
+export const FarmaciaOpen = async(req, res)=> {
+    const {farma} = req.params;
+    const {value} = req.body
+    
+    const data =  await  FarmaciaAberta(value, farma);
+
+    if(value == true){
+        return res.status(200).json({data: data + " Aberta"})
+    } else {
+        res.status(200).json({ data: data +" fechada" })
+    }
+   
+}
 export const DeleteFarma = async (req,res)=>{
     const {id} = req.params
     const data = await DeleteFarmacia(id)

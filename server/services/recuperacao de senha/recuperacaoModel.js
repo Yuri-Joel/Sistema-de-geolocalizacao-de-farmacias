@@ -43,7 +43,8 @@ export const deleteSenhas = (id) =>{
         })})
 }
 
-export const ver = (e)=>{
+
+export const VerificarToken = (e)=>{
 
     const query = " SELECT * FROM recuperacao_senha WHERE token = ? AND expira_em > NOW()";
     return new Promise ((resolve,reject)=>{
@@ -62,4 +63,3 @@ export const verEmail = (e)=>{
             else resolve(data)
         })})
 }
-

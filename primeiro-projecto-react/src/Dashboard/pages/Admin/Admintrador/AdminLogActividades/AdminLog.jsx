@@ -6,18 +6,21 @@ import AdminSide from "../../../../components/aside/admin/adminSide"
 import { Link } from "react-router-dom"
 import FooterDashboard from "../../../../components/footer/footer"
 import { toast } from "react-toastify"
+import { Formattime } from "../AdminMensagens/AdminMensagens"
 
 
 
 export const ObterLog = () => {
 
+    const IsAutenticado = !!localStorage.getItem("usuario")
     const [Log, setLog] = useState([])
     const admin = localStorage.getItem("usuario")
 
     const ListarLog = async () => {
 
+        const tipo = "administrador"
         try {
-            const res = await axios.get(`http://localhost:8800/log/log/${admin}`)
+            const res = await axios.get(`http://localhost:8800/log/log/${admin}/${tipo}`)
             setLog(res.data.data)
         } catch (error) {
             console.error(error)
@@ -53,9 +56,11 @@ export const ObterLog = () => {
 
     return (
         <>
+        { IsAutenticado ?
+        <>
             <HeaderAdmin />
             <AdminSide />
-            <LogActividades />
+            <LogActividades tipo={"administrador"} />
             <main id="main" className="main">
                 <div className="pagetitle">
                     <h1>Dashboard</h1>
@@ -86,9 +91,9 @@ export const ObterLog = () => {
 
                                                     <td>{logA.id}</td>
                                                     <td>{logA.caminho_url}</td>
-                                                    <td>{logA.data_atividade}</td>
+                                                    <td>{Formattime(logA.data_atividade)}</td>
                                                     <td>{logA.detalhes}</td>
-                                                    <tr><button className="btn btn-danger" onClick={()=> Eliminar(logA.id)}>Eliminar</button></tr>
+                                                    <td><button className="btn btn-danger" onClick={()=> Eliminar(logA.id)}>Eliminar</button></td>
                                                 </tr>
                                             ))
                                         }
@@ -106,6 +111,11 @@ export const ObterLog = () => {
 
             <FooterDashboard />
 
+        </>
+        :
+        <div>Voce não está Autenticado, Por favor faça Login</div>
+
+        }
         </>
     )
 }

@@ -9,7 +9,6 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import  k from'../../assets/Geo Farma/Geo Farma.png'
 import "../../pagesHome/Login/loading.css"
-import { LogActividades } from '../../Log_Actividades/Log_actividades';
 
 export default function Cadastrar() {
   const Navigate = useNavigate()
@@ -23,35 +22,39 @@ export default function Cadastrar() {
   const [confirmSenha , setsenha] = useState('')
   const [loading, setloading] = useState(false)
 
-
- 
  const handleSubmit = async(e)=>{
+  
   e.preventDefault();
-  setloading(true)
-
-              
-  if(( confirmSenha  ===  Cadastro.senha) && Cadastro.nome && Cadastro.email && Cadastro.senha && Cadastro.telefone){
-    await  axios.post(`http://localhost:8800/api/cadastro`, Cadastro)
-       .then(res => {
-           console.log(res.data);
+  setloading(true)  ;
+   try {
+      if(( confirmSenha  ===  Cadastro.senha) && Cadastro.nome && Cadastro.email && Cadastro.senha && Cadastro.telefone){
+   
+      const res =  await  axios.post(`http://localhost:8800/api/cadastro`, Cadastro)
+       
+          
            if(res.data.status === "Sucess"){
-               setTimeout(()=>{
-                   toast.success("Cadastrado com Sucesso")
-               },1500)
+            
+            //  localStorage.setItem("dados", JSON.stringify(res.data.values))
                Navigate("/login")
            } else {
                toast.warn(res.data.status);
            }
-       } )
-       .catch(err => toast.warn(err))
    } else{
-      toast.error("ERRO!")
+        toast.warn("Erro!")
    }
+   }
+        catch (error) {
+     toast.warn(error)
+   }
+   finally{
+     setloading(false) 
+   }
+ 
    
     }
   return (
     <>
-    <LogActividades />
+  
        <main>
        <section className="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
            <div className="container ">

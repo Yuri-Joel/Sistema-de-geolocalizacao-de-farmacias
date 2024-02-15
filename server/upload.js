@@ -26,7 +26,12 @@ const {tipo} = req.body;
     const data = await FotoModel("gestores",imagePath, userId);
   res.status(200).json({data})
 
-  } else{
+  } if(tipo == "subgestores"){
+    const data = await FotoModel("subgestores",imagePath, userId);
+    res.status(200).json({data})
+  }
+  
+  else{
     const data = await FotoModel("usuarios", imagePath, userId);
     res.status(200).json({ data })
 

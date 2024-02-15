@@ -35,10 +35,10 @@ export const ObtergestorId =(gestorId) =>{
 }
 export const newGestores = (dados)=>{
     const query = "insert into gestores (nome,email,nome_user,senha,telefone,farmacia_id) value (?)"
-    return new Promise((resolve, reject)=>{
+    return new Promise((resolve)=>{
 
       conn.query(query,[dados], (err)=>{
-          if(err)  reject (err);
+          if(err)resolve ("ERRO! Esta farmacia já possui um Gestor");
           else resolve("Sucess")
   })
   })
@@ -65,10 +65,10 @@ export const ActuaGestor = (dados, usuarioId) => {
     })
 
 }
-export const ActuaGestorsenha = (dados, usuarioId) => {
-    const query = "UPDATE gestores SET `senha`=? WHERE `id` = ?"
+export const ActuaGestorsenha = (tabela, dados, usuarioId) => {
+    const query = "UPDATE ?? SET `senha`=? WHERE `id` = ?"
     return new Promise((resolve, reject) => {
-        conn.query(query, [dados, usuarioId], (err) => {
+        conn.query(query, [tabela,dados, usuarioId], (err) => {
             if (err) reject(err)
             else resolve("Actualizado")
         })

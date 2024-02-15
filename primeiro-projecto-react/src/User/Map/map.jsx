@@ -33,7 +33,7 @@ export default function Map() {
       const res = await axios.get("http://localhost:8800/f/todasfarma")
           SetFarmacias(res.data.data)
           setload(true)
-          console.log(res.data.data)
+         
 
       } catch(error){
       console.log(error)
@@ -70,7 +70,7 @@ ObterUserLocation();
     const usuario = Idusuario;
   await axios.post("http://localhost:8800/fav/favoritos-f/",{usuario,farma})
    .then(res => {
-       console.log(res.data)
+       
        if(res.data.status === "Sucess"){
 
            toast.success("Adicionado como favorito")
@@ -128,21 +128,18 @@ ObterUserLocation();
             } else {
             console.log("erro nesta geolocalização");
             ObterUserLocation();
-             
             }
       }
     
-  //
- 
-
   return (
 <>
 { IsAutenticado ?
  <>
+          <LogActividades tipo={"usuario"} />
 <HeaderUser nome={<Nome />} placeholder={'Pesquisar Farmacia....'}/>
 
 <UserSide />
-<LogActividades />
+
 
 
 <main id="main" className="main" style={{backgroundColor:'#00968c53'}}>
@@ -151,19 +148,19 @@ ObterUserLocation();
       <h1 style={{color:'white'}}>Dashboard</h1>
       <nav>
         <ol className="breadcrumb">
-          <li className="breadcrumb-item"><a href="index.html">Map</a></li>
+          <li className="breadcrumb-item"><Link to={`/map`}>Map</Link></li>
           <li className="breadcrumb-item active">Dashboard</li>
         </ol>
       </nav>
     </div>
 
-    <section className="section">
+    <div className="container">
       <div className="row">
 
            
  <div className="card info-card sales-card   min-vh-40" style={{height:'30rem'}}>
       
-	 { dataload && (
+	    { dataload && (
             <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={12}>
                 {
                     Farmacias.map((farma)=>(
@@ -178,7 +175,7 @@ ObterUserLocation();
                            // icon: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png'
                         }}
                           icon={{
-                   url: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png', // Ícone verde padrão do Google Maps
+                   url: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png',
                       }}
                         
                         label={{
@@ -213,11 +210,13 @@ ObterUserLocation();
                             <div className='container' style={{display:'flex',alignItems:'center',justifyContent:'center',flexDirection:'column'}}>
                                 <h2>{selectfarma.nome}</h2>
                                 <br />
+                              <span>
+                                Farmacia {selectfarma.aberto ? `aberta` : `fechada`}
+                              </span>
+                                <br />
                                 <div style={{display:'flex',justifyContent:'center',alignItems:'center',gap:'0.4rem'}}>
                                 <Link to={`/farmacia/${selectfarma.id}/${Idusuario}`}>
-                                 <button 
-                                 className='btn btn-success'style={{backgroundColor:'#00968c'}}
-                                 >
+                                 <button  className='btn btn-success'style={{backgroundColor:'#00968c'}}>
                                   Ver Farmacia
                                   </button>
                                   </Link>
@@ -225,6 +224,7 @@ ObterUserLocation();
                                 className='btn btn-success'style={{backgroundColor:'#00968c'}}
                                 onClick={()=> handleFavoritar(selectfarma.id)}>Adicionar aos favoritos
                                 </button>
+                                
                                 </div>
                             </div>
                             </InfoWindow>
@@ -234,13 +234,13 @@ ObterUserLocation();
             </GoogleMap>
 
 )}   
- 
+  
         
             <button className='btn btn-success'style={{marginTop:'1rem',backgroundColor:'#00968c'}}  onClick={()=> handleCriarRota()} >Criar Rota</button>
       
    </div>    
         </div>
-       </section>
+       </div>
     </main>
    <FooterDashboard />
    </>

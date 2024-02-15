@@ -5,7 +5,7 @@ const routeLog = express.Router()
 
 routeLog.post("/lognew", criaLog)
 
-routeLog.get("/log/:admin", ObterLogactividades)
+routeLog.get("/log/:admin/:tipo", ObterLogactividades)
 
 routeLog.delete("/dele/:id", DeletarLog)
 routeLog.delete("/del/:id", deletarId)

@@ -15,6 +15,9 @@ import { HeaderGestor } from '../../Dashboard/components/heder/gestor/headerGest
 import GestorSide from '../../Dashboard/components/aside/gestor/gestorSide';
 import { NomeGestor } from '../../components/NomeGestor/NomeGestor';
 import FooterDashboard from '../../Dashboard/components/footer/footer';
+import { NomeSubGestor } from '../../components/NomeSubgestor/NomeSubgestor';
+import { LogActividades } from '../../Log_Actividades/Log_actividades';
+
 
 
 export default function Gestorperfil() {
@@ -23,11 +26,13 @@ export default function Gestorperfil() {
    
     let Idusuario 
     const subgestor = !!localStorage.getItem("subgestor");
-
+   let baseUrl = ""
     if(subgestor){
        Idusuario = localStorage.getItem("subgestor");
+         baseUrl = "http://localhost:8800/sub"
     } else{
         Idusuario = localStorage.getItem("usuario");
+        baseUrl = "http://localhost:8800/ges"
     }
 
     const [userPhoto, setUserPhoto] = useState('');
@@ -38,10 +43,10 @@ export default function Gestorperfil() {
 
     const ObterUserId = async () => {
         try {
-            const res = await axios.get(`http://localhost:8800/ges/obtera/${Idusuario}`);
+            const res = await axios.get(`${baseUrl}/obtera/${Idusuario}`);
             setadmin(res.data.data)
             setUserPhoto(res.data.data[0].foto);
-
+            console.log(res.data)
         } catch (error) {
             console.error(error)
         }
@@ -53,6 +58,7 @@ export default function Gestorperfil() {
     const [dataload, setload] = useState(false)
     const [nome, setnome] = useState('');
     const [email, setemail] = useState('');
+    const [telefone, setTelefone] = useState('')
     const [Alterar, setsenha] = useState({
         senhaActual: '',
         novaSenha: ''
@@ -64,7 +70,7 @@ export default function Gestorperfil() {
         e.preventDefault();
 
         if ((Alterar.novaSenha === ConfimarSenha) && Alterar.senhaActual && ConfimarSenha && Alterar.novaSenha) {
-            await axios.put(`http://localhost:8800/ges/actuasenha/${Idusuario}`, Alterar)
+            await axios.put(`${baseUrl}/actuasenha/${Idusuario}`, Alterar)
                 .then(res => {
                     console.log(res.data);
                     if (res.data.data === "Actualizada") {
@@ -85,7 +91,7 @@ export default function Gestorperfil() {
     const ObterEditarUser = async () => {
 
         try {
-            const res = await axios.get(`http://localhost:8800/ges/obtera/${Idusuario}`)
+            const res = await axios.get(`${baseUrl}/obtera/${Idusuario}`)
 
             console.log(res.data.data)
             setnome(res.data.data[0].nome);
@@ -108,21 +114,15 @@ export default function Gestorperfil() {
 
     const ActualizarUser = async (e) => {
         e.preventDefault();
-        const User = {
-            nome: nome,
-            email: email
-        }
+       
         handleUploadNewImage();
 
         try {
-            const res = await axios.put(`http://localhost:8800/ges/actuages/${Idusuario}`, User)
+            const res = await axios.put(`${baseUrl}/actuages/${Idusuario}`, {nome, email})
             console.log(res.data.data)
             toast.success("Perfil Actualizado");
             ObterUserId();
             Navigate("/gestor")
-
-
-
         } catch (error) {
             console.error(error);
         }
@@ -132,7 +132,15 @@ export default function Gestorperfil() {
             console.log('Nenhuma imagem selecionada.');
             return;
         }
-        const tipo = "gestor";
+
+        let tipo = ""
+        if(subgestor){
+            tipo = "subgestores"
+        } else{
+         tipo = "gestor";
+           
+        }
+        
         const formData = new FormData();
         formData.append('image', newImage);
         formData.append('id', Idusuario);
@@ -150,7 +158,7 @@ export default function Gestorperfil() {
 
     const DeletarFoto = (id) => {
         try {
-            const res = axios.delete(`http://localhost:8800/ges/delfoto/${id}`)
+            const res = axios.delete(`${baseUrl}/delfoto/${id}`)
             if (res.data.data === "Sucess") {
                 toast.success(res.data.data)
             }
@@ -161,6 +169,7 @@ export default function Gestorperfil() {
     }
     return (
 <>
+            <LogActividades tipo={"gestor"} />
 <HeaderGestor />
 
 <GestorSide />
@@ -188,7 +197,7 @@ export default function Gestorperfil() {
         :
         <img src={imagem} alt='profile' className='rounded-circle' />
     }
-    <h2><NomeGestor /></h2>
+    <h2>{ subgestor ? <NomeSubGestor /> : <NomeGestor />}</h2>
     <h3>Gestor 00{Idusuario}</h3>
 
 </div>
@@ -228,10 +237,10 @@ export default function Gestorperfil() {
                             <div className="col-lg-9 col-md-8">{usuario.nome}</div>
                         </div>
 
-                        {/* <div className="row">
-<div className="col-lg-3 col-md-4 label">Constacto</div>
-<div className="col-lg-9 col-md-8">{usuario.telefone}</div>
-</div>*/}
+                        <div className="row">
+                            <div className="col-lg-3 col-md-4 label">Constacto</div>
+                            <div className="col-lg-9 col-md-8">{usuario.telefone}</div>
+                        </div>
 
                         <div className="row">
                             <div className="col-lg-3 col-md-4 label">Email</div>
@@ -248,7 +257,7 @@ export default function Gestorperfil() {
                 (dataload &&
                     <form onSubmit={ActualizarUser}>
                         <div className="row mb-3">
-                            <label for="profileImage" className="col-md-4 col-lg-3 col-form-label">Imagem</label>
+                            <label htmlFor="profileImage" className="col-md-4 col-lg-3 col-form-label">Imagem</label>
                             <div className="col-md-8 col-lg-9">
 
 
@@ -271,22 +280,22 @@ export default function Gestorperfil() {
                         </div>
 
                         <div className="row mb-3">
-                            <label for="fullName" className="col-md-4 col-lg-3 col-form-label">Nome</label>
+                            <label htmlFor="fullName" className="col-md-4 col-lg-3 col-form-label">Nome</label>
                             <div className="col-md-8 col-lg-9">
                                 <input name="fullName" type="text" className="form-control" id="fullName" value={nome} onChange={(e) => setnome(e.target.value)} />
                             </div>
                         </div>
 
 
-                        {/*<div className="row mb-3">
-<label for="Phone" className="col-md-4 col-lg-3 col-form-label">Contacto</label>
+                        *<div className="row mb-3">
+<label htmlFor="Phone" className="col-md-4 col-lg-3 col-form-label">Contacto</label>
 <div className="col-md-8 col-lg-9">
 <input name="phone" type="text" className="form-control" id="Phone"  value={telefone} onChange={(e)=> setTelefone(e.target.value)}/>
 </div>
 </div>
-*/}
+
                         <div className="row mb-3">
-                            <label for="Email" className="col-md-4 col-lg-3 col-form-label">Email</label>
+                            <label htmlFor="Email" className="col-md-4 col-lg-3 col-form-label">Email</label>
                             <div className="col-md-8 col-lg-9">
                                 <input name="email" type="email" className="form-control" id="Email" value={email} onChange={(e) => setemail(e.target.value)} />
                             </div>
@@ -304,21 +313,21 @@ export default function Gestorperfil() {
             <form onSubmit={HandleSubmit}>
 
                 <div className="row mb-3">
-                    <label for="currentPassword" className="col-md-4 col-lg-3 col-form-label">Senha actual</label>
+                    <label htmlFor="currentPassword" className="col-md-4 col-lg-3 col-form-label">Senha actual</label>
                     <div className="col-md-8 col-lg-9">
                         <input name="password" type="password" className="form-control" id="currentPassword" onChange={(e) => setsenha({ ...Alterar, senhaActual: e.target.value })} />
                     </div>
                 </div>
 
                 <div className="row mb-3">
-                    <label for="newPassword" className="col-md-4 col-lg-3 col-form-label">Nova Senha</label>
+                    <label htmlFor="newPassword" className="col-md-4 col-lg-3 col-form-label">Nova Senha</label>
                     <div className="col-md-8 col-lg-9">
                         <input name="newpassword" type="password" className="form-control" id="newPassword" onChange={(e) => setsenha({ ...Alterar, novaSenha: e.target.value })} />
                     </div>
                 </div>
 
                 <div className="row mb-3">
-                    <label for="renewPassword" className="col-md-4 col-lg-3 col-form-label">Confirmar a Senha</label>
+                    <label htmlFor="renewPassword" className="col-md-4 col-lg-3 col-form-label">Confirmar a Senha</label>
                     <div className="col-md-8 col-lg-9">
                         <input name="renewpassword" type="password" className="form-control" id="renewPassword" value={ConfimarSenha} onChange={(e) => setConfirmar(e.target.value)} />
                     </div>

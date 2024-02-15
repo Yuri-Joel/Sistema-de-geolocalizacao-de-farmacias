@@ -10,7 +10,7 @@ import FooterDashboard from '../../../../components/footer/footer'
 export const AdminMostrarFarmacias = () => {
     const [Farmacias, setFarmacias] = useState([])
 
-
+    const IsAutenticado = !!localStorage.getItem("usuario")
     const ListarFarmacias = async () => {
         try {
 
@@ -38,7 +38,9 @@ export const AdminMostrarFarmacias = () => {
 
     return (
         <>
-            <LogActividades />
+        { IsAutenticado ? 
+        <>
+            <LogActividades tipo={"administrador"} />
             <HeaderAdmin />
             <AdminSide />
             <main id="main" className="main" style={{ backgroundColor: '#00968c53' }} >
@@ -51,7 +53,7 @@ export const AdminMostrarFarmacias = () => {
                         </ol>
                     </nav>
                 </div>
-                <section className="section">
+                <div className="container">
                     <div className="row">
 
                         <div className="card info-card sales-card   min-vh-40" style={{ height: '30rem' }}>
@@ -63,6 +65,7 @@ export const AdminMostrarFarmacias = () => {
                                         <th>Endereço</th>
                                         <th>Nif</th>
                                         <th>Horario</th>
+                                        <th>Editar</th>
                                         <th>Eliminar</th>
                                     </tr>
                                 </thead>
@@ -75,7 +78,11 @@ export const AdminMostrarFarmacias = () => {
                                                 <th>{farmas.endereco}</th>
                                                 <th>{farmas.nif}</th>
                                                 <th>{farmas.horario_funcionamento}</th>
-
+                                                <th>
+                                                    <Link className="btn btn-success btn-sm" title="Remove my profile image" to={`/editfarma/${farmas.id}`}>
+                                                      <span>Editar</span>
+                                                    </Link>
+                                                </th>
                                                 <th>
                                                     <Link className="btn btn-danger btn-sm" title="Remove my profile image">
                                                         <i className="bi bi-trash bg-danger" onClick={() => Deletar(farmas.id)} ></i>
@@ -88,9 +95,15 @@ export const AdminMostrarFarmacias = () => {
                             </table>
                         </div>
                     </div>
-                </section>
+                </div>
             </main>
             <FooterDashboard />
+        </>
+        : 
+        <>
+        Você não está Autenticado Por favor faça Login!
+        </>
+}
         </>
     )
 }

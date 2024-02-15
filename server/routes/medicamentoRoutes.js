@@ -38,7 +38,7 @@ routermed.post("/addmed",  upload.single('image') ,AddMed)
 
 
 
-routermed.put("/actuamed/:id", upload.single('image'),ActuaMedi)
+routermed.put("/actuamed/:id", upload.single('image'), ActuaMedi)
 
 routermed.delete("/delmed/:id", DeleMedi)
 

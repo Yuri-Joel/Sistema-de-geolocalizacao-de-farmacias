@@ -3,11 +3,9 @@ import { Link, useParams } from 'react-router-dom'
 import { Button, Image, Card } from 'react-bootstrap';
 import axios from 'axios';
 import UserSide from '../../Dashboard/components/aside/user/userSide';
-import { LogActividades } from '../../Log_Actividades/Log_actividades';
 import HeaderUser from '../../Dashboard/components/heder/user/headerUser';
 import imagenscards from '../../assets/Geo Farma/j.jpg'
-import { Nome } from '../../components/NomeUser/Nome';
-
+import { LogActividades } from '../../Log_Actividades/Log_actividades';
 
 
 export const FarmaciaDetalhes = () => {
@@ -20,6 +18,9 @@ export const FarmaciaDetalhes = () => {
   const [Pesqui, setPesquisar] = useState(false)
   const [Input, setInput] = useState('');
 
+  const [NomeFarmacia, SetNomeFarmacia] = useState("")
+  const [Emailfarma, setEmail]= useState(" ")
+  const [open , setopen] = useState(null)
   const IsAutenticado = !!localStorage.getItem("usuario")
 
 
@@ -29,18 +30,20 @@ export const FarmaciaDetalhes = () => {
     try {
       const res = await axios.get(`http://localhost:8800/m/med/${id}/${usuario}`)
       setMedi(res.data.data)
+      SetNomeFarmacia(res.data.data[0].farmacia_nome)
+      setEmail(res.data.data[0].email)
+      setopen(res.data.data[0].aberto)
+
       setbool(true)
     }
     catch (erro) {
-      console.error(erro)
+      throw new Error(erro)
     }
   }
 
   useEffect(() => {
-    handledetalhes()
+    handledetalhes();
   }, [])
-
-
 
   const Comparar = async (med) => {
 
@@ -48,11 +51,11 @@ export const FarmaciaDetalhes = () => {
       const res = await axios.get(`http://localhost:8800/m/compara/${med}`)
       setMedi(res.data.data)
       setbool(false);
-      setPesquisar(false)
-      setComparar(true)
+      setPesquisar(false);
+      setComparar(true);
     }
     catch (error) {
-      console.error(error)
+     throw new Error(error)
     }
   }
 
@@ -60,29 +63,32 @@ export const FarmaciaDetalhes = () => {
     e.preventDefault()
     const search = Input;
     const usuario = ad;
-    const idfarma = id
+    const idfarma = id;
     try {
       const res = await axios.get(`http://localhost:8800/b/buscar/${search}/${usuario}/${idfarma}`)
-      console.log(res.data)
+    
       if (res.data.data) {
         setMedi(res.data.data)
         setPesquisar(true)
         setbool(false)
         setComparar(false)
       }
-    } catch (erro) { console.error(erro) }
+    } catch (erro) { 
+
+      console.error(erro) 
+    }
 
   }
 
 
   const Handledown = (event) => {
     if (event.key === 'Enter') {
-      Pesquisar();
+        Pesquisar();
     }
   }
 
   const handleFavoritar = async (medicamentoId) => {
-    // Lógica para adicionar/remover medicamento dos favoritos
+    // Lógica para adicionar / remover medicamento dos favoritos
 
     const med = medicamentoId;
     const usuario = ad;
@@ -96,205 +102,226 @@ export const FarmaciaDetalhes = () => {
           medicamento.id === medicamentoId
             ? { ...medicamento, favorito_id: !medicamento.favorito_id }
             : medicamento
-        )
+        ))
 
-      )
-
-    } catch (error) {
-      console.error('Erro ao favoritar medicamento:', error);
+    } catch (error) { 
+      throw new Error('Erro ao favoritar medicamento:', error);
     }
-
   }
 
   return (
     <>
-      
       {
         IsAutenticado ?
           <>
-              <HeaderUser 
+          <LogActividades tipo={"usuario"} />
+                <HeaderUser
               onChange={e => setInput(e.target.value)}
-               onKeyDown={(e) => Handledown(e)}
-                placeholder={'Pesquisar medicamento'} 
-                value={Input}
-                onSubmit={Pesquisar}
-                nome={<Nome />}
-                />
+              onKeyDown={(e) => Handledown(e)}
+              placeholder={'Pesquisar medicamento'}
+              value={Input}
+              onSubmit={Pesquisar} />
+
             <UserSide />
-            <LogActividades />
+           
 
             {
               bool && (
                 <main id="main" className="main" >
                   <section className='section'>
-                <div className="container">
-                  <div className="row">
-                    <div className="col-md-12">
-                      <Card style={{ height: '100vh' }}>
-                        <h1>Lista de Medicamentos</h1>
-                        <div className="row" style={{ height: 200 + 'vh', overflow: "auto" }}>
-                          {Medi.map((medicine, index) => (
-                            <div className="col-md-4" key={index}>
-                              <Card style={{ backgroundColor: "white", borderRadius: '1rem' }}>
-                                <Card.Body>
-                                 <div style={{display:'flex',justifyContent:'space-between'}}> 
-                                <div className="filter">
-                                    <a className="icon" data-bs-toggle="dropdown"><i className="bi bi-three-dots"></i></a>
-                                    <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                      <li className="dropdown-header text-start">
-                                        <h6>Detalhes</h6>
-                                      </li>
-                                      <li>{medicine.data_validade}</li>
-                                    </ul>
-                                  </div>
+                    <div className="container">
+                      <div className="row">
+                        <div className="col-md-12">
+                          <Card style={{ height: '100vh' }}>
+                            <h1>Lista de Medicamentos da {NomeFarmacia}</h1>
+                            <h2>Farmacia {open ? "Aberta" : "Fechada"}</h2>
+                            <h4>Email: {Emailfarma}</h4>
+                           
+                            <div className="row" style={{ height: 200 + 'vh', overflow: "auto" }}>
+                              {Medi.map((medicine, index) => (
+                                <div className="col-md-4" key={index}>
+                                  <Card style={{backgroundColor: medicine.disponibilidade === "disponivel" ? "white" : "gray", borderRadius: '1rem' }}>
+                                    <Card.Body>
+                                      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                        <div className="filter">
+                                          <Link className="icon" data-bs-toggle="dropdown"><i className="bi bi-three-dots"></i></Link>
+                                          <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                            <li className="dropdown-header text-start">
+                                              <h6>Detalhes</h6>
+                                            </li>
+                                            <li>{medicine.data_validade}</li>
+                                            <li>{medicine.informacoes}</li>
+                                          </ul>
+                                        </div>
 
-                                    {/* &#9829; */} <i 
-                                     onClick={() => handleFavoritar(medicine.id)}
-                                    style={{ color: medicine.favorito_id ? 'red' : 'gray',width:'2rem',height:'2rem' }} 
-                                    className='bi bi-heart-fill'>
+                                        {/* &#9829; */} <i
+                                          onClick={() => handleFavoritar(medicine.id)}
+                                          style={{ color: medicine.favorito_id ? 'red' : 'gray', width: '2rem', height: '2rem' }}
+                                          className='bi bi-heart-fill'>
 
-                                    </i>
-                               
-                                  </div>
-                                  <Image style={{width:'9rem',height:'9rem'}} className="img-fluid rounded-start "src={`http://localhost:8800/${medicine.imagem_path}`} alt={medicine.name} />
-                                 
-                                
-                                  <h5 className="card-title">{medicine.nome}</h5>
-                                  <h6 className="card-subtitle mb-2 text-muted">{medicine.preco + " kz"}</h6>
-                                  <h6><strong>{medicine.disponibilidade}</strong></h6>
-                                  <h6><strong>{medicine.data_validade}</strong></h6>
-                                  <Button variant="success" onClick={() => Comparar(medicine.nome)} className="mr-2">
-                                    Comparar preço
-                                  </Button>
-                                 
-                                </Card.Body>
-                              </Card>
+                                        </i>
+
+                                      </div>
+                                      <Image style={{ width: '9rem', height: '9rem' }} className="img-fluid rounded-start " src={`http://localhost:8800/${medicine.imagem_path}`} alt={medicine.nome} />
+
+
+                                      <h5 className="card-title">{medicine.nome}</h5>
+                                      <h6 className="card-subtitle mb-2 text-muted">{medicine.preco + " kz"}</h6>
+                                      <h6><strong>{medicine.disponibilidade}</strong></h6>
+                                      <h6><strong>{medicine.data_validade}</strong></h6>
+                                      <h6><strong>{medicine.informacoes}</strong></h6>
+                                      <Button variant="success" onClick={() => Comparar(medicine.nome)} className="mr-2">
+                                        Comparar preço
+                                      </Button>
+
+                                    </Card.Body>
+                                  </Card>
+                                </div>
+                              ))}
                             </div>
-                          ))}
+                          </Card>
                         </div>
-                      </Card>
+                      </div>
                     </div>
-                  </div>
-                </div>
-                </section>
+                  </section>
                 </main>
               )
             }
 
             {Comp && (
 
-              <div className="container">
-                <div className="row">
-                  <div className="col-md-12">
-                    <Card style={{ height: '100vh' }}>
-                      <h1>Lista de Medicamentos</h1>
-                      <div className="row" style={{ height: 200 + 'vh', overflow: "auto" }}>
-                        {Medi.map((medicine, index) => (
-                          <div className="col-md-4" key={index}>
-                            <Card style={{ backgroundColor: "white", borderRadius: '1rem' }}>
-                              <Card.Body>
-                                <Image className="img-fluid rounded-start" style={{ width: 100 + '%', height: 8 + 'rem' }} src={`http://localhost:8800/${medicine.imagem_path}`} alt={medicine.name} />
-                                <button className='btn '
-                                  onClick={() => handleFavoritar(medicine.id_med)}
-                                  style={{ color: medicine.favorito_id ? 'red' : 'gray' }}
-                                >
-                                  &#9829;
-                                </button>
-                                <h5 className="card-title">{medicine.nome_medicamento}</h5>
-                                <h6 className="card-subtitle mb-2 text-muted">{medicine.preco + " kz"}</h6>
-                                <Button variant="primary" onClick={() => Comparar(medicine.nome_medicamento)} className="mr-2">
-                                  Comparar preço
-                                </Button>
-                                <div className="filter">
-                                  <Link className="icon" data-bs-toggle="dropdown"><i className="bi bi-three-dots"></i></Link>
-                                  <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                    <li className="dropdown-header text-start">
-                                      <h6>Detalhes</h6>
-                                    </li>
-                                    <li>{medicine.preco}</li>
-                                    <li>{medicine.nome_farmacia}</li>
-                                    <li>{medicine.data_validade}</li>
-                                    <li>{medicine.disponibilidade}</li>
-                                  </ul>
-                                </div>
-                              </Card.Body>
-                            </Card>
+              <main id="main" className="main" >
+                <section className='section'>
+                  <div className="container">
+                    <div className="row">
+                      <div className="col-md-12">
+                        <Card style={{ height: '100vh' }}>
+                          <h1>Lista de Medicamentos da {NomeFarmacia}</h1>
+                          <h2>Farmacia {open ? "Aberta" : "Fechada"}</h2>
+                          <h4>Email: {Emailfarma}</h4>
+                          <div className="row" style={{ height: 200 + 'vh', overflow: "auto" }}>
+                            {Medi.map((medicine, index) => (
+                              <div className="col-md-4" key={index}>
+                                <Card style={{ backgroundColor: medicine.disponibilidade === "disponivel" ? "white" : "gray", borderRadius: '1rem' }}>
+                                  <Card.Body>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                      <div className="filter">
+                                        <Link className="icon" data-bs-toggle="dropdown"><i className="bi bi-three-dots"></i></Link>
+                                        <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                          <li className="dropdown-header text-start">
+                                            <h6>Detalhes</h6>
+                                          </li>
+                                          <li>{medicine.data_validade}</li>
+                                          <li>{medicine.informacoes}</li>
+                                          <li>{medicine.nome_farmacia}</li>
+                                        </ul>
+                                      </div>
+
+                                      {/* &#9829; */} <i
+                                        onClick={() => handleFavoritar(medicine.id)}
+                                        style={{ color: medicine.favorito_id ? 'red' : 'gray', width: '2rem', height: '2rem' }}
+                                        className='bi bi-heart-fill'>
+
+                                      </i>
+
+                                    </div>
+                                    <Image style={{ width: '9rem', height: '9rem' }} className="img-fluid rounded-start " src={`http://localhost:8800/${medicine.imagem_path}`} alt={medicine.name} />
+
+
+                                    <h5 className="card-title">{medicine.nome_medicamento}</h5>
+                                    <h5 className="card-title">{medicine.nome_farmacia}</h5>
+                                    <h6 className="card-subtitle mb-2 text-muted">{medicine.preco + " kz"}</h6>
+                                    <h6><strong>{medicine.disponibilidade}</strong></h6>
+                                    {/* 
+                                    <Button variant="success" onClick={() => Comparar(medicine.nome)} className="mr-2">
+                                      Comparar preço
+                                    </Button>
+                                  */}
+                                  </Card.Body>
+                                </Card>
+                              </div>
+                            ))}
                           </div>
-                        ))}
+                        </Card>
                       </div>
-                    </Card>
+                    </div>
                   </div>
-                </div>
-              </div>
+                </section>
+              </main>
             )
             }
 
-            
+
             {Pesqui && (
 
               <main id="main" className="main" >
-                  <section className='section'>
-                <div className="container">
-                  <div className="row">
-                    <div className="col-md-12">
-                      <Card style={{ height: '100vh' }}>
-                        <h1>Lista de Medicamentos</h1>
-                        <div className="row" style={{ height: 200 + 'vh', overflow: "auto" }}>
-                          {Medi.map((medicine, index) => (
-                            <div className="col-md-4" key={index}>
-                              <Card style={{ backgroundColor: "white", borderRadius: '1rem' }}>
-                                <Card.Body>
-                                 <div style={{display:'flex',justifyContent:'space-between'}}> 
-                                <div className="filter">
-                                    <a className="icon" data-bs-toggle="dropdown"><i className="bi bi-three-dots"></i></a>
-                                    <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                      <li className="dropdown-header text-start">
-                                        <h6>Detalhes</h6>
-                                      </li>
-                                      <li>{medicine.data_validade}</li>
-                                    </ul>
-                                  </div>
+                <section className='section'>
+                  <div className="container">
+                    <div className="row">
+                      <div className="col-md-12">
+                        <Card style={{ height: '100vh' }}>
+                          <h1>Lista de Medicamentos da {NomeFarmacia}</h1>
+                          <h2>Farmacia {open ? "Aberta" : "Fechada"}</h2>
+                          <h4>Email: {Emailfarma}</h4>
+                          <div className="row" style={{ height: 200 + 'vh', overflow: "auto" }}>
+                            {Medi.map((medicine, index) => (
+                              <div className="col-md-4" key={index}>
+                                <Card style={{ backgroundColor: "white", borderRadius: '1rem' }}>
+                                  <Card.Body>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                      <div className="filter">
+                                        <Link className="icon" data-bs-toggle="dropdown"><i className="bi bi-three-dots"></i></Link>
+                                        <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                          <li className="dropdown-header text-start">
+                                            <h6>Detalhes</h6>
+                                          </li>
+                                          <li>{medicine.data_validade}</li>
+                                        </ul>
+                                      </div>
 
-                                    {/* &#9829; */} <i 
-                                     onClick={() => handleFavoritar(medicine.id)}
-                                    style={{ color: medicine.favorito_id ? 'red' : 'gray',width:'2rem',height:'2rem' }} 
-                                    className='bi bi-heart-fill'>
+                                      {/* &#9829; */} <i
+                                        onClick={() => handleFavoritar(medicine.id)}
+                                        style={{ color: medicine.favorito_id ? 'red' : 'gray', width: '2rem', height: '2rem' }}
+                                        className='bi bi-heart-fill'>
 
-                                    </i>
-                               
-                                  </div>
-                                  <Image style={{width:'9rem',height:'9rem'}} className="img-fluid rounded-start "src={imagenscards} alt={medicine.name} />
-                                 
-                                
-                                  <h5 className="card-title">{medicine.nome}</h5>
-                                  <h6 className="card-subtitle mb-2 text-muted">{medicine.preco + " kz"}</h6>
-                                  <h6><strong>{medicine.disponibilidade}</strong></h6>
-                                  <Button variant="success" onClick={() => Comparar(medicine.nome)} className="mr-2">
-                                    Comparar preço
-                                  </Button>
-                                 
-                                </Card.Body>
-                              </Card>
-                            </div>
-                          ))}
-                        </div>
-                      </Card>
+                                      </i>
+
+                                    </div>
+                                    <Image style={{ width: '9rem', height: '9rem' }} className="img-fluid rounded-start " src={imagenscards} alt={medicine.name} />
+
+
+                                    <h5 className="card-title">{medicine.nome}</h5>
+                                    <h6 className="card-subtitle mb-2 text-muted">{medicine.preco + " kz"}</h6>
+                                    <h6><strong>{medicine.disponibilidade}</strong></h6>
+                                    <Button variant="success" onClick={() => Comparar(medicine.nome)} className="mr-2">
+                                      Comparar preço
+                                    </Button>
+
+                                  </Card.Body>
+                                </Card>
+                              </div>
+                            ))}
+                          </div>
+                        </Card>
+                      </div>
                     </div>
                   </div>
-                </div>
                 </section>
-                </main>
-
+              </main>
+            
             )
             }
-
-          </>
-          :
-          <>
-            Voce não esta Autenticado
-          </>
-          
-      }
+  
+</>
+            
+            :
+            <>
+              Voce não esta Autenticado faça login 
+              <Link to={"/login"}> </Link>
+            </>
+    
+            } 
+            
     </>
-  )
-}
+
+  )  }

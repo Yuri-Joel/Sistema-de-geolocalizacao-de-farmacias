@@ -6,7 +6,7 @@ import k from '../../assets/Geo Farma/Geo.svg'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/js/dist/util/scrollbar'
-
+import "../../pagesHome/Login/loading.css"
 
 
 
@@ -14,12 +14,14 @@ export const AddNovaSenha = ()=>{
         const Navigate = useNavigate()
 const {id} = useParams();
 const [novaSenha, setnovaSenha]= useState('')
+const [loading, setloading] = useState(false)
 
     const handleSubmit =async(e)=>{
         
         e.preventDefault();
-try {
-    const res = await  axios.post(`http://localhost:8800/rede/novasenha`,{id, novaSenha})
+        setloading(true)
+      try {
+               const res = await  axios.post(`http://localhost:8800/rede/novasenha`,{id, novaSenha})
             
             console.log(res.data.message)
            
@@ -31,6 +33,8 @@ try {
             }
 } catch (error) {
     console.log(error)
+} finally{
+    setloading(false)
 }
       
     }
@@ -71,6 +75,11 @@ try {
                        >Salvar</button></Link>     
                        
                    </div>
+                   { ( loading &&
+           <div className="loading" id="loading">
+            <div className="spinner"></div>
+                 </div>
+            )}
                </div>
            </div>
            </section>

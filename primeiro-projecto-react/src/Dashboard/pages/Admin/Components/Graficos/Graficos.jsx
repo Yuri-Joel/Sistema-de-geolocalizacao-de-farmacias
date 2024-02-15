@@ -1,8 +1,10 @@
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 import axios from 'axios';
-import { useState, useEffect } from 'react';
-export const  Graficos = ()=> {
+import { useState, useEffect, useRef} from 'react';
+import { generatePDF } from '../../../../../PDF/DownloadingPdf';
 
+export const  Graficos = ()=> {
+  const chartRef = useRef(null)
 
     const [data, setdata] = useState([])
     const [dataload, setdataload] = useState(false)
@@ -24,6 +26,7 @@ return(
  <>
      <div className="container">
        <div className="row">
+        <div ref={chartRef}>
        <BarChart width={600} height={300} data={data}>
     <XAxis dataKey="nome" stroke="#8884d8" />
     <YAxis />
@@ -31,8 +34,10 @@ return(
     <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
     <Bar dataKey="total" fill="#8884d8" barSize={30} />
   </BarChart>
-
+  </div>
   <p>Grafico de medicamentos das Farmacias</p>
+
+        <button onClick={() => generatePDF(chartRef, "Grafico de medicamentos das Farmacias")}>Baixar PDF</button>
        </div>
      </div>
  

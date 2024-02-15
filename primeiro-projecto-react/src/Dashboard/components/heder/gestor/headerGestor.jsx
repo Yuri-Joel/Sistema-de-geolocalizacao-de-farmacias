@@ -26,7 +26,7 @@ export const  HeaderGestor =()=> {
    Idusuario = localStorage.getItem("subgestor")
     const ObterUserId = async () => {
       try {
-        const res = await axios.get(`http://localhost:8800/sub/subtodos/${Idusuario}`);
+        const res = await axios.get(`http://localhost:8800/sub/obtera/${Idusuario}`);
         setUserPhoto(res.data.data[0].foto);
 
       } catch (error) {
@@ -74,10 +74,10 @@ export const  HeaderGestor =()=> {
       <header id="header" className="header fixed-top d-flex align-items-center" >
 
         <div className="d-flex align-items-center justify-content-between">
-          <a href="index.html" className="logo d-flex align-items-center">
+          <Link  to={"/"} className="logo d-flex align-items-center">
             <img src={logo} alt="eee" />
             <span className="d-none d-lg-block" style={{ color: 'white' }}>GeoFarma</span>
-          </a>
+          </Link>
           <i className="bi bi-list toggle-sidebar-btn" style={{ color: 'white' }} onClick={open}></i>
 
 
@@ -94,9 +94,9 @@ export const  HeaderGestor =()=> {
           <ul className="d-flex align-items-center">
 
             <li className="nav-item d-block d-lg-none">
-              <a className="nav-link nav-icon search-bar-toggle " href="#">
+              <Link className="nav-link nav-icon search-bar-toggle " to={"#"}>
                 <i className="bi bi-search"></i>
-              </a>
+              </Link>
             </li>
 
         {/*     <li className="nav-item dropdown">
@@ -196,7 +196,7 @@ export const  HeaderGestor =()=> {
             </li> */}
             <li className="nav-item dropdown pe-3" style={{ marginRight: '1.6rem' }}>
 
-              <a className="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+              <Link className="nav-link nav-profile d-flex align-items-center pe-0" to={"#"} data-bs-toggle="dropdown">
                 {userPhoto ?
                   <img src={`http://localhost:8800/${userPhoto}`} alt="Profile" className="rounded-circle" />
                   :
@@ -205,7 +205,7 @@ export const  HeaderGestor =()=> {
 
                 {/* <i className='bi bi-person-circle fs-3 '></i> */}
                 <span className="d-none d-md-block dropdown-toggle ps-2" style={{ color: 'white' }}>     {subgestor ? <NomeSubGestor /> :<NomeGestor />}</span>
-              </a>
+              </Link>
               <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                 <li className="dropdown-header">
                   <h6>{subgestor ? <NomeSubGestor style={{ color: 'white' }} /> : <NomeGestor style={{ color: 'white' }} /> }</h6>

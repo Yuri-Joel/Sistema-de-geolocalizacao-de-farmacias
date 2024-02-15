@@ -1,5 +1,5 @@
 import { hashSenha } from "../../controllers/usuarioControllers.js";
-import { ActualizarSenha, Verify, addrecuperacao, deleteSenhas, ver, verEmail } from "./recuperacaoModel.js";
+import { ActualizarSenha, VerificarToken, Verify, addrecuperacao, deleteSenhas, verEmail } from "./recuperacaoModel.js";
 import { createTransport } from 'nodemailer';
 import {Validatepass} from '../../controllers/usuarioControllers.js'
 
@@ -9,7 +9,7 @@ export const  RecuperaSenha  = async (req, res)=>{
   const {email} = req.body
   const user = await Verify(email)
   
-    const tokenAleatorioCrypto = ()=>  {
+   const tokenAleatorioCrypto = ()=>  {
       
        return new Promise((resolve, reject) => {
       const seisDigitos = Math.floor(100000 + Math.random()* 900000);
@@ -53,7 +53,7 @@ export const  RecuperaSenha  = async (req, res)=>{
         if (error) {
           return res.status(200).json({message: 'Erro ao enviar o Pacote', status: error.message});
         }
-        res.status(200).json({message:"Sucess" , status:`E-mail enviado com sucesso: ${info.response}`});
+       return  res.status(200).json({message:"Sucess" , status:`E-mail enviado com sucesso: ${info.response}`});
       });
 }    
     
@@ -63,7 +63,7 @@ export const  RedefinirSenha = async (req, res)=>{
 
 // Rota para redefinir a senha
   const {token} = req.body
-  const valor = await ver(token)
+  const valor = await VerificarToken(token)
 
     // Verifique no banco de dados se o token está associado ao e-mail do usuário
     if (valor.length === 0) {
@@ -73,7 +73,7 @@ export const  RedefinirSenha = async (req, res)=>{
      
       const result = valor[0].token;
     // Verifique se o token é válido
-    if (result === token){
+    if (result == token){
       const { id } = valor[0];
       
       res.setHeader('Content-Type','application/json');
