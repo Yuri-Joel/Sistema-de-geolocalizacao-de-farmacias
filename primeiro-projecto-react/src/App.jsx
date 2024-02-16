@@ -17,7 +17,7 @@ function App() {
         return (
                 <>
                         <BrowserRouter>
-                                <Load>
+                        <Load>
                                 <RoutesDashboard />
                                 <RoutesAdmin />
                                 <RoutesGestor />

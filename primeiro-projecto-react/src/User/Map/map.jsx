@@ -160,7 +160,7 @@ ObterUserLocation();
            
  <div className="card info-card sales-card   min-vh-40" style={{height:'30rem'}}>
       
-	    { dataload && (
+	     { dataload && (
             <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={12}>
                 {
                     Farmacias.map((farma)=>(
@@ -233,7 +233,7 @@ ObterUserLocation();
           {directions && <DirectionsRenderer directions={directions} /> }
             </GoogleMap>
 
-)}   
+)}    
   
         
             <button className='btn btn-success'style={{marginTop:'1rem',backgroundColor:'#00968c'}}  onClick={()=> handleCriarRota()} >Criar Rota</button>

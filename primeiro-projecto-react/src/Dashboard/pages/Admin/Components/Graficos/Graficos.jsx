@@ -37,7 +37,7 @@ return(
   </div>
   <p>Grafico de medicamentos das Farmacias</p>
 
-        <button onClick={() => generatePDF(chartRef, "Grafico de medicamentos das Farmacias")}>Baixar PDF</button>
+        <button className='btn btn-primary' onClick={() => generatePDF(chartRef, "Grafico de medicamentos das Farmacias")}>Baixar PDF</button>
        </div>
      </div>
  

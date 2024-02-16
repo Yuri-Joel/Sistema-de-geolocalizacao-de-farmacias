@@ -46,7 +46,7 @@ import { generatePDF } from "../../../../../PDF/DownloadingPdf";
   </div>
  <p>Grafico de numeros de medicamento</p>
  
-            <button onClick={() => generatePDF(chartRef, "Grafico de numeros de medicament")}>Baixar PDF</button>
+            <button className='btn btn-primary' onClick={() => generatePDF(chartRef, "Grafico de numeros de medicament")}>Baixar PDF</button>
     </div>
     </div>
 

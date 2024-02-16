@@ -49,7 +49,7 @@ return(
       </AreaChart>
       </div>
       <p>Grafico de favoritos das Farmacias</p>
-        <button onClick={() => generatePDF(chartRef, "Grafico de favoritos das Farmacias")}>Baixar PDF</button>
+        <button className='btn btn-primary' onClick={() => generatePDF(chartRef, "Grafico de favoritos das Farmacias")}>Baixar PDF</button>
     </div>
    </div>
   

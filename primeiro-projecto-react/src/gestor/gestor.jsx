@@ -78,21 +78,24 @@ export const Gestor = () => {
             <GestorSide />
             <main id="main" className="main">
                 
-                <div className="pagetitle">
+                <div className="pagetitle" style={{display:'flex',flexDirection:'column',gap:'1.7rem'}}>
+                    <div>
                     <h1>Dashboard</h1>
                     <nav>
                         <ol className="breadcrumb">
                             <li className="breadcrumb-item"><Link to={'/gestor'}>Home</Link></li>
                             <li className="breadcrumb-item active"> Dashboard / {(load && <>{NomeFarma}</>)} </li>
                             <li className="breadcrumb-item">
-                               
-                                   <button onClick={()=>updatefarmacia()}> Farmacia {!value ? "ABERTA": "FECHADA"}</button> 
-                               <div>
-                                    <span>De momento sua farmacia encontra-se {!value ? "ABERTA" : "FECHADA"} </span>
-                               </div>
                             </li>
                         </ol>
                     </nav>
+                    </div>
+                    <div>
+                    <button className="btn btn-primary" onClick={()=>updatefarmacia()}> Farmacia {value ? "ABERTA": "FECHADA"}</button> 
+                               <div>
+                                    <span>De momento sua farmacia encontra-se {value ? "ABERTA" : "FECHADA"} </span>
+                               </div>
+                               </div>
                 </div>
                 <section className="section dashboard">
                 <div className="container">

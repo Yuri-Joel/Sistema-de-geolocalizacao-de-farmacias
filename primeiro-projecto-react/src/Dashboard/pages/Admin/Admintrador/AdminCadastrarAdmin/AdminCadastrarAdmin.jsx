@@ -45,7 +45,7 @@ export const AdminCadastrarAdmin = ()=>{
         <AdminSide />
         <LogActividades tipo={"administrador"} />
 
-        <main>
+        <main className="main" id="main">
     <div className="container">
 
       <section className="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">

@@ -27,7 +27,7 @@ export  const GraficomedFarma =()=>{
         }
     }
     useEffect(()=>{
-        Grafico()
+        Grafico();
     },[])
 
 
@@ -50,7 +50,7 @@ export  const GraficomedFarma =()=>{
                      </LineChart>
                      <p>Grafico de numeros de medicamento</p>
                      </div>
-                     <button onClick={()=> generatePDF(chartRef, tipo)}>Baixar PDF</button>
+                     <button className='btn btn-primary' onClick={()=> generatePDF(chartRef, tipo)}>Baixar PDF</button>
                  </div>
              </div>
          )

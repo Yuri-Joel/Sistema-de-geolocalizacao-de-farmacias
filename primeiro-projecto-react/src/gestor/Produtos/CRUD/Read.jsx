@@ -79,7 +79,7 @@ export const ReadProdutos = () => {
                                         <div className="row" style={{ height: 200 + 'vh', overflow: "auto" }}>
                                             {Products.map((medicine, index) => (
                                                 <div className="col-md-4" key={index}>
-                                                    <Card style={{ backgroundColor:medicine.disponibilidade == "disponivel" ?  "white" : "gray", borderRadius: '1rem' }}>
+                                                    <Card style={{ borderRadius: '1rem' }}>
                                                         <Card.Body>
                                                             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                                                                 <div className="filter">

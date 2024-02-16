@@ -30,6 +30,7 @@ export const Home = () => {
                                 </ul>
                                 <i class="bi bi-list mobile-nav-toggle"></i>
                             </nav>
+                            <Link to={'/cadastrar'} class="btn" style={{ listStyle: 'none', backgroundColor: '#00968c', width: '6.5rem', height: '2.3rem', color: 'white', textAlign: 'center' }}>Cadastrar</Link>
 
                             <Link to={'/login'} class="btn" style={{ listStyle: 'none', backgroundColor: '#00968c', width: '6.5rem', height: '2.3rem', color: 'white', textAlign: 'center' }}>Login</Link>
                         </div>

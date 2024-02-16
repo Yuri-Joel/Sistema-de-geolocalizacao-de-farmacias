@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react"
 import { Link, useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { toast } from 'react-toastify'
+import HeaderAdmin from "../../../../components/heder/admin/headerAdmin"
+import AdminSide from "../../../../components/aside/admin/adminSide"
 
 export const EditarFarma = () => {
 
@@ -51,26 +53,31 @@ export const EditarFarma = () => {
 
     return (
         <>
+        <HeaderAdmin />
+            <AdminSide />
+       <main className="amin" id="main">
 
+  <div className="container">
+    <div className="row">
 {
                 IsAutenticado ? 
                 
                 <form onSubmit={UpdateFarma}>
                     <div>
-                        <input value={endereco} placeholder="seu enderenço" onChange={(e) => setendereco(e.target.value)} />
+                        <input className="form-control" value={endereco} placeholder="seu enderenço" onChange={(e) => setendereco(e.target.value)} />
                     </div>
                     <div>
-                        <input value={latitude} placeholder="latitude ex: -8.7364368" onChange={(e) => setlatitude(e.target.value)} />
+                        <input className="form-control" value={latitude} placeholder="latitude ex: -8.7364368" onChange={(e) => setlatitude(e.target.value)} />
                     </div>
                     <div>
-                        <input value={longitude} placeholder="longitude ex: 13.734368" onChange={(e) => setlongitude(e.target.value)} />
+                        <input className="form-control" value={longitude} placeholder="longitude ex: 13.734368" onChange={(e) => setlongitude(e.target.value)} />
                     </div>
 
                     <Link to={`#`}>
-                        <button>Ir ao Mapa</button>
+                        <button className="btn btn-primary">Ir ao Mapa</button>
                     </Link>
                     <div>
-                        <button type="submit">Editar</button>
+                        <button className="btn btn-primary" type="submit">Editar</button>
                     </div>
 
                 </form>
@@ -78,9 +85,10 @@ export const EditarFarma = () => {
                 <>
             Voce não está Autenticado! por favor faça login 
                 </>
-
 }
-         
+</div>
+  </div>
+</main>      
         </>
     )
 }

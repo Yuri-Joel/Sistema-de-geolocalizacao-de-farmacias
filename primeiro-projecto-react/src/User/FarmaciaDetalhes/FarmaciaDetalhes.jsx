@@ -140,7 +140,7 @@ export const FarmaciaDetalhes = () => {
                             <div className="row" style={{ height: 200 + 'vh', overflow: "auto" }}>
                               {Medi.map((medicine, index) => (
                                 <div className="col-md-4" key={index}>
-                                  <Card style={{backgroundColor: medicine.disponibilidade === "disponivel" ? "white" : "gray", borderRadius: '1rem' }}>
+                                  <Card style={{borderRadius: '1rem' }}>
                                     <Card.Body>
                                       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                                         <div className="filter">
@@ -156,7 +156,7 @@ export const FarmaciaDetalhes = () => {
 
                                         {/* &#9829; */} <i
                                           onClick={() => handleFavoritar(medicine.id)}
-                                          style={{ color: medicine.favorito_id ? 'red' : 'gray', width: '2rem', height: '2rem' }}
+                                          style={{ color: medicine.favorito_id ? 'red' : 'gray', width: '2rem', height: '2rem',cursor:'pointer' }}
                                           className='bi bi-heart-fill'>
 
                                         </i>
@@ -167,9 +167,7 @@ export const FarmaciaDetalhes = () => {
 
                                       <h5 className="card-title">{medicine.nome}</h5>
                                       <h6 className="card-subtitle mb-2 text-muted">{medicine.preco + " kz"}</h6>
-                                      <h6><strong>{medicine.disponibilidade}</strong></h6>
-                                      <h6><strong>{medicine.data_validade}</strong></h6>
-                                      <h6><strong>{medicine.informacoes}</strong></h6>
+                                      <h6><strong >{medicine.disponibilidade}</strong></h6>
                                       <Button variant="success" onClick={() => Comparar(medicine.nome)} className="mr-2">
                                         Comparar preço
                                       </Button>
