@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
-import axios from 'axios'
+import { api } from "../../api";
 
 
 export const NomeSubGestor = () => {
     const Idusuario = localStorage.getItem('subgestor');
-    const [user, SetUser] = useState([]);
+    const [user, SetUser] = useState("");
     const [dataload, setload] = useState(false)
 
     const ObterAdminId = async () => {
         try {
-            const res = await axios.get(`http://localhost:8800/sub/obtera/${Idusuario}`);
+            const res = await api.get(`/sub/obtera/${Idusuario}`);
             SetUser(res.data.data[0].nome)
             setload(true)
          
@@ -21,12 +21,18 @@ export const NomeSubGestor = () => {
         ObterAdminId();
     }, [])
 
-    const nome = user;
-
+    const nome = user.split(" ");
+    let NomeAbreviado = ""
+        if(nome.length === 1){
+            
+        NomeAbreviado = nome[0]
+        } else{
+         NomeAbreviado = nome[0] + " " + nome[nome.length - 1]
+   }
     return (
         <>
             {(dataload &&
-                <>{nome}</>
+                <>{NomeAbreviado}</>
             )
             }
         </>

@@ -1,4 +1,3 @@
-import axios from "axios"
 import { useEffect, useState } from "react"
 import imagem from '../../../../../assets/Screenshot_20240110-233026.png'
 import { toast } from 'react-toastify'
@@ -8,7 +7,9 @@ import AdminSide from '../../../../components/aside/admin/adminSide'
 import { Link } from "react-router-dom";
 import FooterDashboard from "../../../../components/footer/footer";
 import { LogActividades } from "../../../../../Log_Actividades/Log_actividades";
-
+import { api } from "../../../../../api";
+import Modal from 'react-bootstrap/Modal'
+import { Button } from 'react-bootstrap'
 
 export const AdminListarGestor = () => {
 
@@ -18,16 +19,20 @@ export const AdminListarGestor = () => {
     const ListarGestor = async () => {
 
         try {
-            const res = await axios.get(`http://localhost:8800/ges/todos`)
+            const res = await api.get(`/ges/todos`)
             setGestores(res.data.data)
+          
         } catch (error) {
 
         }
     }
+    const [valordeletado, setvalordeletado]= useState("")
     const Deletar = async (id) => {
+        console.log(id);
+        handlefechar()
         try {
 
-            const res = await axios.delete(`http://localhost:8800/ges/delges/${id}`)
+            const res = await api.delete(`/ges/delges/${id}`)
             toast.success(res.data.data)
             ListarGestor();
         } catch (error) {
@@ -37,7 +42,9 @@ export const AdminListarGestor = () => {
     useEffect(() => {
         ListarGestor();
     }, [])
-
+    const [abrir, setabrir] = useState(false)
+    const handlefechar = () => setabrir(false)
+    const handleabrir = () => setabrir(true)
     return (
         <>
         { IsAutenticado ?
@@ -83,9 +90,23 @@ export const AdminListarGestor = () => {
                                                             </Card>
                                                             </div>
                                                             <div>
-                                                            <Link  className="btn btn-danger btn-sm" title="Remove my profile image">
-                                                            <i className="bi bi-trash bg-danger" onClick={() => Deletar(gestores.id)}></i>  
+                                                                <Link className="btn btn-danger btn-sm" onClick={()=>{handleabrir(); setvalordeletado(gestores.nome)}} title="Remover gestor">
+                                                            <i className="bi bi-trash bg-danger" ></i>  
                                                               </Link>
+                                                                <Modal show={abrir}>
+                                                                    <Modal.Header>
+                                                                        <Modal.Title>Eliminar Gestor</Modal.Title>
+                                                                    </Modal.Header>
+                                                                    <Modal.Body>eliminar {valordeletado} do sistema?</Modal.Body>
+                                                                    <Modal.Footer>
+                                                                        <Button variant='success' onClick={handlefechar}>
+                                                                            Cancelar
+                                                                        </Button>
+                                                                        <Button variant='danger' onClick={() => Deletar(gestores.id)}>
+                                                                            Eliminar
+                                                                        </Button>
+                                                                    </Modal.Footer>
+                                                                </Modal>
                                                             </div>
                                                         </CardBody>
 

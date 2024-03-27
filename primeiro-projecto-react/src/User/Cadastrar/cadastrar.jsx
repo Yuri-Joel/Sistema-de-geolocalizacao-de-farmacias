@@ -5,10 +5,10 @@ import 'bootstrap/js/dist/util/scrollbar'
 import {Link} from'react-router-dom'
 import { useState } from 'react';
 import {toast} from 'react-toastify'
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import  k from'../../assets/Geo Farma/Geo Farma.png'
 import "../../pagesHome/Login/loading.css"
+import { api } from '../../api';
 
 export default function Cadastrar() {
   const Navigate = useNavigate()
@@ -27,9 +27,9 @@ export default function Cadastrar() {
   e.preventDefault();
   setloading(true)  ;
    try {
-      if(( confirmSenha  ===  Cadastro.senha) && Cadastro.nome && Cadastro.email && Cadastro.senha && Cadastro.telefone){
+      if(( confirmSenha  ===  Cadastro.senha) && Cadastro.nome.trim() && Cadastro.email.trim() && Cadastro.senha.trim() && Cadastro.telefone.trim()){
    
-      const res =  await  axios.post(`http://localhost:8800/api/cadastro`, Cadastro)
+        const res = await api.post(`/api/cadastro`, Cadastro)
        
           
            if(res.data.status === "Sucess"){

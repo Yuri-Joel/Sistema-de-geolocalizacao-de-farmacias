@@ -3,7 +3,6 @@ import { ObterU,TodosU, DeletaU, ActualizarU, ContarUsuarios, CriarU, Actualizar
 
 const router = express.Router()
 
-
 router.get('/usuarioId/:id', ObterU)
 router.get('/dados', TodosU)
 router.get('/oneuser', ContarUsuarios)

@@ -1,4 +1,3 @@
-import axios from "axios"
 import { useEffect, useState } from "react"
 import { LogActividades } from "../../Log_Actividades/Log_actividades"
 import { HeaderGestor } from "../../Dashboard/components/heder/gestor/headerGestor"
@@ -7,6 +6,7 @@ import { Link } from "react-router-dom"
 import FooterDashboard from "../../Dashboard/components/footer/footer"
 import { toast } from "react-toastify"
 import { Formattime } from "../../Dashboard/pages/Admin/Admintrador/AdminMensagens/AdminMensagens"
+import { api } from "../../api"
 
 
 
@@ -19,7 +19,7 @@ export const ObterLogGestor = () => {
     const ListarLog = async () => {
         const gestor = "gestor"
         try {
-            const res = await axios.get(`http://localhost:8800/log/log/${admin}/${gestor}`)
+            const res = await api.get(`/log/log/${admin}/${gestor}`)
             setLog(res.data.data)
         } catch (error) {
             console.error(error)
@@ -34,7 +34,7 @@ export const ObterLogGestor = () => {
      const EliminarTudo = async()=>{
          const id = "tudo"
                 try {
-                    const res = await axios.delete(`http://localhost:8800/log/dele/${id}`)
+                    const res = await api.delete(`/log/dele/${id}`)
                         toast.success(res.data.data)
                          ListarLog()
                 } catch (error) {
@@ -44,7 +44,7 @@ export const ObterLogGestor = () => {
 
     const Eliminar = async(id)=>{
         try {
-            const res = await axios.delete(`http://localhost:8800/log/del/${id}`)
+            const res = await api.delete(`/log/del/${id}`)
                 toast.success(res.data.data)
                  ListarLog()
         } catch (error) {

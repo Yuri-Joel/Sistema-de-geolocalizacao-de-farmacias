@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import {toast} from 'react-toastify';
+import { api } from "../../api";
  
 export const ContarUser = ()=>{
      
  const [users, setusers] = useState(0);
 
  const CountUsers = async()=> {
-  await  axios.get("http://localhost:8800/api/oneuser")
+  await  api.get("/api/oneuser")
     .then(res => { 
 
         setusers(res.data.total); 
@@ -31,7 +31,7 @@ return(
   const [Farmacias, setFarmacias] = useState(0)
 
   const ContarFarma = async()=> {
-  await  axios.get("http://localhost:8800/f/cfarma")
+  await  api.get("/f/cfarma")
     .then(res => {
      // console.log(res.data)
         if(res.data){
@@ -57,7 +57,7 @@ export const CountGestores =  ()=>{
   
  const ContarGestores = async()=>{
         try {
-    const res = await axios.get(`http://localhost:8800/ges/conta`)
+    const res = await api.get(`/ges/conta`)
        setgestores( res.data.total)
         } catch (error) {
     console.log(error)

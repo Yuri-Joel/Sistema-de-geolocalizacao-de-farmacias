@@ -22,6 +22,17 @@ export const  Todasfarmacias = ()=>{
     })
     })
 }
+
+export const TodasfarmaciasHome = () => {
+    const query = "SELECT f.*,  COUNT(favoritos_farmacia.id) AS total FROM farmacias f  LEFT JOIN favoritos_farmacia ON f.id = favoritos_farmacia.farmacia_id GROUP BY f.id ORDER BY RAND()  limit 6"
+    return new Promise((resolve, reject) => {
+
+        conn.query(query, (err, result) => {
+            if (err) reject(err);
+            else resolve(result)
+        })
+    })
+}
 export const  ObterFarmaciaId = (farmaid)=>{
     const query ="SELECT * FROM farmacias where id=?"
     return new Promise((resolve,reject)=>{
@@ -35,7 +46,7 @@ export const  ObterFarmaciaId = (farmaid)=>{
 
 export const CriarNewFarmacia = (dados) => {
  
-    const query = "INSERT INTO farmacias (nome,nif,telefone,email,endereco,latitude,longitude,horario_funcionamento) VALUES (?)"
+    const query = "INSERT INTO farmacias (nome,nif,telefone,email,endereco,latitude,longitude) VALUES (?)"
       return new Promise((resolve,reject)=>{
 
         conn.query(query,[dados], (err)=>{
@@ -46,7 +57,7 @@ export const CriarNewFarmacia = (dados) => {
 }
 
 export const ActualizarFarmacias = (dados, id) => {
-    const query = "UPDATE farmacias SET  `nome`=? , `nif`=? ,`email`= ?, `telefone`=? ,`horario_funcionamento`=?  WHERE `id` =?;"
+    const query = "UPDATE farmacias SET  `nome`=? , `nif`=? ,`email`= ?, `telefone`=?  WHERE `id` =?;"
     return new Promise((resolve,reject)=>{
 
         conn.query(query,[...dados, id], (err)=>{
@@ -86,4 +97,26 @@ export const DeleteFarmacia = (farmaId)=>{
             else resolve("Farmacia deletado com sucesso")
         })})
 
+}
+
+export const UpdateHorario = (horaA, horaF, id)=>{
+
+    const query = "UPDATE farmacias SET `horaAbertura`= ?, `horaFechamento`= ?  WHERE `id` =?;";
+    return new Promise ((resolve,reject)=>{
+        conn.query(query,[horaA, horaF, id],(err)=>{
+            if(err) reject(err)
+            else resolve("Horario adicionado")
+        })})
+}
+
+export const  Buscarhora = async()=>{
+    const query = "SELECT id,nome,horaAbertura, horaFechamento FROM farmacias"
+
+    return new Promise((resolve, reject) => {
+
+        conn.query(query, (err, data) => {
+            if (err) reject(err);
+            else resolve(data)
+        })
+    })
 }

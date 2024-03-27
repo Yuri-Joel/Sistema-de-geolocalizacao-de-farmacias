@@ -58,7 +58,7 @@ return (
   </BarChart> 
  
 
-  <p>Grafico de medicamentos favoritas</p>
+  <p>Grafico de medicamentos favoritados</p>
   </div>
         <button  className='btn btn-primary'onClick={() => generatePDF(chartRef, "Grafico de medicamentos favoritas")}>Baixar PDF</button>
     </div>

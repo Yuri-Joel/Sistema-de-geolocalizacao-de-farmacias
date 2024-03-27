@@ -1,4 +1,3 @@
-import axios from "axios"
 import { useState } from "react"
 import { toast } from "react-toastify";
 import {Link, useNavigate} from 'react-router-dom'
@@ -7,11 +6,12 @@ import GestorSide from "../../Dashboard/components/aside/gestor/gestorSide";
 import FooterDashboard from "../../Dashboard/components/footer/footer";
 import { Card } from "react-bootstrap";
 import { LogActividades } from "../../Log_Actividades/Log_actividades";
+import { api } from "../../api";
 
 
 export const CadastrarsubGestor = ()=>{
     
-
+    const [loading, setloading] = useState(false)
 const Navigate = useNavigate()
     const Idgestor = localStorage.getItem("usuario");
 
@@ -25,11 +25,11 @@ const Navigate = useNavigate()
     })
     const handleGestor = async(e)=>{
         e.preventDefault();
-
+        setloading(true)
         if(Subgestor.senha && Subgestor.email && Subgestor.telefone && Subgestor.nome){
             try {
-                const res = await axios.post(`http://localhost:8800/sub/subcges`, Subgestor)
-
+                const res = await api.post(`/sub/subcges`, Subgestor)
+                console.log(res.data.data);
                 if (res.data.data === "Sucess"){
                     toast.success(res.data.data)
                     Navigate("/listarsubgestor")
@@ -40,6 +40,8 @@ const Navigate = useNavigate()
 
             } catch (error) {
                 console.log(error)
+            } finally {
+                setloading(false)
             }
         } else{
             toast.warn("ERRO! os Campos não podem ser vazios")
@@ -84,6 +86,11 @@ const Navigate = useNavigate()
             <button className="btn btn-sucess" required style={{backgroundColor:'#00968c',color:'white'}} type="submit">Cadastrar</button>
            </form> 
            </Card>
+                        {(loading &&
+                            <div className="loading" id="loading">
+                                <div className="spinner"></div>
+                            </div>
+                        )}
                      </div>
                   </div>
                 </main>

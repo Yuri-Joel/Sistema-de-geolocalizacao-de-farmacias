@@ -5,10 +5,10 @@ import 'bootstrap/js/dist/util/scrollbar'
 import {Link} from'react-router-dom';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import k from '../../assets/Geo Farma/Geo.svg'
 import "./loading.css"
+import {api} from '../../api/index'
 
 export default function Login() {
   const Navigate = useNavigate();
@@ -24,7 +24,7 @@ export default function Login() {
    
  try{
   if( email || senha ){
-    const res = await  axios.post(`http://localhost:8800/l/login`, {email, senha})
+    const res = await api.post(`/l/login`, {email, senha})
      
           if(res.data.status === "Sucess"){
               const id = res.data.id

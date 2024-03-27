@@ -61,7 +61,7 @@ export const EditarFarma = () => {
     <div className="row">
 {
                 IsAutenticado ? 
-                
+                <>
                 <form onSubmit={UpdateFarma}>
                     <div>
                         <input className="form-control" value={endereco} placeholder="seu enderenço" onChange={(e) => setendereco(e.target.value)} />
@@ -73,14 +73,16 @@ export const EditarFarma = () => {
                         <input className="form-control" value={longitude} placeholder="longitude ex: 13.734368" onChange={(e) => setlongitude(e.target.value)} />
                     </div>
 
-                    <Link to={`#`}>
-                        <button className="btn btn-primary">Ir ao Mapa</button>
-                    </Link>
+                                 
                     <div>
                         <button className="btn btn-primary" type="submit">Editar</button>
                     </div>
 
                 </form>
+                   <Link to={`https://www.google.com/maps/@-8.8735744,13.254656,12z?hl=es&entry=ttu`} target="_blank">
+                        <button className="btn btn-primary">Ir ao Mapa</button>
+                    </Link>
+                                </>
                 :
                 <>
             Voce não está Autenticado! por favor faça login 

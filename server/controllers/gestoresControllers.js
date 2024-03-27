@@ -1,6 +1,7 @@
 import { ActuaGestor, deleteGestor, CGestores, newGestores, TodosGestores, ObtergestorId, Nomefarmacias, ActuaGestorsenha} from "../Models/gestoresModels.js"
 import { EliminarFoto } from "../Models/usuarioModels.js"
-import { hashSenha } from "./usuarioControllers.js"
+import { Verify } from "../services/recuperacao de senha/recuperacaoModel.js"
+import { Validateall, hashSenha } from "./usuarioControllers.js"
 
 
 export const ContarGestores = async(_,res) =>{
@@ -24,18 +25,33 @@ export const ObterGes = async (req,res)=>{
 
 
 export const CriarGestor = async (req,res)=> {
-    const senha = await hashSenha(req.body.senha)
-    const values =[
-        req.body.nome,
-        req.body.email,
-        req.body.nomeusuario,
-        senha,
-        req.body.telefone,
-        req.body.farmacia
+    
+  const  { nome, email, nomeusuario, senha, telefone, farmacia} = req.body
+
+    const result = await Verify(email)
+    if (!result || result.length === 0) {
+       
+        const validar = await Validateall(nome,email,senha,telefone);
+        if(validar){
+            const senha1 = await hashSenha(senha);
+             const values =[
+      nome,
+      email,
+      nomeusuario,
+      senha1,
+      telefone,
+      farmacia
     ];
 
     const data = await newGestores(values)
     res.status(200).json({data})
+        } else {
+            return res.status(200).json({ data: 'Erro, nos campos!' });
+        }
+   
+} else{
+    return res.status(200).json({ data: 'E-mail Já Existe!' });
+}
 }
 export const ActualizarGestor = async (req,res)=> {
   const {id} = req.params;

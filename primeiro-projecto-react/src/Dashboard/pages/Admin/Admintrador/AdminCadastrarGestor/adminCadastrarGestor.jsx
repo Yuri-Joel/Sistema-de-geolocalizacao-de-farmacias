@@ -11,15 +11,15 @@ import {Link, useNavigate} from 'react-router-dom';
 import React,{useEffect,useState } from 'react';
 import FooterDashboard from '../../../../components/footer/footer';
 import HeaderAdmin from '../../../../components/heder/admin/headerAdmin';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import { LogActividades } from '../../../../../Log_Actividades/Log_actividades';
 import AdminSide from '../../../../components/aside/admin/adminSide';
+import { api } from '../../../../../api';
 
 
 
 export default function AdminCadastrarGestor() {
-
+  const [loading, setloading] = useState(false)
   const IsAutenticado = !!localStorage.getItem("usuario");
   const Navigate = useNavigate()
   const [Gestores, setGestores] = useState({
@@ -38,7 +38,7 @@ export default function AdminCadastrarGestor() {
   const FarmaciasData = async()=>{
   
     try{
-      const res = await axios.get("http://localhost:8800/f/todasfarma")
+      const res = await api.get("/f/todasfarma")
           SetFarmacias(res.data.data)
           setload(true)
           console.log(res.data.data)
@@ -51,13 +51,14 @@ useEffect(()=>{
   FarmaciasData();
 },[])
   const HandleGestores = async(e)=>{
-    e.preventDefault()
-if((ConfimarSenha === Gestores.senha) && Gestores.email && Gestores.nome && Gestores.nomeusuario && Gestores.telefone && Gestores.senha){
+    e.preventDefault();
+    setloading(true)
+if((ConfimarSenha === Gestores.senha) && Gestores.email && Gestores.nome && Gestores.nomeusuario && Gestores.telefone && Gestores.senha && Gestores.farmacia){
     try {
-      const res = await axios.post("http://localhost:8800/ges/cges", Gestores)
+      const res = await api.post("/ges/cges", Gestores)
 
       if(res.data.data === "Sucess"){
-      //  Navigate("/adminlistarGestor")
+       Navigate("/adminlistarGestor")
       toast.success("Sucesso")
     }else{
       toast.error(res.data.data)
@@ -66,6 +67,8 @@ if((ConfimarSenha === Gestores.senha) && Gestores.email && Gestores.nome && Gest
     } catch (error) {
       console.log(error)
       
+    } finally {
+      setloading(false)
     }
   }else{
       toast.warn("Erro!")
@@ -118,7 +121,7 @@ if((ConfimarSenha === Gestores.senha) && Gestores.email && Gestores.nome && Gest
                      <div className="d-flex"style={{flexDirection:'column',gap:'0.4rem'}}>
                         <span>Gerenciar</span>
 
-                         <select className='select-group select-group-left form-control"' value={Gestores.farmacia} onChange={(e)=> setGestores({...Gestores, farmacia: e.target.value})} >
+                         <select className='select-group select-group-left form-control' value={Gestores.farmacia} onChange={(e)=> setGestores({...Gestores, farmacia: e.target.value})} >
                             <option value="">Escolher a Farmacia para Gerenciar</option>
                             { load && 
                               Farmacias.map((farma)=>(
@@ -129,6 +132,11 @@ if((ConfimarSenha === Gestores.senha) && Gestores.email && Gestores.nome && Gest
                      </div>
                     <button onClick={HandleGestores} className='btn btn-success'style={{marginTop:'3rem',backgroundColor:'#00968c'}}>Cadastrar</button>
                 </div>
+                  {(loading &&
+                    <div className="loading" id="loading">
+                      <div className="spinner"></div>
+                    </div>
+                  )}
             </div>    
         </div>      
 </section>

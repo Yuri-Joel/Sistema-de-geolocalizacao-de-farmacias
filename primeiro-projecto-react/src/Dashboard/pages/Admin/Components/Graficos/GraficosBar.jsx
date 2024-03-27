@@ -48,7 +48,7 @@ return(
         <Area type="monotone" dataKey="total" stroke="#82ca9d" fillOpacity={1} fill="url(#colorPv)" />
       </AreaChart>
       </div>
-      <p>Grafico de favoritos das Farmacias</p>
+      <p>Grafico de Farmacias favoritadas</p>
         <button className='btn btn-primary' onClick={() => generatePDF(chartRef, "Grafico de favoritos das Farmacias")}>Baixar PDF</button>
     </div>
    </div>

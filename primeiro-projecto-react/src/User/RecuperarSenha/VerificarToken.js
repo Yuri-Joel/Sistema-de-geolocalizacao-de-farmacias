@@ -1,5 +1,4 @@
 import { useState } from "react"
-import axios from "axios"
 import { Link, useNavigate } from "react-router-dom"
 import k from '../../assets/Geo Farma/Geo.svg'
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -7,6 +6,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/js/dist/util/scrollbar'
 import { toast } from "react-toastify";
 import "../../pagesHome/Login/loading.css"
+import { api } from "../../api";
 
 
 export const RedefenirSenha = ()=>{
@@ -19,7 +19,7 @@ export const RedefenirSenha = ()=>{
 
             setloading(true)
         try {
-            const res =  await  axios.post(`http://localhost:8800/rede/redefinir-senha`, {token})
+            const res =  await api.post(`/rede/redefinir-senha`, {token})
            
              if(res.data.message ===  "Sucess"){
                 const id = res.data.id;

@@ -11,12 +11,13 @@ import { Link , useNavigate} from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import FooterDashboard from '../../Dashboard/components/footer/footer';
 import { Nome } from '../../components/NomeUser/Nome';
-import axios from 'axios'
 import {toast} from 'react-toastify';
 import HeaderUser from '../../Dashboard/components/heder/user/headerUser';
 import UserSide from '../../Dashboard/components/aside/user/userSide';
 import imagem from '../../assets/Screenshot_20240110-233026.png'
 import { LogActividades } from '../../Log_Actividades/Log_actividades';
+import { MyModal } from '../component/Modal';
+import { api } from '../../api';
 
 export default function User() {
    
@@ -31,7 +32,7 @@ const [user, SetUser]= useState([]);
 
 const ObterUserId = async ()=>{
     try {
-        const res = await axios.get(`http://localhost:8800/api/usuarioId/${Idusuario}`);
+        const res = await api.get(`/api/usuarioId/${Idusuario}`);
         SetUser(res.data.data)
         setUserPhoto(res.data.data[0].foto);
     
@@ -57,7 +58,7 @@ const HandleSubmit = async(e)=>{
   e.preventDefault();
 
   if(( Alterar.novaSenha  ===  ConfimarSenha) && Alterar.senhaActual && ConfimarSenha && Alterar.novaSenha){
-      await  axios.put(`http://localhost:8800/api/actualizarsenha/${Idusuario}`, Alterar)
+      await  api.put(`/api/actualizarsenha/${Idusuario}`, Alterar)
          .then(res => {
              console.log(res.data);
              if(res.data.data === "Actualizada"){
@@ -78,7 +79,7 @@ const HandleSubmit = async(e)=>{
 const ObterEditarUser = async ()=>{
    
     try {
-        const res = await axios.get(`http://localhost:8800/api/usuarioId/${Idusuario}`)
+        const res = await api.get(`/api/usuarioId/${Idusuario}`)
         
         console.log(res.data.data)
        setnome(res.data.data[0].nome);
@@ -103,14 +104,14 @@ const Navigate = useNavigate();
 const ActualizarUser = async (e)=>{
     e.preventDefault();
     const User = {
-        nome: nome,
-        telefone: telefone,
-        email: email
+        nome: nome.trim(),
+        telefone: telefone.trim(),
+        email: email.trim()
     }
   handleUploadNewImage();
   
     try {    
-        const res = await axios.put(`http://localhost:8800/api/actualizar/${Idusuario}`,User)
+        const res = await api.put(`/api/actualizar/${Idusuario}`,User)
         console.log(res.data.data)
         toast.success("Perfil Actualizado");
         ObterUserId();
@@ -131,10 +132,10 @@ const handleUploadNewImage = async () => {
   const formData = new FormData();
   formData.append('image', newImage);
   formData.append('id', Idusuario);
-  formData.append("tipo", tipo)
+  formData.append("tipo",tipo)
 
   try {
-    const response = await axios.post(`http://localhost:8800/upload`,formData);
+    const response = await api.post(`/upload`,formData);
     console.log(response.data)
     setUserPhoto(response.data.data);
   } catch (error) {
@@ -146,22 +147,34 @@ const handleUploadNewImage = async () => {
 const DeletarFoto = (id)=>{
   try {
     
-    const res = axios.delete(`http://localhost:8800/api/delfoto/${id}`)
+    const res = api.delete(`/api/delfoto/${id}`)
       if(res.data.data === "Sucess"){
         toast.success("Foto Eliminada")
         Navigate("/users-profile")
       }
   } catch (error) {
     console.log(error)
+  }}
+
+
+  const [show, setShow] = useState(false);
+  const handleShow = () => {
+    setShow(true)
   }
 
-}
+  useEffect(() => {
+    handleShow();
+  }, [IsAutenticado])
+
+  const handleClose = () => {
+    setShow(false)
+  }
   return (
     <>
     { IsAutenticado ?
     <>
     <LogActividades tipo={"usuario"} />
- <HeaderUser/>
+ <HeaderUser disabled={true}/>
 
     <UserSide   />
 
@@ -186,7 +199,7 @@ const DeletarFoto = (id)=>{
           <div className="card">
             <div className="card-body profile-card pt-4 d-flex flex-column align-items-center">
               { userPhoto ?
-              <img src={`http://localhost:8800/${userPhoto}`} alt="Profile" className="rounded-circle"/>
+                        <img src={`http://localhost:8800/${userPhoto}`} style={{ borderRadius: '100%', width: '12rem', height: '8rem' }} alt="Profile" className="rounded-circle"/>
                :
               <img src={imagem} alt='profile' className='rounded-circle' />
               }
@@ -245,7 +258,7 @@ const DeletarFoto = (id)=>{
                 ))}
 
                 <div className="tab-pane fade profile-edit pt-3" id="profile-edit">
-                <button onClick={()=> DeletarFoto(Idusuario)}>Eliminar Foto</button>
+ 
                 {
                  ( dataload &&
                   <form  onSubmit={ActualizarUser}>
@@ -260,7 +273,7 @@ const DeletarFoto = (id)=>{
       
       {/* Outras informações do perfil do usuário */}
               { userPhoto ?
-              <img src={`http://localhost:8800/${userPhoto}`} alt="Profile" className="rounded-circle"/>
+                                      <img src={`http://localhost:8800/${userPhoto}`} style={{ borderRadius: '100%', width: '12rem', height: '8rem' }} alt="Profile" className="rounded-circle"/>
                :
               <img src={imagem} alt='profile' className='rounded-circle' />
               }
@@ -270,10 +283,10 @@ const DeletarFoto = (id)=>{
                           <br></br><br></br>
                           <button className="btn btn-primary btn-sm"   onClick={()=> handleUploadNewImage} >
                                           <i className="bi bi-upload">  </i>
-                            </button>
-                          <Link  className="btn btn-danger btn-sm" title="Remove my profile image">
-                            
-                            <i className="bi bi-trash"></i></Link>
+                          </button>
+                          <Link   className="btn btn-danger btn-sm" title="Remove my profile image">
+                                        <i onClick={() => DeletarFoto(Idusuario)} className="bi bi-trash"> </i>
+                            </Link>
                         </div>
                       </div>
                     </div>
@@ -354,6 +367,7 @@ const DeletarFoto = (id)=>{
     : 
     <>
     Você não está Autenticado por favor favor faça Login
+    <MyModal show={show} handleClose={handleClose} />
     </>
 }
     </>

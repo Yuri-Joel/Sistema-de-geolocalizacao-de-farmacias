@@ -1,5 +1,4 @@
 import { useState } from "react"
-import axios from "axios"
 import { toast } from "react-toastify"
 import { Link, useNavigate, useParams } from "react-router-dom";
 import k from '../../assets/Geo Farma/Geo.svg'
@@ -7,6 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/js/dist/util/scrollbar'
 import "../../pagesHome/Login/loading.css"
+import { api } from "../../api";
 
 
 
@@ -21,7 +21,7 @@ const [loading, setloading] = useState(false)
         e.preventDefault();
         setloading(true)
       try {
-               const res = await  axios.post(`http://localhost:8800/rede/novasenha`,{id, novaSenha})
+               const res = await  api.post(`/rede/novasenha`,{id, novaSenha})
             
             console.log(res.data.message)
            

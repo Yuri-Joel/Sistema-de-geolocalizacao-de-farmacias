@@ -1,7 +1,7 @@
 import express from 'express'
 import path from 'path'
 import multer from 'multer';
-import { ActuaMedi, AddMed, ComparaMed, DeleMedi, DispoMed, GraficomedFarma, ObtermedicamentoId, SelMedicamento, TotalFavMedi, TotalMedi, farmaciaMed } from '../controllers/medicamentoControllers.js'
+import { ActuaMedi, ActualizarImagemMed, AddMed, ComparaMed, DeleMedi, DispoMed, GraficomedFarma, ObtermedicamentoId, SelMedicamento, TotalFavMedi, TotalMedi, farmaciaMed, farmaciaMedTop } from '../controllers/medicamentoControllers.js'
 
 
 
@@ -9,6 +9,7 @@ const routermed = express.Router()
 
 routermed.get('/med/:id/:usuario',SelMedicamento);
 routermed.get('/farmamed/:id', farmaciaMed)
+routermed.get('/meditop', farmaciaMedTop)
 
 routermed.get("/compara/:med", ComparaMed)
 routermed.get("/obtermed/:id", ObtermedicamentoId)
@@ -35,11 +36,11 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 routermed.post("/addmed",  upload.single('image') ,AddMed)
+routermed.post("/uploadmed", upload.single('image'), ActualizarImagemMed)
+
+routermed.put("/actuamed/:id", ActuaMedi);
 
 
-
-routermed.put("/actuamed/:id", upload.single('image'), ActuaMedi)
-
-routermed.delete("/delmed/:id", DeleMedi)
+routermed.delete("/delmed/:id/:subgestor", DeleMedi)
 
 export default routermed;

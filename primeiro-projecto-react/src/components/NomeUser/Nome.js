@@ -1,15 +1,15 @@
 import { useState,useEffect } from "react";
-import axios from 'axios'
+import { api } from "../../api";
 
 
 export const Nome = ()=>{
     const Idusuario =  localStorage.getItem('usuario');
-const [user, SetUser]= useState([]);
+const [user, SetUser]= useState("");
   const [dataload, setload] = useState(false)
     
 const ObterUserId = async ()=>{
     try {
-        const res = await axios.get(`http://localhost:8800/api/usuarioId/${Idusuario}`);
+        const res = await api.get(`/api/usuarioId/${Idusuario}`);
         SetUser(res.data.data[0].nome)
         setload(true)
     } catch (error) {
@@ -20,12 +20,15 @@ const ObterUserId = async ()=>{
   ObterUserId();
   },[])
 
-  const nome = user;
+  const nome = user.split(" ");
+
+  const NomeAbreviado = nome[0] + " " + nome[nome.length - 1]
+  
    
   return(
     <>
       { (dataload &&
-      <>{nome}</>
+      <>{NomeAbreviado}</>
       ) 
       }
     </>

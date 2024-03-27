@@ -7,21 +7,20 @@ import 'bootstrap/js/dist/button';
 import 'bootstrap/js/dist/offcanvas';
 import 'bootstrap/js/dist/scrollspy';
 import 'bootstrap/js/dist/tab'
-import { Link } from 'react-router-dom';
+import { Link ,useNavigate} from 'react-router-dom';
 import { useState } from 'react';
 import FooterDashboard from '../../../../components/footer/footer';
 import HeaderAdmin from '../../../../components/heder/admin/headerAdmin';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import { LogActividades } from '../../../../../Log_Actividades/Log_actividades';
 import AdminSide from '../../../../components/aside/admin/adminSide';
-
+import { api } from '../../../../../api';
 
 
 export default function AdminCadastrarFarmacias() {
 
 const IsAutenticado = !!localStorage.getItem("usuario")
-
+const Navi = useNavigate()
   const [CadastraF, setCadastrarF] = useState({
     nome: "",
     nif: "",
@@ -31,23 +30,25 @@ const IsAutenticado = !!localStorage.getItem("usuario")
     latitude: "",
     longitude: ""
   })
-
+const [loading, setloading]= useState(false)
   const handleCadastrarFarma = async (e) => {
     e.preventDefault();
-
-    if (CadastraF.nome && CadastraF.email && CadastraF.endereco && CadastraF.latitude && CadastraF.longitude && CadastraF.nif && CadastraF.telefone) {
+    setloading(true)
+    if (CadastraF.nome.trim() && CadastraF.email.trim() && CadastraF.endereco.trim() && CadastraF.latitude.trim() && CadastraF.longitude.trim() && CadastraF.nif.trim() && CadastraF.telefone.trim()) {
     try {
       
-      const res = await axios.post(`http://localhost:8800/f/criarfarma`, CadastraF)
+      const res = await api.post(`/f/criarfarma`, CadastraF)
 
       if (res.data.data === "Sucess") {
-        setCadastrarF("")
+        Navi("/adminfarmacias")
         toast.success("Farmacia Cadastrada")
       } else {
-        toast.warn("erro no servidor")
+        toast.warn(res.data.data)
       }
     } catch (error) {
       console.log(error)
+    } finally{
+      setloading(false)
     }
   } else{
     toast.error("ERRO!")
@@ -110,11 +111,16 @@ const IsAutenticado = !!localStorage.getItem("usuario")
                 </div>
                 <hr />
 
-                <Link to={`/map`}>
+                    <Link to={`https://www.google.com/maps/@-8.8735744,13.254656,12z?hl=es&entry=ttu`}>
                   <button className='btn btn-success' style={{ marginTop: '3rem', backgroundColor: '#00968c' }}>Ir ao mapa</button></Link>
                 < button onClick={handleCadastrarFarma} className='btn btn-success' style={{ marginTop: '3rem', backgroundColor: '#00968c' }}>Cadastrar</button>
 
               </div>
+                  {(loading &&
+                    <div className="loading" id="loading">
+                      <div className="spinner"></div>
+                    </div>
+                  )}
             </div>
           </div>
         </section>

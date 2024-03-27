@@ -1,5 +1,5 @@
-import { ActualizarMedi, AddMedicamento, ComparaMedicamentos, DeletarMed, DisponivelMed, GraficoMedfavoritosFarma, Medicamento, ObterMedid, farmamedicamentos, totalFavoritosMedi, totalMedicamento } from "../Models/MedicamentoModel.js"
-
+import { ActualizarMedi, AddMedicamento, ComparaMedicamentos, DeletarMed, DisponivelMed, GraficoMedfavoritosFarma, Medicamento, ObterMedid, UploadImageMedicamento, farmamedicamentos, farmamedicamentosTop, getMedicamentoDeletado, totalFavoritosMedi, totalMedicamento } from "../Models/MedicamentoModel.js"
+import {  NotificacaoSubgestor } from "../Models/NotificacoesModel.js";
 
 
 export const SelMedicamento = async( req,res) =>{
@@ -11,12 +11,18 @@ export const SelMedicamento = async( req,res) =>{
 
 }
 
-
 export const farmaciaMed = async (req, res)=>{
     const {id} = req.params
 
   
     const data = await farmamedicamentos(id);
+    res.status(200).json({ data })
+}
+
+export const farmaciaMedTop = async (_, res) => {
+ 
+
+    const data = await farmamedicamentosTop();
     res.status(200).json({ data })
 }
 
@@ -28,45 +34,24 @@ export const ObtermedicamentoId = async(req, res)=>{
 
 }
 
-
 export const ComparaMed = async (req, res )=>{
 
     const {med} = req.params
 
     const data = await ComparaMedicamentos(med)
-
-
     res.status(200).json({data})
 }
 
-//gestor
+// gestor
 
 export const AddMed = async (req, res)=>{
    
  //add medicamento 
 
-    const {farma} = req.body;
+    const {farma, subgestor} = req.body;
     const imagePath = 'image_Product/' + req.file.filename;
 const {nome, preco, data_validade, informacoes, tipo, disponibilidade} = req.body;
 
-  const values = [
-       nome,
-       informacoes,
-       tipo,
-       disponibilidade
-    ]
-let validar ;
-
-    for (let i = 0; i < values.length; i++) {
-       validar = await ValidateProduto(values[i])
-    
-           if(validar == false){
-               return res.status(200).json({ data: "Erro ao cadastrar Produto! Pelo menos 3 caracteres"})
-           }
-    }
-    const validarPreco = await ValidateNumber(preco)
-   
-    if(validarPreco) {
        const  dados = [
             nome,
             preco,
@@ -77,79 +62,57 @@ let validar ;
             disponibilidade
         ]
         const data = await AddMedicamento(dados, farma)
-
-        res.status(200).json({ data })
-    }
-    else {
-        res.status(200).json({ data: "preco deve ser somente numeros" })
-    }
+       
+if((subgestor != "null")){
+    const result = await NotificacaoSubgestor([subgestor, data, "Produto cadastrado", "gestor"]);
+    console.log(result) 
+}
+        res.status(200).json({data : "medicamento adicionado"})
   
 }
-const ValidateProduto = async (nome) => {
-    if (nome.length < 3) {
-        return false;
-    }
-    const regexNome = /^[a-zA-Z0-9\s]+$/;
-
-    return regexNome.test(nome);
-}
-
-
- const ValidateNumber = async (telefone) => {
-
-    
-    const regexTelefone = /^[0-9\.]+$/;
-    return regexTelefone.test(telefone);
-
-}
-
-
-
-
-
 
 export const ActuaMedi = async (req,res)=>{
     const {id}= req.params
-    const imagePath = 'image_Product/' + req.file.filename;
-    const { nome, preco, data_validade, informacoes, tipo, disponibilidade } = req.body;
-    const values = [
-        nome,
-        informacoes,
-        tipo,
-        disponibilidade
-    ]
-    let validar;
+    const {subgestor, produto,nome, preco, data_validade, informacoes, tipo, disponibilidade } = req.body;
+   
 
-    for (let i = 0; i < values.length; i++) {
-        validar = await ValidateProduto(values[i])
-
-        if (validar == false) {
-            return res.status(200).json({ data: "Erro ao cadastrar Produto! Pelo menos 3 caracteres" })
-        }
+   
+   console.log(subgestor);
+    if(subgestor != null ) {
+        const result = await NotificacaoSubgestor([subgestor, produto, "produto actualizado ", "gestor"])
+        console.log(result)
     }
-    const validarPreco = await ValidateNumber(preco)
-
-    if (validarPreco) {
+   
         const dados = [
             nome,
-            preco,
+            preco,                   
             data_validade,
             informacoes,
             tipo,
-            imagePath,
             disponibilidade
         ]
         const data = await ActualizarMedi(dados, id)
 
         res.status(200).json({ data })
-    }
-    else {
-        res.status(200).json({ data: "preco deve ser somente numeros" })
-    }
 
 }
 
+export const ActualizarImagemMed = async(req,res)=>{
+    const {subgestor,id} = req.body;
+    const imagePath = 'image_Product/' + req.file.filename;
+    
+    
+    console.log(subgestor)
+    if (subgestor != "null") {
 
+        const result = await NotificacaoSubgestor([subgestor, id, "foto actualizada ", "gestor"])
+        console.log(result)
+    }
+ 
+
+    const data = await UploadImageMedicamento(imagePath, id)
+    res.status(200).json({ data })
+}
 export const DispoMed= async (req,res) =>{
 
     const {id}= req.params
@@ -162,8 +125,14 @@ export const DispoMed= async (req,res) =>{
 
 
 export const DeleMedi = async (req,res)=>{
-    const {id} = req.params
+    const {id, subgestor} = req.params
 
+    if (subgestor != "null") {
+        const medicamento = await getMedicamentoDeletado(id)
+        console.log(medicamento[0].nome);
+        const result = await NotificacaoSubgestor([subgestor,id, `Item deletado ${medicamento[0].nome} `, "gestor"])
+        console.log(result)
+    }
     const data = await DeletarMed(id)
 
     res.status(200).json({data})

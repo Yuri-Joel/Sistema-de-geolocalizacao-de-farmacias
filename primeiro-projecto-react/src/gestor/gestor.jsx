@@ -1,4 +1,3 @@
-import axios from "axios"
 import { useEffect, useState } from "react"
 import { ContarSubgestor } from "./components/ContarSubgestor"
 import { ContarMedi } from "./components/ContarMedicamentos"
@@ -9,8 +8,8 @@ import GestorSide from "../Dashboard/components/aside/gestor/gestorSide"
 import { GraficomedFarma } from "./DadosGraficosGestor/GraficofavMedFarma"
 import { Link } from "react-router-dom"
 import { LogActividades } from "../Log_Actividades/Log_actividades"
-import "./check.css"
 import {toast} from 'react-toastify'
+import { api } from "../api"
 
 
 
@@ -21,10 +20,12 @@ export const Gestor = () => {
     const [load, setload] = useState(false)
     const id = localStorage.getItem('usuario')
     const farma = localStorage.getItem("farma")
+    const [horaOpen, sethoraOpen] = useState("")
+    const [horaClose, sethoraClose] = useState("")
 
     const NomeId = async () => {
         try {
-            const res = await axios.get(`http://localhost:8800/ges/nome/${id}`)
+            const res = await api.get(`/ges/nome/${id}`)
             setNomeFarma(res.data.data[0].nome)
             setload(true)
 
@@ -43,7 +44,7 @@ export const Gestor = () => {
     const Openfarmacia = async()=> {
         try {
             
-            const res = await axios.get(`http://localhost:8800/f/obterfarma/${farma}`)
+            const res = await api.get(`/f/obterfarma/${farma}`)
             setvalue(res.data.data[0].aberto)
             console.log(value)
         } catch (error) {
@@ -51,30 +52,30 @@ export const Gestor = () => {
         }
     }
 
-    const updatefarmacia = async()=> {
-       
-        
-        setvalue(!value)
+
+    const Horario = async(e)=>{
+        e.preventDefault();
+
+        if(horaClose && horaClose){
+            console.log(horaClose , horaOpen)
         try {
-
-            const res = await axios.put(`http://localhost:8800/f/ligado/${farma}`, { value })
-            if (res.data.data === "Farmacia Aberta"){
-
-                
-                toast.success(res.data.data)
-            } else {
-                toast.warning(res.data.data)
-            }
+            const res = await api.put(`/f/horario/${farma}`, {horaOpen, horaClose}) 
+            console.log(res.data.data)
+            sethoraClose(" ")
+            sethoraOpen(" ")
+            toast.success("Novo horario Adicionado")
+             Openfarmacia();
         } catch (error) {
-            throw new Error(error)
+            console.log(error)
+        } } else{
+            toast.error("ERRO! na digitação da hora")
         }
-
     }
 
     return (
         <>
         <LogActividades tipo={"gestor"} />
-            <HeaderGestor />
+            <HeaderGestor />  
             <GestorSide />
             <main id="main" className="main">
                 
@@ -91,9 +92,23 @@ export const Gestor = () => {
                     </nav>
                     </div>
                     <div>
-                    <button className="btn btn-primary" onClick={()=>updatefarmacia()}> Farmacia {value ? "ABERTA": "FECHADA"}</button> 
+                   {/*  <button className="btn btn-primary"> Farmacia {value ? "ABERTA": "FECHADA"}</button>  */}
                                <div>
                                     <span>De momento sua farmacia encontra-se {value ? "ABERTA" : "FECHADA"} </span>
+
+                               </div>
+                               <div>
+                               <form onSubmit={Horario}>
+                                <div>
+                                    <input   type="time"  value={horaOpen} onChange={(e)=> sethoraOpen(e.target.value)} />
+                                </div>
+                                <div>
+                                    <input  type="time"  value={horaClose} onChange={(e)=> sethoraClose(e.target.value)} />
+                                </div>
+                                   <div>
+                                   <button type="submit">Novo Horario</button>
+                                   </div>
+                                </form>
                                </div>
                                </div>
                 </div>
@@ -159,7 +174,7 @@ export const Gestor = () => {
                         <div className="col-md-3">
                             <div className="card info-card sales-card" style={{ backgroundColor: '#00968c', color: 'white' }}>
                                 <div className="card-body">
-                                    <h5 className="card-title">Produtos favoritados</h5>
+                                    <h5 className="card-title">favoritados</h5>
                                     <div className="d-flex align-items-center">
                                         <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                             <i className="bi bi-bookmark-heart"></i>

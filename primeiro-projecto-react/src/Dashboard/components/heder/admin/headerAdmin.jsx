@@ -12,8 +12,8 @@ import { Terminar } from '../../../../components/Logout/Logout';
 import { NomeAdmin } from '../../../../components/NomeAdmin/NomeAdmin';
 import logo from '../../../../assets/Geo Farma/Geo Farma.png'
 import imagem from '../../../../assets/Screenshot_20240110-233026.png'
-import axios from 'axios';
 import { Formattime } from '../../../pages/Admin/Admintrador/AdminMensagens/AdminMensagens';
+import { api } from '../../../../api';
 
 
 export default function HeaderAdmin() {
@@ -38,7 +38,7 @@ export default function HeaderAdmin() {
 
   const ObterUserId = async () => {
     try {
-      const res = await axios.get(`http://localhost:8800/ad/obtera/${Idusuario}`);
+      const res = await api.get(`/ad/obtera/${Idusuario}`);
       setUserPhoto(res.data.data[0].foto);
 
     } catch (error) {
@@ -47,7 +47,7 @@ export default function HeaderAdmin() {
   }
   const Mensagens = async () => {
     try {
-      const res = await axios.get(`http://localhost:8800/sms/mostra`)
+      const res = await api.get(`/sms/mostra`)
       setMensagens(res.data.data)
 
       settotal(res.data.data[0].total)
@@ -77,12 +77,7 @@ export default function HeaderAdmin() {
 
         </div>
 
-        <div className="search-bar">
-          <form className="search-form d-flex align-items-center" method="POST" action="#">
-            <input type="text" name="query" placeholder="Pesquisar" title="Enter search keyword" style={{ marginLeft: '3rem', width: '20rem' }} />
-            <button type="submit" title="Search"><i className="bi bi-search"></i></button>
-          </form>
-        </div>
+        
 
         <nav className="header-nav ms-auto">
           <ul className="d-flex align-items-center">
@@ -163,7 +158,7 @@ export default function HeaderAdmin() {
                       <li className="message-item" >
                         <Link to="/adminmensagem">
                           {m.foto ?
-                            <img src={`http://localhost:8800/${m.foto}`} alt="ee" className="rounded-circle" />
+                              <img src={`http://localhost:8800/${m.foto}`} alt="ee" style={{ borderRadius: '100%', width: '1rem', height: '1rem' }}  />
                             :
                             <img src={imagem} alt='profile' className='rounded-circle' />
                           }

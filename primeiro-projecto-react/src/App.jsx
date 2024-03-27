@@ -11,20 +11,28 @@ import 'bootstrap/js/dist/scrollspy';
 import { RoutesGestor } from './gestor/routesGestor';
 
 
+
+
+
+
 function App() {
         
 
         return (
                 <>
-                        <BrowserRouter>
-                        <Load>
+                         <BrowserRouter>
+                                <Load>
                                 <RoutesDashboard />
                                 <RoutesAdmin />
                                 <RoutesGestor />
-                               
+                              
                                 </Load>
                         </BrowserRouter>
                         <ToastContainer autoClose={3000} position={toast.POSITION.BOTTOM_LEFT} />
+                        
+                
+                       
+                       
                        
                 </>
 

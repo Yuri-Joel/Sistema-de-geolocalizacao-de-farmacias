@@ -1,5 +1,4 @@
 import React,{ useState } from "react"
-import axios from "axios"
 import { toast } from "react-toastify";
 import { useNavigate,Link } from "react-router-dom"
 import k from '../../../assets/Geo Farma/Geo.svg'
@@ -7,6 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/js/dist/util/scrollbar'
 import "../../../pagesHome/Login/loading.css"
+import { api } from "../../../api";
 
 
 export const ConfirmCadastro = ()=>{
@@ -28,7 +28,7 @@ export const ConfirmCadastro = ()=>{
         
 
         try {
-            const res =  await  axios.post(`http://localhost:8800/api/confirmcadastro`,Values)
+            const res =  await api.post(`/api/confirmcadastro`,Values)
             if(res.data.data === 'Sucess'){
                 localStorage.removeItem("dados")
                 toast.success("Cadastrado com sucesso!")

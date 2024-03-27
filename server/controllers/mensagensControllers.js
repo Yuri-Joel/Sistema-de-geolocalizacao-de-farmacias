@@ -12,12 +12,12 @@ export const MostraSMS = async (_, res)=>{
 
 export const AddNovasSMS = async (req,res)=>{
     
-const values = [
-    req.body.usuario,
-    req.body.texto,
-    
-]
-const data = await AddNewsms(values);
+    const {usuario,email,texto } = req.body
+
+
+    const data = await AddNewsms([usuario, texto, email]);
+
+
 
     res.status(200).json({data})
 }

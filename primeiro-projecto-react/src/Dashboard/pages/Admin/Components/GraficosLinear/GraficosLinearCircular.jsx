@@ -44,7 +44,7 @@ import { generatePDF } from "../../../../../PDF/DownloadingPdf";
   <Line type="monotone" dataKey="total" stroke="#8884d8" />
 </LineChart>
   </div>
- <p>Grafico de numeros de medicamento</p>
+  <p>Grafico dos medicamentos das Farmacias</p>
  
             <button className='btn btn-primary' onClick={() => generatePDF(chartRef, "Grafico de numeros de medicament")}>Baixar PDF</button>
     </div>

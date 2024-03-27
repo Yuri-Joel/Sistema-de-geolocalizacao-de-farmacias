@@ -2,15 +2,14 @@
 import {conn}  from "../../utils/conexao.js";
 /// recuperar senha 
 export const Verify = (email)=>{
-    const query = "SELECT * FROM usuarios WHERE email = ?";
+    const query = `SELECT u.email, g.email, ad.email, sub.email FROM usuarios u, gestores g, administradores ad, subgestores sub WHERE u.email = '${email}' OR g.email = '${email}' OR ad.email = '${email}' OR sub.email = '${email}' `;
 
     return new Promise ((resolve, reject)=>{
-        conn.query(query,[email],(err, data)=>{
+        conn.query(query,(err, data)=>{
             if(err)  reject (err);
             else resolve(data)
     
-        })})
-    
+        })}) 
 }
 
 export const addrecuperacao = (dados)=>{

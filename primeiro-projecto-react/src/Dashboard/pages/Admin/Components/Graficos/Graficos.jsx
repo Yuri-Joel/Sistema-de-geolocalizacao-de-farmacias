@@ -35,7 +35,7 @@ return(
     <Bar dataKey="total" fill="#8884d8" barSize={30} />
   </BarChart>
   </div>
-  <p>Grafico de medicamentos das Farmacias</p>
+  <p>Grafico dos medicamentos das Farmacias</p>
 
         <button className='btn btn-primary' onClick={() => generatePDF(chartRef, "Grafico de medicamentos das Farmacias")}>Baixar PDF</button>
        </div>

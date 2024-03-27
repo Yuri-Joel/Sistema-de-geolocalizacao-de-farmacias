@@ -1,6 +1,7 @@
 import { ActuaSubGestor, deleteSubGestor, newSubGestores, TodosSubGestores, ObterSubgestorId, CGestores, ObterSubgestorgestor} from "../Models/SubgestorModels.js"
 import { ActuaGestorsenha } from "../Models/gestoresModels.js"
 import { EliminarFoto } from "../Models/usuarioModels.js"
+import { Verify } from "../services/recuperacao de senha/recuperacaoModel.js"
 import { Validateall, hashSenha } from "./usuarioControllers.js"
 
  
@@ -39,6 +40,8 @@ export const CriarSubGestor = async (req,res)=> {
    
     const {nome,email, telefone,gestor} = req.body
    
+    const result = await Verify(email)
+    if (!result || result.length === 0) {
     const validar = await Validateall(nome,email,senha, telefone)
 
     if(validar){
@@ -54,6 +57,8 @@ export const CriarSubGestor = async (req,res)=> {
         res.status(200).json({ data })
     } else{
         res.status(200).json({ data: "ERRO ao cadastrar!" })
+    }} else{
+        return res.status(200).json({ data: 'E-mail Já Existe!' });
     }
     
 }

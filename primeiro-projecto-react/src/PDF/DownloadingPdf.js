@@ -43,10 +43,10 @@ page.drawText(`Relatório gerado em: ${currentDate}`, {
 
 
   // Adicionar informações adicionais ao relatório com indentação
-  const additionalInfo = `Este gráfico impresso serve como um recurso valioso para profissionais
+  const additionalInfo = `Esta folha impresso serve como um recurso valioso para profissionais
 de saúde, autoridades locais e membros da comunidade, fornecendo informações 
 essenciais sobre a infraestrutura farmacêutica disponível. A análise
-dos dados contidos neste gráfico impresso pode orientar políticas e iniciativas destinadas 
+dos dados contidos nesta folha impresso pode orientar políticas e iniciativas destinadas 
 a melhorar o acesso e a disponibilidade de serviços farmacêuticos em nossa comunidade.`;
 
   page.drawText(additionalInfo, {

@@ -1,5 +1,6 @@
 import { Actualiadmin, Actualizaradminsenha, DeleteAdmin, ObteradminId, TodosAdmin, TornarPrincipal, VerificarAdmin, newadmin } from "../Models/AdministradoresModels.js"
 import { EliminarFoto, VerificarSenha } from "../Models/usuarioModels.js"
+import { Verify } from "../services/recuperacao de senha/recuperacaoModel.js"
 import { Validateall, Validatepass, hashSenha } from "./usuarioControllers.js"
 
 
@@ -11,18 +12,17 @@ export const ObterAdmin = async (req,res)=>{
 }
 
 export const TornarAdmin = async(req,res) =>{
-    const {id} = req.body;
+    const {id, value} = req.body;
 
-        const verificarAdmin = await VerificarAdmin(id)
-
-        if(verificarAdmin == true){
+        
+        if(value == 1){
 
             const data = await TornarPrincipal(id,false)
-            res.status(200).json({data})
+            res.status(200).json({data:"Foi removido como Admin Principal"})
         } 
         else{
             const data = await TornarPrincipal(id,true)
-            res.status(200).json({data})
+            res.status(200).json({data: "Adicionado como Admin principal"})
         }
     
 }
@@ -37,7 +37,10 @@ export const CriarAdmin = async (req,res)=> {
     const {nome} = req.body;
     const {email} = req.body;
     const {senha} = req.body;
-    const validar = Validateall(nome, email,senha, "9348944574")
+
+    const result = await Verify(email)
+    if (!result || result.length === 0) {
+    const validar =  await Validateall(nome, email,senha, "935699190")
     
     if(validar){
         const senha2 = await hashSenha(senha);
@@ -50,10 +53,11 @@ export const CriarAdmin = async (req,res)=> {
       const data = await newadmin(values)
       res.status(200).json({data})
     } else{
-
-        return res.status(200).json({data: "Erro na Actualização"});
+        return res.status(200).json({data: "erro, nos campos de cadastro"});
     }
-    
+}else{
+ return res.status(200).json({data: "Email já Existe"});
+}
 }
 
 

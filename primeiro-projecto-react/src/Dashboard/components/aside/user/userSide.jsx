@@ -9,7 +9,6 @@ import 'bootstrap/js/dist/scrollspy';
 import { Link } from 'react-router-dom'
 
 export default function UserSide() {
-  const Idusuario = localStorage.getItem("usuario");
   return (
     <>
       <aside id="sidebar" className="sidebar" style={{ backgroundColor: '#00968c' }} >
@@ -29,12 +28,12 @@ export default function UserSide() {
             </Link>
             <ul id="components-nav" className="nav-content collapse text-white" data-bs-parent="#sidebar-nav" >
               <li >
-                <Link to={`/favfarma/${Idusuario}`}>
+                <Link to={`/favfarma`}>
                   <i className="bi bi-circle" style={{ color: 'white' }} ></i><span style={{ color: 'white' }}>Farmácias</span>
                 </Link>
               </li>
               <li>
-                <Link to={`/favmed/${Idusuario}`}>
+                <Link to={`/favmed`}>
                   <i className="bi bi-circle" style={{ color: 'white' }} ></i><span style={{ color: 'white' }} >Medicamentos</span>
                 </Link>
               </li>
@@ -47,7 +46,7 @@ export default function UserSide() {
             </Link>
             <ul id="forms-nav" className="nav-content collapse " data-bs-parent="#sidebar-nav">
               <li>
-                <Link to={`/comentar/${Idusuario}`}>
+                <Link to={`/comentar`}>
                   <i className="bi bi-circle" style={{ color: 'white' }}></i><span style={{ color: 'white' }}> Mensagem</span>
                 </Link>
               </li>

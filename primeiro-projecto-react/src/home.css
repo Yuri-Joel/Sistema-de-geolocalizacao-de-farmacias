@@ -12,6 +12,10 @@ body {
     font-family: "Open Sans", sans-serif;
     color: #444444;
   }
+  *{
+    margin: 0;
+    padding: 0;
+  }
   
   a {
     color: #009961;
@@ -32,6 +36,14 @@ body {
     font-family: "Raleway", sans-serif;
   }
   
+   @keyframes fade-in {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes fade-out {
+          from { opacity: 1; }
+          to { opacity: 0; }
+        }
   /*--------------------------------------------------------------
   # Preloader
   --------------------------------------------------------------*/
@@ -117,18 +129,19 @@ body {
   /*--------------------------------------------------------------
   # Header
   --------------------------------------------------------------*/
-  #header {
+  #heade {
     transition: all 0.5s;
     z-index: 997;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      background-color: #00968c;
   }
   
-  #header.header-scrolled,
-  #header.header-inner-pages {
+  #heade.header-scrolled,
+  #heade.header-inner-pages {
     background: rgba(40, 40, 40, 0.9);
   }
   
-  #header .logo {
+  #heade.logo {
     font-size: 28px;
     margin: 0;
     padding: 0;
@@ -137,23 +150,24 @@ body {
     letter-spacing: 0.5px;
   }
   
-  #header .logo a {
+  #heade.logo a {
     color: #fff;
   }
   
-  #header .logo img {
+  #heade .logo img {
     max-height: 40px;
   }
   
   @media (max-width: 992px) {
-    #header {
+    #heade {
       border: 0;
       padding: 15px 0;
     }
   }
+
   
   /* Get Startet Button */
-  .get-started-btn {
+  #bb {
     margin-left: 25px;
     background: #009961;
     color: #fff;
@@ -164,16 +178,15 @@ body {
     font-size: 14px;
     display: inline-block;
   }
-  
-  .get-started-btn:hover {
+  #bb:hover {
     background: #00b371;
     color: #fff;
   }
   
-  @media (max-width: 992px) {
-    .get-started-btn {
-      margin: 0 15px 0 0;
-      padding: 6px 18px;
+  @media (max-width: 430px) {
+    #bb {
+     margin-left: 14rem;
+     
     }
   }
   
@@ -437,7 +450,8 @@ body {
   #hero {
     width: 100%;
     height: 100vh;
-    background: url("../public/asset/img/hero-bg.jpg") top center;
+   /*  background: url("./pagesHome/Home/bb.png") top center; */
+    overflow: 'hidden';
     background-size: cover;
     position: relative;
   }
@@ -745,7 +759,7 @@ body {
   # Cta
   --------------------------------------------------------------*/
   .cta {
-    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("../public/asset/img/cta-bg.jpg") fixed center center;
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("./pagesHome/Home/accao.jpg") fixed center center;
     background-size: cover;
     padding: 120px 0;
   }
@@ -1314,19 +1328,19 @@ body {
   /*--------------------------------------------------------------
   # Contact
   --------------------------------------------------------------*/
-  .contact .info {
+  .contac .info {
     width: 100%;
     background: #fff;
   }
   
-  .contact .info i {
+  .contac .info i {
     font-size: 32px;
     color: #009961;
     float: left;
     line-height: 1;
   }
   
-  .contact .info h4 {
+  .contac .info h4 {
     padding: 0 0 0 60px;
     font-size: 22px;
     font-weight: 600;
@@ -1334,28 +1348,28 @@ body {
     color: #282828;
   }
   
-  .contact .info p {
+  .contac .info p {
     padding: 0 0 0 60px;
     margin-bottom: 0;
     font-size: 14px;
     color: #5b5b5b;
   }
   
-  .contact .info .email,
-  .contact .info .phone {
+  .contac .info .email,
+  .contac .info .phone {
     margin-top: 40px;
   }
   
-  .contact .php-email-form {
+  .contac .php-email-form {
     width: 100%;
     background: #fff;
   }
   
-  .contact .php-email-form .form-group {
+  .contac .php-email-form .form-group {
     padding-bottom: 8px;
   }
   
-  .contact .php-email-form .error-message {
+  .contac .php-email-form .error-message {
     display: none;
     color: #fff;
     background: #ed3c0d;
@@ -1364,7 +1378,7 @@ body {
     font-weight: 600;
   }
   
-  .contact .php-email-form .sent-message {
+  .contac .php-email-form .sent-message {
     display: none;
     color: #fff;
     background: #18d26e;
@@ -1373,18 +1387,18 @@ body {
     font-weight: 600;
   }
   
-  .contact .php-email-form .sent-message br+br {
+  .contac .php-email-form .sent-message br+br {
     margin-top: 25px;
   }
   
-  .contact .php-email-form .loading {
+  .contac .php-email-form .loading {
     display: none;
     background: #fff;
     text-align: center;
     padding: 15px;
   }
   
-  .contact .php-email-form .loading:before {
+  .contac .php-email-form .loading:before {
     content: "";
     display: inline-block;
     border-radius: 50%;
@@ -1397,28 +1411,28 @@ body {
     animation: animate-loading 1s linear infinite;
   }
   
-  .contact .php-email-form input,
-  .contact .php-email-form textarea {
+  .contac .php-email-form input,
+  .contac .php-email-form textarea {
     border-radius: 0;
     box-shadow: none;
     font-size: 14px;
     border-radius: 4px;
   }
   
-  .contact .php-email-form input:focus,
-  .contact .php-email-form textarea:focus {
+  .contac .php-email-form input:focus,
+  .contac .php-email-form textarea:focus {
     border-color: #009961;
   }
   
-  .contact .php-email-form input {
+  .contac .php-email-form input {
     height: 44px;
   }
   
-  .contact .php-email-form textarea {
+  .contac .php-email-form textarea {
     padding: 10px 12px;
   }
   
-  .contact .php-email-form button[type=submit] {
+  .contac .php-email-form button[type=submit] {
     background: #009961;
     border: 0;
     padding: 10px 30px;
@@ -1427,7 +1441,7 @@ body {
     border-radius: 50px;
   }
   
-  .contact .php-email-form button[type=submit]:hover {
+  .contac .php-email-form button[type=submit]:hover {
     background: #00b371;
   }
   
@@ -1495,7 +1509,7 @@ body {
   /*--------------------------------------------------------------
   # Footer
   --------------------------------------------------------------*/
-  #footer {
+  #foote {
     background: #0f0f0f;
     color: #fff;
     font-size: 14px;
@@ -1503,7 +1517,7 @@ body {
     padding: 30px 0;
   }
   
-  #footer h3 {
+  #foote h3 {
     font-size: 36px;
     font-weight: 700;
     color: #fff;
@@ -1513,18 +1527,18 @@ body {
     margin: 0 0 15px 0;
   }
   
-  #footer p {
+  #foote p {
     font-size: 15;
     font-style: italic;
     padding: 0;
     margin: 0 0 40px 0;
   }
   
-  #footer .social-links {
+  #foote .social-links {
     margin: 0 0 40px 0;
   }
   
-  #footer .social-links a {
+  #foote.social-links a {
     font-size: 18px;
     display: inline-block;
     background: #009961;
@@ -1539,25 +1553,25 @@ body {
     transition: 0.3s;
   }
   
-  #footer .social-links a:hover {
+  #foote .social-links a:hover {
     background: #00b371;
     color: #fff;
     text-decoration: none;
   }
   
-  #footer .copyright {
+  #foote .copyright {
     margin: 0 0 5px 0;
   }
   
-  #footer .credits {
+  #foote .credits {
     font-size: 13px;
   }
   
-  #footer .credits a {
+  #foote .credits a {
     color: #00b371;
     transition: 0.3s;
   }
   
-  #footer .credits a:hover {
+  #foote .credits a:hover {
     color: #009961;
   }

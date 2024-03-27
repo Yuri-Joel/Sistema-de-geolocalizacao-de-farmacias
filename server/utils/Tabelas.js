@@ -7,11 +7,11 @@ const query1 = "CREATE TABLE IF NOT EXISTS favoritos_farmacia( id int NOT NULL A
 const query2 = " CREATE TABLE IF NOT EXISTS favoritos_medicamentos( id int NOT NULL AUTO_INCREMENT, `usuario_id` int(11) DEFAULT NULL, `medicamento_id` int(11) DEFAULT NULL,`farmacia_id` int(11) DEFAULT NULL, PRIMARY KEY (`id`), KEY `usuario_id` (`usuario_id`), KEY `medicamento_id` (`farmacia_id`),KEY `farmacia_id` (`farmacia_id`) )ENGINE=MyISAM AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;";
 
 // admin
-const query3 = "CREATE TABLE IF NOT EXISTS `administradores` (  `id` int(11) NOT NULL AUTO_INCREMENT,`nome` varchar(255) NOT NULL,`email` varchar(255) NOT NULL,`senha` varchar(255) NOT NULL, `foto` varchar(255) DEFAULT NULL, `administrador_principal` BOOLEAN NOT NULL DEFAULT FALSE, PRIMARY KEY (`id`) ) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;"
+const query3 = "CREATE TABLE IF NOT EXISTS `administradores` (`id` int NOT NULL AUTO_INCREMENT,`nome`varchar(255) NOT NULL, `email` varchar(255) NOT NULL,  `senha` varchar(255) NOT NULL,  `foto` varchar(255) DEFAULT NULL,`administrador_principal` tinyint(1) NOT NULL DEFAULT '0', PRIMARY KEY(`id`)) ENGINE = MyISAM AUTO_INCREMENT = 34 DEFAULT CHARSET = utf8; "
 
 
 //farmacias e medicamentos
-const query4 = "CREATE TABLE IF NOT EXISTS `farmacias` ( `id` int(11) NOT NULL AUTO_INCREMENT, `nome` varchar(255) NOT NULL,`nif` varchar(255) NOT NULL,  `telefone` varchar(50) NOT NULL,`email` varchar(255) not null, `endereco` varchar(255) NOT NULL, `latitude` decimal(10,8) NOT NULL, `longitude` decimal(11,8) NOT NULL, `horario_funcionamento` varchar(100) DEFAULT NULL, PRIMARY KEY (`id`) ) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;"
+const query4 = "CREATE TABLE IF NOT EXISTS `farmacias` ( `id` int NOT NULL AUTO_INCREMENT,`nome` varchar(255) NOT NULL,`nif` varchar(255) NOT NULL,`telefone` varchar(50) NOT NULL,`email` varchar(255) NOT NULL,  `endereco` varchar(255) NOT NULL,  `latitude` decimal(10, 8) NOT NULL,`longitude` decimal(11, 8) NOT NULL, `aberto` tinyint(1) DEFAULT '1',`horaAbertura` varchar(255) NOT NULL,`horaFechamento` varchar(255) NOT NULL, PRIMARY KEY(`id`)) ENGINE = MyISAM AUTO_INCREMENT = 35 DEFAULT CHARSET = utf8;"
 
 const query5 = "CREATE TABLE IF NOT EXISTS `farmacia_medicamentos` ( `id` int(11) NOT NULL AUTO_INCREMENT, `farmacia_id` int(11) DEFAULT NULL,  `medicamento_id` int(11) DEFAULT NULL,  PRIMARY KEY (`id`), KEY `farmacia_id` (`farmacia_id`), KEY `medicamento_id` (`medicamento_id`) ) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;"
 
@@ -33,9 +33,18 @@ const query10 = "CREATE TABLE IF NOT EXISTS `log_atividades` ( `id` int(11) NOT 
 
 
 // gestores e subGestores
-const query11 = "CREATE TABLE IF NOT EXISTS `gestores` ( `id` int(11) NOT NULL AUTO_INCREMENT,  `nome` varchar(255) NOT NULL, `nome_user` varchar(255) NOT NULL,  `telefone` varchar(255) NOT NULL, `email` varchar(255) NOT NULL, `senha` varchar(255) NOT NULL, `farmacia_id` int(11) DEFAULT NULL, `foto` varchar(255) DEFAULT NULL,  PRIMARY KEY (`id`), KEY `farmacia_id` (`farmacia_id`) ) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;";
+const query11 = "CREATE TABLE IF NOT EXISTS `gestores` ( `id` int(11) NOT NULL AUTO_INCREMENT,  `nome` varchar(255) NOT NULL, `nome_user` varchar(255) NOT NULL,  `telefone` varchar(255) NOT NULL, `email` varchar(255) NOT NULL, `senha` varchar(255) NOT NULL, `farmacia_id` int(11) DEFAULT NULL, `foto` varchar(255) DEFAULT NULL,  PRIMARY KEY (`id`), KEY `farmacia_id` (`farmacia_id`) ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;";
 
 const query12 = "CREATE TABLE IF NOT EXISTS `subgestores` ( `id` int(11) NOT NULL AUTO_INCREMENT, `nome` varchar(255) NOT NULL,  `nome_user` varchar(255) NOT NULL, `email` varchar(255) NOT NULL, `telefone`  varchar(255) NOT NULL, `senha` varchar(255) NOT NULL, `foto` varchar(255) , `gestor_id` int(11) NOT NULL, PRIMARY KEY (`id`),FOREIGN KEY (`gestor_id`) REFERENCES `gestores` (`id`));"
+
+// estatisticas e notificaçoes
+const query13 = "CREATE TABLE IF NOT EXISTS `estatisticas_produtos` ( `id` int NOT NULL AUTO_INCREMENT,`mes` int NOT NULL,  `municipio` varchar(255) NOT NULL, `provincia` varchar(255) NOT NULL, `produto` varchar(255) NOT NULL,  `quantidade_pesquisas` int NOT NULL, `data_atualizacao` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,   PRIMARY KEY(`id`)) ENGINE = MyISAM AUTO_INCREMENT = 0 DEFAULT CHARSET = utf8; "
+
+const query14 = "CREATE TABLE IF NOT EXISTS `notificacoes` (`id` int NOT NULL AUTO_INCREMENT,`mensagem` text NOT NULL,`data_envio` timestamp NULL DEFAULT CURRENT_TIMESTAMP, `tipo` varchar(255) NOT NULL, `subgestor_id` int DEFAULT NULL,`medicamento_id` int DEFAULT NULL, PRIMARY KEY(`id`),   KEY`subgestor_id`(`subgestor_id`), KEY`medicamento_id`(`medicamento_id`)) ENGINE = MyISAM AUTO_INCREMENT = 0 DEFAULT CHARSET = utf8; "
+
+
+
+
 const  resposta = (query)=>{
 
    return new Promise ((resolve)=>{
@@ -70,6 +79,10 @@ export const Tabela = async()=>{
         res = await resposta(query11)
         console.log(res)
         res = await resposta(query12)
+        console.log(res)
+        res = await resposta(query13)
+        console.log(res)
+        res = await resposta(query14)
         console.log(res)
     }catch(error){
         console.log(error)

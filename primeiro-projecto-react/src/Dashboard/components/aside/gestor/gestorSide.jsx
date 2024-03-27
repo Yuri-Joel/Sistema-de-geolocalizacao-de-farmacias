@@ -44,6 +44,7 @@ export default function GestorSide() {
                       <i className="bi bi-circle"></i><span>Cadastrar</span>
                     </Link>
                   </li>
+                
                   <li>
                     <Link to={`/EditarFarma/${id}`} style={{ color: 'white' }}>
                       <i className="bi bi-circle" ></i><span>Editar Farmacia</span>
@@ -56,7 +57,7 @@ export default function GestorSide() {
           }
 
           <li className="nav-item">
-            <Link className="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+            <Link className="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" to={"#"}>
               <i className="bi bi-people"></i><span>Produtos</span><i className="bi bi-chevron-down ms-auto"></i>
             </Link>
             <ul id="forms-nav" className="nav-content collapse " data-bs-parent="#sidebar-nav">
@@ -73,6 +74,12 @@ export default function GestorSide() {
             </ul>
           </li>
           <li className="nav-heading" style={{ color: 'white', fontSize: '1rem' }}>REGISTROS</li>
+          <li className='nav-item'>
+         <Link className='nav-link collapsed' to={`/estatisticas`} >
+              <i className="bi bi-circle"></i>
+              <span>Dados Estatisticos</span>
+             </Link>
+           </li>
           <li className="nav-item">
             <Link className="nav-link collapsed" to={`/loggestor`}>
               <i className="bi bi-patch-exclamation"></i>
@@ -84,14 +91,15 @@ export default function GestorSide() {
               <i className="bi bi-graph-up"></i>
               <span>Dados Estatisticos</span>
             </Link>
-          </li> */}
+          </li>  */}
 
           <li className="nav-item">
-            <Link className="nav-link collapsed" to={`#`}>
+            <Link className="nav-link collapsed" to={`/map`}>
               <i className="bi bi-geo-alt-fill"></i>
               <span>Map</span>
             </Link>
           </li>
+         
         </ul>
 
       </aside>

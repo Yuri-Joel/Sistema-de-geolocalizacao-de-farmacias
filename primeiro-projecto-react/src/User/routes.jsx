@@ -16,6 +16,7 @@ import { ConfirmCadastro } from "./Cadastrar/ConfirmarCadastro/Confirmcadastro";
 import { ObterLogUser } from "./UserLogActividades/UserLog";
 
 
+
 export default function RoutesDashboard (){
     return (
       <>
@@ -33,10 +34,10 @@ export default function RoutesDashboard (){
                 <Route  path="/redefinir-senha" Component={RedefenirSenha}></Route>
                 <Route  path="/addnovasenha/:id" Component={AddNovaSenha}></Route>
 
-                <Route  path="/farmacia/:id/:ad" Component={FarmaciaDetalhes}></Route>
-                <Route  path="/favmed/:id" Component={FavoritosMedicamentos}></Route>
-                <Route  path="/favfarma/:id" Component={FavoritosFarmacia}> </Route>
-                <Route  path="/comentar/:usuario" Component={Comentarios}></Route>
+                <Route  path="/farmacia/:id" Component={FarmaciaDetalhes}></Route>
+                <Route  path="/favmed" Component={FavoritosMedicamentos}></Route>
+                <Route  path="/favfarma" Component={FavoritosFarmacia}> </Route>
+                <Route  path="/comentar" Component={Comentarios}></Route>
                 <Route path="/userlog" Component={ObterLogUser}></Route>
              </Routes>  
       </>

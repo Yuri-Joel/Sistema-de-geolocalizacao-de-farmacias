@@ -24,6 +24,19 @@ export const farmamedicamentos = (farma)=>{
             else resolve(data);
         })
     })}
+export const farmamedicamentosTop = (farma) => {
+
+
+    const query = "SELECT m.*, f.id AS farmacia_id FROM medicamentos m JOIN farmacia_medicamentos fm ON fm.medicamento_id = m.id LEFT JOIN farmacias f ON f.id = fm.farmacia_id WHERE m.disponibilidade = 'disponivel' ORDER BY RAND() DESC LIMIT 3"
+
+    return new Promise((resolve, reject) => {
+
+        conn.query(query, [farma], (err, data) => {
+            if (err) reject(err);
+            else resolve(data);
+        })
+    })
+}
 
 export const ObterMedid = (id)=>{
 
@@ -67,9 +80,9 @@ export const AddMedicamento = (dados,farmaId)=>{
                 if(err) reject(err);
                        else{
                     
-                    conn.query(q,[ data[0].lastId], (err) => {
+                    conn.query(q,[data[0].lastId], (err) => {
                         if (err) reject(err);
-                        else resolve("medicamento adicionado")
+                        else resolve(data[0].lastId)
                     })
                 }
             })
@@ -79,13 +92,9 @@ export const AddMedicamento = (dados,farmaId)=>{
 
 export const ActualizarMedi = async(dados, id)=>{
 
-    const RecuperarImage = await recuperarCaminhoImagem(id);
-    console.log(RecuperarImage)
-    const EliminarFoto = await excluirImagemNoDiretorio(RecuperarImage)
+   
     
-    console.log(EliminarFoto);
-    
-    const query = "UPDATE medicamentos set nome=?, preco= ?, data_validade = ?, informacoes=?,tipo=?,imagem_path=?, disponibilidade=? where id=?";
+    const query = "UPDATE medicamentos set nome=?, preco= ?, data_validade = ?, informacoes=?,tipo=?, disponibilidade=? where id=?";
 
     return new Promise ((resolve, reject)=>{
         conn.query(query, [...dados,id], (err)=>{
@@ -93,6 +102,22 @@ export const ActualizarMedi = async(dados, id)=>{
             else resolve(`Medicamento actualizado`)
         })
 })
+}
+
+export const UploadImageMedicamento = async(caminho , id)=> {
+    
+    const RecuperarImage = await recuperarCaminhoImagem(id);
+    console.log(RecuperarImage)
+    const EliminarFoto = await excluirImagemNoDiretorio(RecuperarImage)
+    
+    console.log(EliminarFoto);
+  const query = "UPDATE medicamentos set imagem_path = ? where id  = ?";
+  return new Promise ((resolve, reject)=>{
+    conn.query(query, [caminho, id], (err)=>{
+        if(err) reject(err);
+        else resolve(`Medicamento actualizado`)
+    })
+  })
 }
 
 
@@ -184,6 +209,17 @@ export const GraficoMedfavoritosFarma = (id) => {
 }
 
 
+
+export const getMedicamentoDeletado = (id)=>{
+    const query ="SELECT * from medicamentos where id =?"
+     return new Promise((resolve, reject) => {
+        conn.query(query, [id], (err, data) => {
+            if (err) reject(err);
+            else resolve(data)
+
+        })
+    })
+}
 
 
 

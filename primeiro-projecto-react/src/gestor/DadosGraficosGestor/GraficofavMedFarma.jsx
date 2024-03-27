@@ -1,8 +1,7 @@
-import axios from 'axios'
 import {useEffect, useRef, useState} from 'react'
 import { LineChart, CartesianGrid, Tooltip, XAxis, YAxis, Legend, Line } from "recharts";
 import { generatePDF } from '../../PDF/DownloadingPdf';
-import { LogActividades } from '../../Log_Actividades/Log_actividades';
+import { api } from '../../api';
 
 
 
@@ -18,7 +17,7 @@ export  const GraficomedFarma =()=>{
     const [dataload, setdataload] = useState(false)
     const Grafico = async()=>{
         try {
-            const res = await axios.get(`http://localhost:8800/m/graficomed/${id}`)
+            const res = await api.get(`/m/graficomed/${id}`)
                 setdata(res.data.data)
                 setdataload(true)
 
@@ -33,7 +32,7 @@ export  const GraficomedFarma =()=>{
 
  return(
     <>
-     <LogActividades tipo={"gestor"} />  
+   
      { 
         ( dataload  &&  
              <div className="container">

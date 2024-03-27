@@ -8,7 +8,6 @@ import 'bootstrap/js/dist/scrollspy';
 import 'bootstrap/js/dist/tab'
 import { Link, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
-import axios from 'axios'
 import { toast } from 'react-toastify';
 import imagem from '../../assets/Screenshot_20240110-233026.png'
 import { HeaderGestor } from '../../Dashboard/components/heder/gestor/headerGestor';
@@ -17,8 +16,7 @@ import { NomeGestor } from '../../components/NomeGestor/NomeGestor';
 import FooterDashboard from '../../Dashboard/components/footer/footer';
 import { NomeSubGestor } from '../../components/NomeSubgestor/NomeSubgestor';
 import { LogActividades } from '../../Log_Actividades/Log_actividades';
-
-
+import { api } from '../../api';
 
 export default function Gestorperfil() {
 
@@ -29,21 +27,17 @@ export default function Gestorperfil() {
    let baseUrl = ""
     if(subgestor){
        Idusuario = localStorage.getItem("subgestor");
-         baseUrl = "http://localhost:8800/sub"
+         baseUrl = "/sub"
     } else{
         Idusuario = localStorage.getItem("usuario");
-        baseUrl = "http://localhost:8800/ges"
+        baseUrl = "/ges"
     }
-
     const [userPhoto, setUserPhoto] = useState('');
     const [newImage, setNewImage] = useState(null);
 
-
-
-
     const ObterUserId = async () => {
         try {
-            const res = await axios.get(`${baseUrl}/obtera/${Idusuario}`);
+            const res = await api.get(`${baseUrl}/obtera/${Idusuario}`);
             setadmin(res.data.data)
             setUserPhoto(res.data.data[0].foto);
             console.log(res.data)
@@ -65,12 +59,11 @@ export default function Gestorperfil() {
     })
     const [ConfimarSenha, setConfirmar] = useState('')
 
-
     const HandleSubmit = async (e) => {
         e.preventDefault();
 
         if ((Alterar.novaSenha === ConfimarSenha) && Alterar.senhaActual && ConfimarSenha && Alterar.novaSenha) {
-            await axios.put(`${baseUrl}/actuasenha/${Idusuario}`, Alterar)
+            await api.put(`${baseUrl}/actuasenha/${Idusuario}`, Alterar)
                 .then(res => {
                     console.log(res.data);
                     if (res.data.data === "Actualizada") {
@@ -87,28 +80,24 @@ export default function Gestorperfil() {
         }
     }
 
-
     const ObterEditarUser = async () => {
 
         try {
-            const res = await axios.get(`${baseUrl}/obtera/${Idusuario}`)
+            const res = await api.get(`${baseUrl}/obtera/${Idusuario}`)
 
             console.log(res.data.data)
             setnome(res.data.data[0].nome);
             setemail(res.data.data[0].email);
+            setTelefone(res.data.data[0].telefone)
             setload(true)
 
         } catch (error) {
             console.error(error)
         }
     }
-
-
     useEffect(() => {
         ObterEditarUser();
     }, [Idusuario]);
-
-
 
     const Navigate = useNavigate();
 
@@ -118,7 +107,7 @@ export default function Gestorperfil() {
         handleUploadNewImage();
 
         try {
-            const res = await axios.put(`${baseUrl}/actuages/${Idusuario}`, {nome, email})
+            const res = await api.put(`${baseUrl}/actuages/${Idusuario}`, {nome: nome.trim(), email: email.trim()})
             console.log(res.data.data)
             toast.success("Perfil Actualizado");
             ObterUserId();
@@ -132,22 +121,20 @@ export default function Gestorperfil() {
             console.log('Nenhuma imagem selecionada.');
             return;
         }
-
-        let tipo = ""
+          let tipo = ""
         if(subgestor){
             tipo = "subgestores"
         } else{
          tipo = "gestor";
            
         }
-        
         const formData = new FormData();
         formData.append('image', newImage);
         formData.append('id', Idusuario);
         formData.append("tipo", tipo)
 
         try {
-            const response = await axios.post(`http://localhost:8800/upload`, formData);
+            const response = await api.post(`/upload`, formData);
             console.log(response.data)
             setUserPhoto(response.data.data);
         } catch (error) {
@@ -158,7 +145,7 @@ export default function Gestorperfil() {
 
     const DeletarFoto = (id) => {
         try {
-            const res = axios.delete(`${baseUrl}/delfoto/${id}`)
+            const res = api.delete(`${baseUrl}/delfoto/${id}`)
             if (res.data.data === "Sucess") {
                 toast.success(res.data.data)
             }

@@ -1,6 +1,6 @@
-import React, { useState } from "react"
-import { Link, useParams } from "react-router-dom";
-import axios from "axios";
+import React, { useEffect, useState } from "react"
+import { Link } from "react-router-dom";
+import { api } from "../../api";
 import { toast } from "react-toastify";
 import HeaderUser from "../../Dashboard/components/heder/user/headerUser";
 import UserSide from "../../Dashboard/components/aside/user/userSide";
@@ -12,20 +12,36 @@ import 'bootstrap/js/dist/button';
 import 'bootstrap/js/dist/offcanvas';
 import 'bootstrap/js/dist/scrollspy';
 import { LogActividades } from "../../Log_Actividades/Log_actividades";
+import { MyModal } from "../component/Modal";
+import FooterDashboard from "../../Dashboard/components/footer/footer";
 
 
 export const Comentarios = () => {
 
-
+  
     const IsAutenticado = !!localStorage.getItem("usuario");
-    const { usuario } = useParams()
+    const  usuario  = localStorage.getItem("usuario")
     const [texto, setTexto] = useState('');
 
+    const [show, setShow] = useState(false);
+    const handleShow = () => {
+        setShow(true)
+    }
+
+    useEffect(()=>{
+        handleShow();
+    },[IsAutenticado])
+
+    const handleClose = () => {
+        setShow(false)
+    }
 
     const HandleSubmit = async (e) => {
         e.preventDefault()
+
+        if(texto.trim()){
         try {
-            const res = await axios.post("http://localhost:8800/sms/novasms", { usuario, texto })
+            const res = await api.post("/sms/novasms", { usuario, texto })
             if (res.data.data === "Sucess") {
                 toast.success("Enviada com Sucesso");
                 setTexto("")
@@ -37,6 +53,9 @@ export const Comentarios = () => {
         } catch (error) {
             console.log(error)
         }
+    }else{
+        toast.warn("Campo vazio")
+    }
 
 
     }
@@ -45,11 +64,8 @@ export const Comentarios = () => {
             {IsAutenticado ?
                 <>
                     <LogActividades tipo={"usuario"} />
-                    < HeaderUser />
-
+                    < HeaderUser  disabled={true} />
                     <UserSide />
-
-
                     <main id="main" className="main" style={{ backgroundColor: '#00968c53' }}>
                         <div className="pagetitle">
                             <h1 style={{ color: 'white' }}>Dashboard</h1>
@@ -60,20 +76,14 @@ export const Comentarios = () => {
                                 </ol>
                             </nav>
                         </div>
-                        <section className="section dashboard section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
-                            <div className="container">
+                        <section>
+                            <div className="container" style={{display:"flex",alignItems:'center',justifyContent:'center'}}>
                                 <div className='row'>
 
                                     <form onSubmit={HandleSubmit}>
 
-                                        <div>
-                                            < textarea className="form-control" value={texto} onChange={(e) => setTexto(e.target.value)} placeholder="Digite a sua questão, reclamação, inovações" />
-
-                                        </div>
-                                        <div>
-                                            <button className="btn btn-primary" style={{ backgroundColor: '#00968c' }} type="submit">Comentar</button>
-
-                                        </div>
+                                            < textarea cols={30} rows={10} className="form-control" value={texto} onChange={(e) => setTexto(e.target.value)} placeholder="Digite a sua questão, reclamação, inovações" />
+                                            <button className="btn btn-primary" style={{ backgroundColor: '#00968c',width:'100%' }} type="submit">Comentar</button>                                       
                                     </form>
 
                                 </div>
@@ -87,9 +97,12 @@ export const Comentarios = () => {
                 </>
                 :
                 <>
+                <MyModal show={show} handleClose={handleClose} />
                     Voce não esta Autenticado
                 </>
             }
+            <FooterDashboard />
         </>
+
     )
 }

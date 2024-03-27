@@ -1,4 +1,3 @@
-import axios from "axios"
 import { useEffect, useState } from "react"
 import { LogActividades } from "../../Log_Actividades/Log_actividades"
 import HeaderUser from "../../Dashboard/components/heder/user/headerUser"
@@ -7,6 +6,8 @@ import { Link } from "react-router-dom"
 import FooterDashboard from "../../Dashboard/components/footer/footer"
 import { toast } from "react-toastify"
 import { Formattime } from "../../Dashboard/pages/Admin/Admintrador/AdminMensagens/AdminMensagens"
+import { MyModal } from "../component/Modal"
+import { api } from "../../api"
 
 
 
@@ -19,7 +20,7 @@ export const ObterLogUser = () => {
     const ListarLog = async () => {
         const gestor = "usuario"
         try {
-            const res = await axios.get(`http://localhost:8800/log/log/${admin}/${gestor}`)
+            const res = await api.get(`http://localhost:8800/log/log/${admin}/${gestor}`)
             setLog(res.data.data)
         } catch (error) {
             console.error(error)
@@ -34,7 +35,7 @@ export const ObterLogUser = () => {
      const EliminarTudo = async()=>{
          const id = "tudo"
                 try {
-                    const res = await axios.delete(`http://localhost:8800/log/dele/${id}`)
+                    const res = await api.delete(`http://localhost:8800/log/dele/${id}`)
                         toast.success(res.data.data)
                          ListarLog()
                 } catch (error) {
@@ -44,20 +45,31 @@ export const ObterLogUser = () => {
 
     const Eliminar = async(id)=>{
         try {
-            const res = await axios.delete(`http://localhost:8800/log/del/${id}`)
+            const res = await api.delete(`http://localhost:8800/log/del/${id}`)
                 toast.success(res.data.data)
                  ListarLog()
         } catch (error) {
             console.log(error)
         }
 }
+    const [show, setShow] = useState(false);
+    const handleShow = () => {
+        setShow(true)
+    }
 
+    useEffect(() => {
+        handleShow();
+    }, [IsAutenticado])
+
+    const handleClose = () => {
+        setShow(false)
+    }
 
     return (
         <>
         { IsAutenticado ?
         <>
-            <HeaderUser />
+                    <HeaderUser disabled={true} />
             <UserSide />
             <LogActividades tipo={"usuario"} />
             <main id="main" className="main">
@@ -112,7 +124,10 @@ export const ObterLogUser = () => {
 
         </>
         :
-        <div>Voce não está Autenticado, Por favor faça Login</div>
+        <div>
+            Voce não está Autenticado, Por favor faça Login
+            <MyModal show={show} handleClose={handleClose} />
+        </div>
 
         }
         </>

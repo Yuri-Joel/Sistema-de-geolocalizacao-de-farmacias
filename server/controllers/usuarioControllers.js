@@ -1,9 +1,10 @@
-import { ActualizarUsuarioId, CriarUsuario, ObterUsuarioId, TodosUsuarios, TodosUsuariosNumeros, VerificarSenha, deleteUsuarios, ActualizarSenhaUser, EliminarFoto} from "../Models/usuarioModels.js";
+import { ActualizarUsuarioId, CriarUsuario, ObterUsuarioId,TodosUsuarios, TodosUsuariosNumeros, VerificarSenha, deleteUsuarios, ActualizarSenhaUser, EliminarFoto} from "../Models/usuarioModels.js";
 import bcrypt from 'bcryptjs'
 import { VerificarToken, Verify, addrecuperacao } from "../services/recuperacao de senha/recuperacaoModel.js";
 import { createTransport } from 'nodemailer';
 import {conn} from '../utils/conexao.js'
-export const hashSenha = async  (senha)=>{
+import axios from 'axios'
+export const hashSenha = async (senha)=>{
     
         const saltRounds = 5;
         const v  =  bcrypt.hash(senha, saltRounds)
@@ -11,7 +12,7 @@ export const hashSenha = async  (senha)=>{
        return v;
 }
 export const TodosU = async (_,res)=>{
-    const data = await  TodosUsuarios()
+    const data = await  TodosUsuarios();
     
     res.status(200).json({data})
    
@@ -42,7 +43,6 @@ export const CriarU = async (req,res)=> {
     
     if (!result || result.length === 0) {
       
-
         const validar = await Validateall(nome,email,senha,telefone);
        
         if(validar){
@@ -55,7 +55,8 @@ export const CriarU = async (req,res)=> {
             senha1
           ]
           const data = await CriarUsuario(values)
-          res.status(200).json({ status: data })
+          res.status(200).json({ status: data });
+          
           /*    const Confirmar = await ConfirmarEmail(email);
             
              if(Confirmar.message == "Sucess"){
@@ -200,6 +201,7 @@ export const ValidateName = async(nome)=>{
     }
     const regexNome = /^[a-zA-Z\s]+$/;
 
+
     return regexNome.test(nome);
     
 }
@@ -218,15 +220,66 @@ export const Validatepass = async(senha)=>{
 
 export const ValidateNumber = async(telefone)=>{
 
-  if(telefone.length < 9){
+  if(telefone.length < 7){
 
     return false
   }
+  
+   if (telefone){
+     // Exemplo de uso:
+     
+     const formattedPhoneNumber = await formatPhoneNumber(telefone);
+     console.log(formattedPhoneNumber); // Saída: +244935699190
+     
+      const result = await validatePhoneNumber(formattedPhoneNumber)
+       .then(data => {
+         if (data){
+           console.log('Mensagem:', data.message);
+           if (data.message == "This is an Angola valid phone number"){
+            return true;
+           }
+          
+         } else {
+           console.log('Não foi possível obter os dados.')
+           return false;
+         }
+       })
+       .catch(error => {
+         console.error('Ocorreu um erro:', error);
+         return false
+       });
+    
+  return result
+  };
    
-    const regexTelefone = /^[0-9\-]+$/;
-    return regexTelefone.test(telefone);
-   
+ 
 }
+async function validatePhoneNumber(phoneNumber) {
+  try {
+    const response = await axios.get(`https://angolaapi.onrender.com/api/v1/validate/phone/${phoneNumber}`);
+    return response.data;
+  } catch (error) {
+    console.error('Ocorreu um erro ao fazer a requisição:', error.data);
+    return null;
+  }
+}
+async function formatPhoneNumber(number) {
+  // Remover todos os caracteres que não sejam dígitos
+  const cleanedNumber = number.replace(/\D/g, '');
+
+  // Verificar se o número começa com "244" ou "+244"
+  const startsWith244 = /^244/.test(cleanedNumber);
+  const startsWithPlus244 = /^\+244/.test(cleanedNumber);
+
+  // Se o número não começar com "244" ou "+244", adicionar "+244" na frente
+  let formattedNumber = cleanedNumber;
+  if (!startsWith244 && !startsWithPlus244) {
+    formattedNumber = '+244' + cleanedNumber;
+  }
+
+  return formattedNumber;
+}
+
 
 const DeletarConfirmacaoEmail =async (token)=>{
     const query = 'DELETE FROM recuperacao_senha WHERE token = ?';

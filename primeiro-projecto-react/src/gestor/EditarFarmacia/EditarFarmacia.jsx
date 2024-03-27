@@ -1,33 +1,33 @@
 import React, { useState, useEffect } from "react"
 import { useParams } from 'react-router-dom'
-import axios from 'axios'
 import { toast } from 'react-toastify'
 import { LogActividades } from "../../Log_Actividades/Log_actividades"
 import { HeaderGestor } from "../../Dashboard/components/heder/gestor/headerGestor"
 import GestorSide from "../../Dashboard/components/aside/gestor/gestorSide"
 import FooterDashboard from "../../Dashboard/components/footer/footer"
+import { api } from "../../api"
 
 export const EditarFarmacia = () => {
 
     const [Nomefarma, setNomefarma] = useState("")
     const [Niffarma, setNiffarma] = useState("")
     const [Telefonefarma, setTelefonefarma] = useState("")
-    const [Horariofarma, setHorariofarma] = useState("")
+    
     const [Email, setEmailFarma] = useState("")
 
 
     const { id } = useParams()
-
+    const [loading, setloading] = useState(false)
     const IsAutenticado = !!localStorage.getItem("usuario")
 
     const getFarmacia = async () => {
         try {
-            const res = await axios.get(`http://localhost:8800/f/obterfarma/${id}`)
+            const res = await api.get(`/f/obterfarma/${id}`)
             setNomefarma(res.data.data[0].nome)
             setNiffarma(res.data.data[0].nif)
             setEmailFarma(res.data.data[0].email)
             setTelefonefarma(res.data.data[0].telefone)
-            setHorariofarma(res.data.data[0].horario_funcionamento)
+           
         } catch (error) {
             throw new Error(error)
         }
@@ -38,22 +38,27 @@ export const EditarFarmacia = () => {
     }, [id])
 
     const UpdateFarma = async (e) => {
-        e.preventDefault();
+        e.preventDefault()
+        setloading(true)
 
-        if (Niffarma && Nomefarma && Email && Telefonefarma && Horariofarma) {
+        if (Niffarma && Nomefarma && Email && Telefonefarma ) {
             try {
-                const res = await axios.put(`http://localhost:8800/f/actuafarma/${id}`, { Nomefarma, Niffarma, Email, Telefonefarma, Horariofarma })
+                const res = await api.put(`/f/actuafarma/${id}`, { Nomefarma, Niffarma, Email, Telefonefarma})
                 if (res.data.data === "Farmacia Actualizada com sucesso") {
                     setNomefarma(" ")
                     setEmailFarma(" ")
                     setNiffarma(" ")
                     setTelefonefarma(" ")
-                    setHorariofarma(" ")
+                 
                     toast.success("Editado com sucesso")
 
+                } else{
+                    toast.warn("ERRO! por favor digite correctamente")
                 }
             } catch (error) {
                 throw new Error(error)
+            } finally {
+                setloading(false)
             }
         } else {
             toast.warn("ERRO! os Campos não podem ser vazios")
@@ -87,10 +92,7 @@ export const EditarFarmacia = () => {
                                         <input className="form-control" value={Telefonefarma} placeholder="telefone ex 932434..." onChange={(e) => setTelefonefarma(e.target.value)} />
                                     </div>
                                     <div>
-                                        <input className="form-control" value={Horariofarma} placeholder="ex: 11H - 22h" onChange={(e) => setHorariofarma(e.target.value)} />
-                                    </div>
-                                    <div>
-                                        <button className="btn brn-primary" type="submit">Atualizar</button>
+                                        <button className="btn btn-primary" type="submit">Atualizar</button>
                                     </div>
 
                                 </form> :
@@ -98,6 +100,11 @@ export const EditarFarmacia = () => {
                                     Voce não está Autenticado! por favor faça login
                                 </>
                         }
+                        {(loading &&
+                            <div className="loading" id="loading">
+                                <div className="spinner"></div>
+                            </div>
+                        )}
                     </div>
                 </div>
             </main>

@@ -8,6 +8,8 @@ import { UpdateProduct } from './Produtos/CRUD/Update'
 import { ReadProdutos } from './Produtos/CRUD/Read'
 import { ObterLogGestor } from './GestLogActividades/GestorLog'
 import { EditarFarmacia } from './EditarFarmacia/EditarFarmacia'
+import { EstatisticasPesquisas } from './Estatistica/Estatisticas'
+import { PaypalPagament } from './Estatistica/paypal'
 
 
 
@@ -15,6 +17,8 @@ export const RoutesGestor = ()=>{
 
     return (
         <Routes>
+            <Route path='/paypagament' Component={PaypalPagament}></Route>
+            <Route path='/estatisticas' Component={EstatisticasPesquisas}></Route>
             <Route path='/loggestor' Component={ObterLogGestor}></Route>
             <Route path='/gestor' Component={Gestor}></Route>
             <Route path='/gestorperfil' Component={Gestorperfil}></Route>

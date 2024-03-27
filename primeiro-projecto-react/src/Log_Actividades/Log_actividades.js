@@ -1,5 +1,5 @@
-import axios from "axios";
 import { useEffect } from "react";
+import { api } from "../api";
 
 export const LogActividades = ({tipo})=>{
 
@@ -11,7 +11,7 @@ export const LogActividades = ({tipo})=>{
         const caminho = `http://localhost:3000${cam}`
 
         try {
-            const res = await axios.post(`http://localhost:8800/log/lognew`, {usuario, caminho, tipo})
+            await api.post(`/log/lognew`, {usuario, caminho, tipo})
                    
         } catch (error) {
             console.log(error)

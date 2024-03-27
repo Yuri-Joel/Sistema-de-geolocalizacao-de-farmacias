@@ -15,11 +15,12 @@ import { AdminDados } from './Admintrador/adminDadosEstatiscos/Admindados';
 import { EditarFarma } from './Admintrador/AdminMostrarFarmacias/EditarFarma';
 
 
+
 export const RoutesAdmin = ()=>{
 
     return(
         <>
-            <Routes>
+        <Routes>
         <Route path="/adminperfil" element={<Adminperfil/>}></Route>
         <Route path="/admin" element={<Administrador />}></Route>
         <Route path="/adminCadastrarGestor" element={<AdminCadastrarGestor />}></Route>
@@ -33,7 +34,7 @@ export const RoutesAdmin = ()=>{
         <Route path='/ListarAdmin' Component={ListarAdmin}></Route>
         <Route path='/adminlog' Component={ObterLog}></Route>
         <Route path='/admindados' Component={AdminDados}></Route>
-            </Routes>         
+        </Routes>         
         </>
     )
 }

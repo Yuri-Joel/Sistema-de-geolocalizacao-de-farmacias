@@ -3,7 +3,12 @@ import  {conn}  from "../utils/conexao.js";
 // aqui eu adiciono novas mengens e mostro as mensagens enviadas
 
 export const MostrarMensagens = () => {
-const query = "select u.nome,u.foto, m.id, m.mensagem,m.data_envio,m.id,(Select Count(*) from mensagens)  As total from mensagens m join usuarios u on m.usuario_id = u.id";
+    const query = `SELECT u.nome, u.foto, u.email, m.id, m.mensagem, m.data_envio, (SELECT COUNT(*) FROM mensagens) AS total FROM mensagens m JOIN usuarios u ON m.usuario_id = u.id 
+UNION
+SELECT 'Usuário Anônimo' AS nome, 'Null' AS foto, m.email AS email, m.id, m.mensagem, m.data_envio, (SELECT COUNT(*) FROM mensagens) AS total
+FROM mensagens m
+WHERE m.usuario_id = 0;
+ `;
 
 return new Promise((resolve, reject)=>{
     conn.query(query, (err, data)=>{
@@ -14,7 +19,7 @@ return new Promise((resolve, reject)=>{
 }
 
 export const AddNewsms = (dados)=>{
-    const query = "INSERT INTO mensagens(`usuario_id`, `mensagem`) values(?)";
+    const query = "INSERT INTO mensagens(`usuario_id`, `mensagem`,`email`) values(?)";
   return  new Promise ((resolve, reject)=>{
         conn.query(query,[dados], (err)=>{
             if(err) reject(err);
